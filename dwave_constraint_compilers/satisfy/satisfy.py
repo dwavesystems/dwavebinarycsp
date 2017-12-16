@@ -32,7 +32,3 @@ def satisfy(constraints, sampler, compilation_method=stitch, validate_constraint
         sample = convert_sample(sample, vartype=original_vartype)
 
     return sample
-
-
-
-

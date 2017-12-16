@@ -1,8 +1,10 @@
 from __future__ import division
+
 import sys
+
 from penaltymodel import SPIN, BINARY
 
-__all__ = ['constraint_vartype', 'convert_constraint', 'sample_vartype', 'itervalues', 'iteritems']
+__all__ = ['constraint_vartype', 'convert_constraint', 'sample_vartype', 'convert_sample', 'itervalues', 'iteritems']
 
 _PY2 = sys.version_info.major == 2
 

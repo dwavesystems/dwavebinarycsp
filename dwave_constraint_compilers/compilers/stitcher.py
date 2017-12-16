@@ -3,8 +3,8 @@ from itertools import combinations
 import networkx as nx
 import penaltymodel as pm
 
-from dwave_constraint_compilers.utils import iteritems, itervalues
 from dwave_constraint_compilers.utils import convert_constraint, constraint_vartype
+from dwave_constraint_compilers.utils import iteritems, itervalues
 
 __all__ = ['stitch']
 

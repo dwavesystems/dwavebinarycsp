@@ -1,9 +1,11 @@
-import unittest
-import networkx as nx
 import string
+import unittest
 from unittest.mock import patch, MagicMock
-from dwave_constraint_compilers.compilers import stitcher
+
+import networkx as nx
 from penaltymodel import BinaryQuadraticModel, SPIN
+
+from dwave_constraint_compilers.compilers import stitcher
 
 
 class TestStitch(unittest.TestCase):
