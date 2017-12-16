@@ -1,37 +1,15 @@
-from __future__ import absolute_import
-
-import sys
 from itertools import combinations
 
 import networkx as nx
 import penaltymodel as pm
 
-from compilers.constraint_specification_languages.internal import validate
+from dwave_constraint_compilers.utils import iteritems, itervalues
+from dwave_constraint_compilers.utils import convert_constraint, constraint_vartype
 
 __all__ = ['stitch']
 
 
-_PY2 = sys.version_info.major == 2
-
-if _PY2:
-    range = xrange
-
-    def iteritems(d):
-        return d.iteritems()
-
-    def itervalues(d):
-        return d.itervalues()
-
-else:
-
-    def iteritems(d):
-        return d.items()
-
-    def itervalues(d):
-        return d.values()
-
-
-def stitch(constraints, do_validation=True):
+def stitch(constraints):
     """
     Create :class:`pm.PenaltyModel` widgets from the constraints given, and 'stitch' them together:
     The variable set of the new model is the additive union of the variable sets of the widgets,
@@ -48,15 +26,11 @@ def stitch(constraints, do_validation=True):
     Args:
         constraints (dict[str, dict]): A set of constraints conforming to the schema defined in the
                                       `constraint_specification_language`
-        do_validation (bool): whether to validate the constraints using the JSON schema.
 
     Returns:
         :class:`pm.BinaryQuadraticModel`: The resulting :class:`BinaryQuadraticModel`.
 
     """
-    if do_validation:
-        validate(constraints)
-
     widgets = make_widgets_from(constraints)
     linear = {}
     quadratic = {}
@@ -87,8 +61,8 @@ def make_widgets_from(constraints):
     max_graph_size = 8
     widgets = []
     for constraint in itervalues(constraints):
-        if _constraint_vartype(constraint) != pm.SPIN:
-            constraint = _convert_to_spin(constraint)
+        if constraint_vartype(constraint) != pm.SPIN:
+            constraint = convert_constraint(constraint, vartype=pm.SPIN)
         widget = None
         n = len(constraint['variables'])
         while widget is None and n < max_graph_size:
@@ -141,33 +115,3 @@ def make_complete_graph_from(named_nodes, n):
     graph = nx.Graph()
     graph.add_edges_from(combinations(all_nodes, 2))
     return graph
-
-
-def _constraint_vartype(constraint):
-    for feasible_configuration in constraint['feasible_configurations']:
-        i = 0
-        while feasible_configuration[0] == 1 and i < len(feasible_configuration):
-            i += 1
-
-        if feasible_configuration[0] != 1:
-            if feasible_configuration[0] in pm.SPIN.value:
-                return pm.SPIN
-            else:
-                return pm.BINARY
-
-    # if we're here, either there are no feasible_configurations, every value in each configuration is 1.
-    # either way, we can return pm.SPIN.
-    return pm.SPIN
-
-
-def _convert_to_spin(constraint):
-    spin_configurations = []
-
-    def to_spin(i):
-        return 2 * i - 1
-
-    for feasible_configuration in constraint['feasible_configurations']:
-        spin_configurations.append(tuple(map(to_spin, feasible_configuration)))
-
-    constraint['feasible_configurations'] = spin_configurations
-    return constraint
