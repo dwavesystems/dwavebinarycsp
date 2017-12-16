@@ -1,10 +1,52 @@
 import unittest
+import networkx as nx
+import string
 from unittest.mock import patch, MagicMock
 from compilers import stitch
 from penaltymodel import BinaryQuadraticModel, SPIN
 
 
 class TestStitch(unittest.TestCase):
+
+    def test_make_complete_graph_all_decision_vars(self):
+        n = 10
+        vertices = list(string.ascii_lowercase[:n])
+
+        edges = set({})
+        for i, u in enumerate(vertices):
+            for v in vertices[i + 1:]:
+                edges.add((u, v))
+
+        expected_graph = nx.Graph()
+        expected_graph.add_edges_from(edges)
+
+        result = stitch.make_complete_graph_from(vertices, n)
+        self.assertEqual(expected_graph.nodes(), result.nodes())
+        self.assertEqual(expected_graph.edges(), result.edges())
+
+    def test_make_complete_graph_more_nodes_than_vars(self):
+        n = 10
+        vertices = list(string.ascii_lowercase[:(n - 5)])
+
+        edges = set({})
+        all_vertices = vertices + list(range(len(vertices), n))
+        for i, u in enumerate(all_vertices):
+            for v in all_vertices[i + 1:]:
+                edges.add((u, v))
+
+        expected_graph = nx.Graph()
+        expected_graph.add_edges_from(edges)
+
+        result = stitch.make_complete_graph_from(vertices, n)
+        self.assertEqual(expected_graph.nodes(), result.nodes())
+        self.assertEqual(expected_graph.edges(), result.edges())
+
+    def test_make_complete_graph_less_nodes_than_vars(self):
+        n = 5
+        vertices = list(string.ascii_lowercase[:(n + 5)])
+
+        with self.assertRaises(RuntimeError):
+            stitch.make_complete_graph_from(vertices, n)
 
     @patch('stitch.pm.get_penalty_model', return_value='mock')
     def test_make_widgets(self, pm):

@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 import sys
+from itertools import combinations
 
 import networkx as nx
 import penaltymodel as pm
@@ -92,8 +93,7 @@ def make_widgets_from(constraints):
         n = len(constraint['variables'])
         while widget is None and n < max_graph_size:
 
-            graph = nx.complete_graph(len(constraint['variables']))
-            nx.relabel_nodes(graph, lambda i: constraint['variables'][i], copy=False)
+            graph = make_complete_graph_from(constraint['variables'], n)
 
             spec = pm.Specification(
                 graph=graph, decision_variables=constraint['variables'],
@@ -112,6 +112,35 @@ def make_widgets_from(constraints):
             raise RuntimeError('Cannot find penalty model for constraint: {}'.format(constraint))
 
     return widgets
+
+
+def make_complete_graph_from(named_nodes, n):
+    """
+    Create a complete graph of size `n` and name the first `len(named_nodes)` using the values in named_nodes.
+
+    Args:
+        named_nodes (iterable): Iterable of node labels.
+        n (int): The total number of nodes in the graph. Must be at least `len(named_nodes)`
+
+    Returns:
+        :class:`nx.Graph`: a complete graph.
+
+    Raises:
+        RuntimeError: if the `n` < len(named_nodes)
+
+    """
+    if n < len(named_nodes):
+        raise RuntimeError('Graph must have at least {} nodes'.format(len(named_nodes)))
+
+    # copy named_nodes so we don't modify the original input.
+    all_nodes = named_nodes[:]
+
+    if n > len(named_nodes):
+        all_nodes.extend(range(len(named_nodes), n))
+
+    graph = nx.Graph()
+    graph.add_edges_from(combinations(all_nodes, 2))
+    return graph
 
 
 def _constraint_vartype(constraint):
