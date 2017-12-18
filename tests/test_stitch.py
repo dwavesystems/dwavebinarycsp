@@ -1,9 +1,11 @@
-import unittest
-import networkx as nx
 import string
+import unittest
 from unittest.mock import patch, MagicMock
-from compilers import stitch
+
+import networkx as nx
 from penaltymodel import BinaryQuadraticModel, SPIN
+
+from dwave_constraint_compilers.compilers import stitcher
 
 
 class TestStitch(unittest.TestCase):
@@ -20,7 +22,7 @@ class TestStitch(unittest.TestCase):
         expected_graph = nx.Graph()
         expected_graph.add_edges_from(edges)
 
-        result = stitch.make_complete_graph_from(vertices, n)
+        result = stitcher.make_complete_graph_from(vertices, n)
         self.assertEqual(expected_graph.nodes(), result.nodes())
         self.assertEqual(expected_graph.edges(), result.edges())
 
@@ -37,7 +39,7 @@ class TestStitch(unittest.TestCase):
         expected_graph = nx.Graph()
         expected_graph.add_edges_from(edges)
 
-        result = stitch.make_complete_graph_from(vertices, n)
+        result = stitcher.make_complete_graph_from(vertices, n)
         self.assertEqual(expected_graph.nodes(), result.nodes())
         self.assertEqual(expected_graph.edges(), result.edges())
 
@@ -46,9 +48,9 @@ class TestStitch(unittest.TestCase):
         vertices = list(string.ascii_lowercase[:(n + 5)])
 
         with self.assertRaises(RuntimeError):
-            stitch.make_complete_graph_from(vertices, n)
+            stitcher.make_complete_graph_from(vertices, n)
 
-    @patch('stitch.pm.get_penalty_model', return_value='mock')
+    @patch('stitcher.pm.get_penalty_model', return_value='mock')
     def test_make_widgets(self, pm):
         constraints = {
             'AND': {
@@ -56,41 +58,8 @@ class TestStitch(unittest.TestCase):
                 'variables': [0, 1, 2]
             }
         }
-        widgets = stitch.make_widgets_from(constraints)
+        widgets = stitcher.make_widgets_from(constraints)
         self.assertEqual(widgets, ['mock'])
-
-    def test_to_spin(self):
-        constraint = {
-            'feasible_configurations': [(0, 0, 0), (0, 1, 0), (1, 0, 0), (0, 0, 0)],
-            'variables': [0, 1, 2]
-        }
-        constraint = stitch._convert_to_spin(constraint)
-        self.assertEqual(constraint['feasible_configurations'], [(-1, -1, -1), (-1, 1, -1), (1, -1, -1), (-1, -1, -1)])
-
-    def test_constraint_vartype(self):
-        constraint = {
-            'feasible_configurations': [(0, 0, 0), (0, 1, 0), (1, 0, 0), (0, 0, 0)],
-            'variables': [0, 1, 2]
-        }
-        self.assertEqual(stitch._constraint_vartype(constraint), stitch.pm.BINARY)
-
-        constraint = {
-            'feasible_configurations': [(1, 0, 0), (0, 1, 0), (1, 0, 0), (0, 0, 0)],
-            'variables': [0, 1, 2]
-        }
-        self.assertEqual(stitch._constraint_vartype(constraint), stitch.pm.BINARY)
-
-        constraint = {
-            'feasible_configurations': [(-1, -1, -1), (-1, 1, -1), (1, -1, -1), (-1, -1, -1)],
-            'variables': [0, 1, 2]
-        }
-        self.assertEqual(stitch._constraint_vartype(constraint), stitch.pm.SPIN)
-
-        constraint = {
-            'feasible_configurations': [(-1, -1, -1), (-1, 1, -1), (1, -1, -1), (-1, -1, -1)],
-            'variables': [0, 1, 2]
-        }
-        self.assertEqual(stitch._constraint_vartype(constraint), stitch.pm.SPIN)
 
     def test_stitch(self):
         constraints = {
@@ -105,9 +74,9 @@ class TestStitch(unittest.TestCase):
         expected_bqm = BinaryQuadraticModel(linear, quadratic, offset, SPIN)
         mock_pm = MagicMock()
         mock_pm.model = expected_bqm
-        stitch.pm.get_penalty_model = MagicMock(return_value=mock_pm)
+        stitcher.pm.get_penalty_model = MagicMock(return_value=mock_pm)
 
-        self.assertEqual(expected_bqm, stitch.stitch(constraints))
+        self.assertEqual(expected_bqm, stitcher.stitch(constraints))
 
     def test_stitch_multiple_constraints(self):
         constraints = {
@@ -127,13 +96,13 @@ class TestStitch(unittest.TestCase):
         mock_bqm = BinaryQuadraticModel(linear, quadratic, offset, SPIN)
         mock_pm = MagicMock()
         mock_pm.model = mock_bqm
-        stitch.pm.get_penalty_model = MagicMock(return_value=mock_pm)
+        stitcher.pm.get_penalty_model = MagicMock(return_value=mock_pm)
 
         linear = {0: -2, 1: -2, 2: -2}
         quadratic = {(0, 1): -2, (0, 2): -2, (1, 2): -2}
         offset = 2
         expected_bqm = BinaryQuadraticModel(linear, quadratic, offset, SPIN)
-        self.assertEqual(expected_bqm, stitch.stitch(constraints))
+        self.assertEqual(expected_bqm, stitcher.stitch(constraints))
 
 
 if __name__ == '__main__':

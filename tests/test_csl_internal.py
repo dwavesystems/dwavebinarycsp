@@ -1,5 +1,5 @@
 import unittest
-from compilers.constraint_specification_languages.internal import validate
+from dwave_constraint_compilers.constraint_specification_languages.internal import validate
 from jsonschema import ValidationError
 
 
