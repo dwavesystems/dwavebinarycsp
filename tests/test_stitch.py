@@ -1,6 +1,10 @@
 import string
 import unittest
-from unittest.mock import patch, MagicMock
+
+try:
+    import unittest.mock as mock
+except ImportError:
+    import mock
 
 import networkx as nx
 import penaltymodel as pm
@@ -50,7 +54,7 @@ class TestStitch(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             stitcher.make_complete_graph_from(vertices, n)
 
-    @patch('dwave_constraint_compilers.compilers.stitcher.pm.get_penalty_model')
+    @mock.patch('dwave_constraint_compilers.compilers.stitcher.pm.get_penalty_model')
     def test_make_widgets_from(self, mock_get_penalty_model):
         # we want to make get_penalty_model return an object we can treat
         # as a signal
@@ -73,7 +77,7 @@ class TestStitch(unittest.TestCase):
         widgets = stitcher.make_widgets_from(constraints)
         self.assertEqual(widgets, [signal, signal])
 
-    @patch('dwave_constraint_compilers.compilers.stitcher.pm.get_penalty_model')
+    @mock.patch('dwave_constraint_compilers.compilers.stitcher.pm.get_penalty_model')
     def test_make_widgets_from_impossible_model(self, mock_get_penalty_model):
         # we want to make get_penalty_model to always raise the ImpossibleModelError
         signal = object()
@@ -101,9 +105,9 @@ class TestStitch(unittest.TestCase):
         quadratic = {(0, 1): -1, (0, 2): -1, (1, 2): -1}
         offset = 0
         expected_bqm = pm.BinaryQuadraticModel(linear, quadratic, offset, pm.SPIN)
-        mock_pm = MagicMock()
+        mock_pm = mock.MagicMock()
         mock_pm.model = expected_bqm
-        stitcher.pm.get_penalty_model = MagicMock(return_value=mock_pm)
+        stitcher.pm.get_penalty_model = mock.MagicMock(return_value=mock_pm)
 
         self.assertEqual(expected_bqm, stitcher.stitch(constraints))
 
@@ -123,9 +127,9 @@ class TestStitch(unittest.TestCase):
         quadratic = {(0, 1): -1, (0, 2): -1, (1, 2): -1}
         offset = 1
         mock_bqm = pm.BinaryQuadraticModel(linear, quadratic, offset, pm.SPIN)
-        mock_pm = MagicMock()
+        mock_pm = mock.MagicMock()
         mock_pm.model = mock_bqm
-        stitcher.pm.get_penalty_model = MagicMock(return_value=mock_pm)
+        stitcher.pm.get_penalty_model = mock.MagicMock(return_value=mock_pm)
 
         linear = {0: -2, 1: -2, 2: -2}
         quadratic = {(0, 1): -2, (0, 2): -2, (1, 2): -2}
