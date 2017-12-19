@@ -3,7 +3,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 
 import networkx as nx
-from penaltymodel import BinaryQuadraticModel, SPIN
+import penaltymodel as pm
 
 from dwave_constraint_compilers.compilers import stitcher
 
@@ -50,8 +50,14 @@ class TestStitch(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             stitcher.make_complete_graph_from(vertices, n)
 
-    @patch('stitcher.pm.get_penalty_model', return_value='mock')
-    def test_make_widgets(self, pm):
+    @patch('dwave_constraint_compilers.compilers.stitcher.pm.get_penalty_model')
+    def test_make_widgets_from(self, mock_get_penalty_model):
+        # we want to make get_penalty_model return an object we can treat
+        # as a signal
+        signal = object()
+        mock_get_penalty_model.return_value = signal
+
+        # if we give one constraint, should get back a list of exactly one signal
         constraints = {
             'AND': {
                 'feasible_configurations': [(0, 0, 0), (0, 1, 0), (1, 0, 0), (0, 0, 0)],
@@ -59,7 +65,30 @@ class TestStitch(unittest.TestCase):
             }
         }
         widgets = stitcher.make_widgets_from(constraints)
-        self.assertEqual(widgets, ['mock'])
+        self.assertEqual(widgets, [signal])
+
+        # now two constraints
+        constraints['INVERT'] = {'feasible_configurations': [(0, 1), (1, 0)],
+                                 'variables': [3, 0]}
+        widgets = stitcher.make_widgets_from(constraints)
+        self.assertEqual(widgets, [signal, signal])
+
+    @patch('dwave_constraint_compilers.compilers.stitcher.pm.get_penalty_model')
+    def test_make_widgets_from_impossible_model(self, mock_get_penalty_model):
+        # we want to make get_penalty_model to always raise the ImpossibleModelError
+        signal = object()
+        mock_get_penalty_model.side_effect = pm.ImpossiblePenaltyModel
+
+        # if we give one constraint, should get back a list of exactly one signal
+        constraints = {
+            'AND': {
+                'feasible_configurations': [(0, 0, 0), (0, 1, 0), (1, 0, 0), (0, 0, 0)],
+                'variables': [0, 1, 2]
+            }
+        }
+        # in this case we should get a runtime error saying that the model cannot be built
+        with self.assertRaises(RuntimeError):
+            widgets = stitcher.make_widgets_from(constraints)
 
     def test_stitch(self):
         constraints = {
@@ -71,7 +100,7 @@ class TestStitch(unittest.TestCase):
         linear = {0: -1, 1: -1, 2: -1}
         quadratic = {(0, 1): -1, (0, 2): -1, (1, 2): -1}
         offset = 0
-        expected_bqm = BinaryQuadraticModel(linear, quadratic, offset, SPIN)
+        expected_bqm = pm.BinaryQuadraticModel(linear, quadratic, offset, pm.SPIN)
         mock_pm = MagicMock()
         mock_pm.model = expected_bqm
         stitcher.pm.get_penalty_model = MagicMock(return_value=mock_pm)
@@ -93,7 +122,7 @@ class TestStitch(unittest.TestCase):
         linear = {0: -1, 1: -1, 2: -1}
         quadratic = {(0, 1): -1, (0, 2): -1, (1, 2): -1}
         offset = 1
-        mock_bqm = BinaryQuadraticModel(linear, quadratic, offset, SPIN)
+        mock_bqm = pm.BinaryQuadraticModel(linear, quadratic, offset, pm.SPIN)
         mock_pm = MagicMock()
         mock_pm.model = mock_bqm
         stitcher.pm.get_penalty_model = MagicMock(return_value=mock_pm)
@@ -101,7 +130,7 @@ class TestStitch(unittest.TestCase):
         linear = {0: -2, 1: -2, 2: -2}
         quadratic = {(0, 1): -2, (0, 2): -2, (1, 2): -2}
         offset = 2
-        expected_bqm = BinaryQuadraticModel(linear, quadratic, offset, SPIN)
+        expected_bqm = pm.BinaryQuadraticModel(linear, quadratic, offset, pm.SPIN)
         self.assertEqual(expected_bqm, stitcher.stitch(constraints))
 
 
