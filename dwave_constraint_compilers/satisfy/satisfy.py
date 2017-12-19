@@ -1,7 +1,5 @@
 from __future__ import absolute_import
 
-from dimod.template_sampler import TemplateSampler
-
 from dwave_constraint_compilers.compilers import stitch
 from dwave_constraint_compilers.constraint_specification_languages.internal import validate
 from dwave_constraint_compilers.utils import constraint_vartype, sample_vartype, convert_sample
@@ -10,8 +8,16 @@ __all__ = ['satisfy']
 
 
 def satisfy(constraints, sampler, compilation_method=stitch, validate_constraints=True, **sampler_args):
+    """todo"""
 
-    assert isinstance(sampler, TemplateSampler), "Expected sampler to be a subclass of 'TemplateSampler"
+    # check the the sampler is a dimod-compliant sampler
+    # Author note: we want to handle samplers that have the same API as a dimod sampler but are not
+    # themselves a subclass of the dimod TemplateSampler.
+    if not hasattr(sampler, "sample_qubo") or not callable(sampler.sample_qubo):
+        raise TypeError("expected sampler to have a 'sample_qubo' method")
+    if not hasattr(sampler, "sample_ising") or not callable(sampler.sample_ising):
+        raise TypeError("expected sampler to have a 'sample_ising' method")
+
     if validate_constraints:
         validate(constraints)
 
