@@ -16,6 +16,7 @@ Documentation
 .. toctree::
    :maxdepth: 1
 
+   satisfy
    specification_language
    compilers
    utils
