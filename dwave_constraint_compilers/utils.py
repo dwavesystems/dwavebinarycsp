@@ -1,3 +1,11 @@
+"""Utility functions.
+
+These are not meant to access directly. They are available by importing the
+utils submodule.
+
+>>> import dwave_constraint_compilers.utils as dccutils
+
+"""
 from __future__ import division
 
 import sys
@@ -31,8 +39,8 @@ def constraint_vartype(constraint):
         constraint (dict): Must contain 'feasible_configurations' key.
 
     Returns:
-        :class:`.penaltymodel.Vartype`: The type of the constraint, either
-            :class:`.penaltymodel.Vartype.SPIN` or :class:`.penaltymodel.Vartype.BINARY`
+        :class:`penaltymodel.Vartype`: The type of the constraint, either
+        :class:`penaltymodel.Vartype.SPIN` or :class:`penaltymodel.Vartype.BINARY`
 
     """
     seen_values = set().union(*constraint['feasible_configurations'])
@@ -55,7 +63,7 @@ def sample_vartype(sample):
 
     Returns:
         :class:`penaltymodel.Vartype`: The type of the constraint, either
-            :class:`penaltymodel.Vartype.SPIN` or :class:`.penaltymodel.Vartype.BINARY`
+        :class:`penaltymodel.Vartype.SPIN` or :class:`.penaltymodel.Vartype.BINARY`
 
     """
     for assignment in itervalues(sample):
@@ -85,7 +93,7 @@ def convert_constraint(constraint, vartype=SPIN):
     Examples:
         >>> import penaltymodel as pm
         >>> constraint = {'feasible_configurations': [(0, 0), (1, 1)], 'variables': [0, 1]}
-        >>> dcc.utils.convert_constraint(constraint, pm.SPIN)
+        >>> dcc.utils.convert_constraint(constraint, pm.SPIN)  # doctest: +SKIP
         {'feasible_configurations': [(-1, -1), (1, 1)], 'variables': [0, 1]}
 
     """
