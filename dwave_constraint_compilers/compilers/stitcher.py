@@ -28,7 +28,7 @@ def stitch(constraints):
                                       `constraint_specification_language`
 
     Returns:
-        :class:`pm.BinaryQuadraticModel`: The resulting :class:`BinaryQuadraticModel`.
+        :class:`penaltymodel.BinaryQuadraticModel`: The resulting :class:`BinaryQuadraticModel`.
 
     """
     widgets = make_widgets_from(constraints)
