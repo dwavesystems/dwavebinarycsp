@@ -12,7 +12,7 @@ else:
     exec(open("./dwave_constraint_compilers/package_info.py").read())
 
 install_requires = ['penaltymodel==1.0.0.dev3', 'networkx>=2.0', 'jsonschema==2.6.0']
-tests_require = ['dimod>=0.4.0']
+tests_require = ['dimod>=0.4.0', 'coverage']
 extras_require = {'tests': tests_require}
 
 
