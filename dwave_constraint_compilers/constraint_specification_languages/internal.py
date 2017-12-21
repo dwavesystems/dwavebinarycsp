@@ -1,4 +1,4 @@
-import os
+from pkg_resources import resource_filename
 import json
 from jsonschema import validate as json_validate
 from jsonschema import ValidationError
@@ -16,8 +16,7 @@ def validate(constraints):
     Raises:
         ValidationError: An error if the instance violates the schema.
     """
-    schema_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'constraints_schema.json')
-    with open(schema_path) as schema_file:
+    with open(resource_filename(__name__, 'constraints_schema.json')) as schema_file:
         schema = json.load(schema_file)
 
     constraints = json.loads(json.dumps(constraints))
