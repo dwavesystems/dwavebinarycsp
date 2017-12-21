@@ -85,7 +85,7 @@ def convert_constraint(constraint, vartype=SPIN):
     Examples:
         >>> import penaltymodel as pm
         >>> constraint = {'feasible_configurations': [(0, 0), (1, 1)], 'variables': [0, 1]}
-        >>> dcc.convert_constraint(constraint, pm.SPIN)
+        >>> dcc.utils.convert_constraint(constraint, pm.SPIN)
         {'feasible_configurations': [(-1, -1), (1, 1)], 'variables': [0, 1]}
 
     """
@@ -123,7 +123,7 @@ def convert_sample(sample, vartype=SPIN):
     Examples:
         >>> import penaltymodel as pm
         >>> sample = {0: 0, 1: 1}
-        >>> dcc.convert_sample(sample, pm.SPIN)
+        >>> dcc.utils.convert_sample(sample, pm.SPIN)
         {0: -1, 1: 1}
 
     """
