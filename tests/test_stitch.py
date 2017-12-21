@@ -137,6 +137,23 @@ class TestStitch(unittest.TestCase):
         expected_bqm = pm.BinaryQuadraticModel(linear, quadratic, offset, pm.SPIN)
         self.assertEqual(expected_bqm, stitcher.stitch(constraints))
 
+    @mock.patch('dwave_constraint_compilers.compilers.stitcher.pm.get_penalty_model')
+    def test_stitch_constraint_propgation(self, mock_get_penalty_model):
+        def is_and(spec):
+            self.assertEqual(spec.feasible_configurations,
+                             {(-1, -1, -1): 0, (-1, 1, -1): 0, (1, -1, -1): 0, (1, 1, 1): 0})
+            return mock.MagicMock()
+
+        mock_get_penalty_model.side_effect = is_and
+
+        constraints = {
+            'AND': {
+                'feasible_configurations': [(0, 0, 0), (0, 1, 0), (1, 0, 0), (1, 1, 1)],
+                'variables': [0, 1, 2]
+            }
+        }
+
+        stitcher.stitch(constraints)
 
 if __name__ == '__main__':
     unittest.main()

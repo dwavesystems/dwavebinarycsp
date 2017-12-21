@@ -68,6 +68,7 @@ def convert_constraint(constraint, vartype=SPIN):
     for feasible_configuration in constraint['feasible_configurations']:
         spin_configurations.append(tuple(map(convert, feasible_configuration)))
 
+    constraint = constraint.copy()
     constraint['feasible_configurations'] = spin_configurations
     return constraint
 
