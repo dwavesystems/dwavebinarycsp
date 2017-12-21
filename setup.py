@@ -33,5 +33,6 @@ setup(
     packages=packages,
     install_requires=install_requires,
     extras_require=extras_require,
-    tests_require=tests_require
+    tests_require=tests_require,
+    include_package_data=True
 )
