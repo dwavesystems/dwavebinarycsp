@@ -16,6 +16,7 @@ Documentation
 .. toctree::
    :maxdepth: 1
 
+   specification_language
    compilers
    utils
    license

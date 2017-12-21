@@ -55,7 +55,7 @@ source_parsers = {'.md': 'recommonmark.parser.CommonMarkParser'}
 master_doc = 'index'
 
 # General information about the project.
-project = u'Penalty Model'
+project = u'D-Wave Constraint Compilers'
 copyright = u'2017, D-Wave Systems Inc'
 author = u'D-Wave Systems Inc'
 
