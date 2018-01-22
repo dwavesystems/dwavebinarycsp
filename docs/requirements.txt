@@ -1,0 +1,6 @@
+sphinx
+recommonmark
+networkx
+penaltymodel
+jsonschema
+sphinx_rtd_theme
