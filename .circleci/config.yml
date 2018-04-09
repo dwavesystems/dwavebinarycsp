@@ -59,6 +59,7 @@ jobs:
             python -m virtualenv env
             . env/bin/activate
             pip install .
+            pip install mock
         
       - run:
           name: run tests
