@@ -1,10 +1,12 @@
 from itertools import combinations
 
+from six import itervalues, iteritems
+
 import networkx as nx
 import penaltymodel as pm
+import dimod
 
 from dwave_constraint_compilers.utils import convert_constraint, constraint_vartype
-from dwave_constraint_compilers.utils import iteritems, itervalues
 
 __all__ = ['stitch']
 
@@ -44,7 +46,7 @@ def stitch(constraints):
 
         offset += widget.model.offset
 
-    return pm.BinaryQuadraticModel(linear, quadratic, offset, pm.SPIN)
+    return dimod.BinaryQuadraticModel(linear, quadratic, offset, dimod.SPIN)
 
 
 def make_widgets_from(constraints):
@@ -61,8 +63,8 @@ def make_widgets_from(constraints):
     max_graph_size = 8
     widgets = []
     for constraint in itervalues(constraints):
-        if constraint_vartype(constraint) != pm.SPIN:
-            constraint = convert_constraint(constraint, vartype=pm.SPIN)
+        if constraint_vartype(constraint) != dimod.SPIN:
+            constraint = convert_constraint(constraint, vartype=dimod.SPIN)
         widget = None
         n = len(constraint['variables'])
         while widget is None and n < max_graph_size:
@@ -72,7 +74,7 @@ def make_widgets_from(constraints):
             spec = pm.Specification(
                 graph=graph, decision_variables=constraint['variables'],
                 feasible_configurations=constraint['feasible_configurations'],
-                vartype=pm.SPIN
+                vartype=dimod.SPIN
             )
             try:
                 widget = pm.get_penalty_model(spec)

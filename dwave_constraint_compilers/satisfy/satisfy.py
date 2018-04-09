@@ -3,9 +3,11 @@ The main functions for D-Wave Constraint Compilers.
 """
 from __future__ import absolute_import
 
+from six import iteritems
+
 from dwave_constraint_compilers.compilers import stitch
 from dwave_constraint_compilers.constraint_specification_languages.internal import validate
-from dwave_constraint_compilers.utils import constraint_vartype, sample_vartype, convert_sample, iteritems
+from dwave_constraint_compilers.utils import constraint_vartype, sample_vartype, convert_sample
 
 __all__ = ['satisfy', 'is_satisfied', 'iter_unsatisfied_constraints']
 
