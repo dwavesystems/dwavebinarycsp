@@ -11,11 +11,11 @@ if _PY2:
 else:
     exec(open("./dwave_constraint_compilers/package_info.py").read())
 
-install_requires = ['penaltymodel==1.0.0.dev3', 'networkx>=2.0', 'jsonschema==2.6.0']
-tests_require = ['dimod>=0.4.0', 'coverage']
-extras_require = {'tests': tests_require,
-                  'docs': ['sphinx', 'sphinx_rtd_theme', 'recommonmark']}
-
+install_requires = ['penaltymodel>=0.13.2,<0.14.0',
+                    'networkx>=2.0,<3.0',
+                    'jsonschema>=2.6.0,<3.0.0',
+                    'dimod>=0.6.7,<0.7.0'
+                    'six>=1.11.0,<2.0.0']
 
 packages = ['dwave_constraint_compilers',
             'dwave_constraint_compilers.compilers',
@@ -32,7 +32,5 @@ setup(
     license='Apache 2.0',
     packages=packages,
     install_requires=install_requires,
-    extras_require=extras_require,
-    tests_require=tests_require,
     include_package_data=True
 )
