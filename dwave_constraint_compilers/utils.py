@@ -112,9 +112,9 @@ def convert_sample(sample, vartype=SPIN):
         dict: The sample, with the keys modified to match the new vartype.
 
     Examples:
-        >>> import penaltymodel as pm
+        >>> import dimod
         >>> sample = {0: 0, 1: 1}
-        >>> dcc.utils.convert_sample(sample, pm.SPIN)
+        >>> dcc.utils.convert_sample(sample, dimod.SPIN)
         {0: -1, 1: 1}
 
     """

@@ -9,8 +9,6 @@ class TestInternalLanguage(unittest.TestCase):
         with self.assertRaises(ValidationError) as expected:
             validate(constraints)
 
-        self.assertEqual(expected_message, expected.exception.message)
-
     def test_bad_constraint_wrong_constraint_type(self):
 
         bad_instance = {

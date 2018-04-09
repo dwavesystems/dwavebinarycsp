@@ -23,8 +23,8 @@ def satisfy(constraints, sampler, compilation_method=stitch, validate_constraint
             A binary quadratic model sampler. A sampler is a process that
             samples from low energy states in models defined by an Ising
             equation or a Quadratic Unconstrained Binary Optimization Problem
-            (QUBO). A sampler is expected to have a ‘sample_qubo’ and
-            ‘sample_ising’ method. A sampler is expected to return an
+            (QUBO). A sampler is expected to have a `sample_qubo` and
+            `sample_ising` method. A sampler is expected to return an
             iterable of samples, in order of increasing energy.
 
         compilation_method (function, optional, default=:func:`.stitch`):
