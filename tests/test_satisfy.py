@@ -2,17 +2,12 @@ import unittest
 
 import penaltymodel as pm
 import networkx as nx
+import dimod
 
 try:
     import unittest.mock as mock
 except ImportError:
     import mock
-
-try:
-    import dimod
-    _dimod_found = True
-except ImportError:
-    _dimod_found = False
 
 import dwave_constraint_compilers as dcc
 
@@ -29,7 +24,7 @@ def get_penalty_model(spec):
         else:
             u, v = spec.decision_variables
             quadratic[(v, u)] = -1
-        model = pm.BinaryQuadraticModel(linear, quadratic, 0, pm.SPIN)
+        model = dimod.BinaryQuadraticModel(linear, quadratic, 0, dimod.SPIN)
         return pm.PenaltyModel.from_specification(spec, model, 2, 0)
     elif spec.feasible_configurations == {(-1, 1): 0, (1, -1): 0}:
         # disequality
@@ -40,12 +35,11 @@ def get_penalty_model(spec):
         else:
             u, v = spec.decision_variables
             quadratic[(v, u)] = 1
-        model = pm.BinaryQuadraticModel(linear, quadratic, 0, pm.SPIN)
+        model = dimod.BinaryQuadraticModel(linear, quadratic, 0, dimod.SPIN)
         return pm.PenaltyModel.from_specification(spec, model, 2, 0)
     raise NotImplementedError
 
 
-@unittest.skipUnless(_dimod_found, "Need a sampler to run tests")
 class TestSatisfy(unittest.TestCase):
     @mock.patch('dwave_constraint_compilers.compilers.stitcher.pm.get_penalty_model',
                 side_effect=get_penalty_model)

@@ -8,6 +8,7 @@ except ImportError:
 
 import networkx as nx
 import penaltymodel as pm
+import dimod
 
 from dwave_constraint_compilers.compilers import stitcher
 
@@ -104,7 +105,7 @@ class TestStitch(unittest.TestCase):
         linear = {0: -1, 1: -1, 2: -1}
         quadratic = {(0, 1): -1, (0, 2): -1, (1, 2): -1}
         offset = 0
-        expected_bqm = pm.BinaryQuadraticModel(linear, quadratic, offset, pm.SPIN)
+        expected_bqm = dimod.BinaryQuadraticModel(linear, quadratic, offset, dimod.SPIN)
         mock_pm = mock.MagicMock()
         mock_pm.model = expected_bqm
         stitcher.pm.get_penalty_model = mock.MagicMock(return_value=mock_pm)
@@ -126,7 +127,7 @@ class TestStitch(unittest.TestCase):
         linear = {0: -1, 1: -1, 2: -1}
         quadratic = {(0, 1): -1, (0, 2): -1, (1, 2): -1}
         offset = 1
-        mock_bqm = pm.BinaryQuadraticModel(linear, quadratic, offset, pm.SPIN)
+        mock_bqm = dimod.BinaryQuadraticModel(linear, quadratic, offset, dimod.SPIN)
         mock_pm = mock.MagicMock()
         mock_pm.model = mock_bqm
         stitcher.pm.get_penalty_model = mock.MagicMock(return_value=mock_pm)
@@ -134,7 +135,7 @@ class TestStitch(unittest.TestCase):
         linear = {0: -2, 1: -2, 2: -2}
         quadratic = {(0, 1): -2, (0, 2): -2, (1, 2): -2}
         offset = 2
-        expected_bqm = pm.BinaryQuadraticModel(linear, quadratic, offset, pm.SPIN)
+        expected_bqm = dimod.BinaryQuadraticModel(linear, quadratic, offset, dimod.SPIN)
         self.assertEqual(expected_bqm, stitcher.stitch(constraints))
 
     @mock.patch('dwave_constraint_compilers.compilers.stitcher.pm.get_penalty_model')

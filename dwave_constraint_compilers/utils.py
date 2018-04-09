@@ -8,39 +8,23 @@ utils submodule.
 """
 from __future__ import division
 
-import sys
+from six import iteritems, itervalues
 
-from penaltymodel import SPIN, BINARY
+from dimod import SPIN, BINARY
 
-__all__ = ['constraint_vartype', 'convert_constraint', 'sample_vartype', 'convert_sample',
-           'itervalues', 'iteritems']
-
-_PY2 = sys.version_info.major == 2
-
-if _PY2:
-    def iteritems(d):
-        return d.iteritems()
-
-    def itervalues(d):
-        return d.itervalues()
-
-else:
-    def iteritems(d):
-        return d.items()
-
-    def itervalues(d):
-        return d.values()
+__all__ = ['constraint_vartype', 'convert_constraint', 'sample_vartype', 'convert_sample']
 
 
 def constraint_vartype(constraint):
     """Determine the vartype of the given constraint.
 
     Args:
-        constraint (dict): Must contain 'feasible_configurations' key.
+        constraint (dict):
+            Must contain 'feasible_configurations' key.
 
     Returns:
-        :class:`penaltymodel.Vartype`: The type of the constraint, either
-        :class:`penaltymodel.Vartype.SPIN` or :class:`penaltymodel.Vartype.BINARY`
+        :class:`dimod.Vartype`: The type of the constraint, either :class:`dimod.Vartype.SPIN` or
+        :class:`dimod.Vartype.BINARY`
 
     """
     seen_values = set().union(*constraint['feasible_configurations'])
@@ -50,7 +34,7 @@ def constraint_vartype(constraint):
     elif seen_values.issubset(BINARY.value):
         return BINARY
 
-    raise ValueError("unknow constraint vartype")
+    raise ValueError("unknown constraint vartype")
 
 
 def sample_vartype(sample):
@@ -62,19 +46,18 @@ def sample_vartype(sample):
             in {-1, 1} or in {0, 1}.
 
     Returns:
-        :class:`penaltymodel.Vartype`: The type of the constraint, either
-        :class:`penaltymodel.Vartype.SPIN` or :class:`.penaltymodel.Vartype.BINARY`
+        :class:`dimod.Vartype`: The type of the constraint, either :class:`dimod.Vartype.SPIN` or
+        :class:`dimod.Vartype.BINARY`
 
     """
-    for assignment in itervalues(sample):
-        if assignment != 1:
-            if assignment in SPIN.value:
-                return SPIN
-            else:
-                return BINARY
+    seen_values = set(itervalues(sample))
 
-    # if we're here, either sample is empty, or every value is 1. Either way, we can return SPIN
-    return SPIN
+    if seen_values.issubset(SPIN.value):
+        return SPIN
+    elif seen_values.issubset(BINARY.value):
+        return BINARY
+
+    raise ValueError("unknown constraint vartype")
 
 
 def convert_constraint(constraint, vartype=SPIN):
@@ -142,7 +125,8 @@ def convert_sample(sample, vartype=SPIN):
         def convert(i):
             return (i + 1) // 2
 
+    new_sample = {}
     for var_name, assignment in iteritems(sample):
-        sample[var_name] = convert(assignment)
+        new_sample[var_name] = convert(assignment)
 
-    return sample
+    return new_sample
