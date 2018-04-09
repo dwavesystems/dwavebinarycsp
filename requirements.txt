@@ -1,0 +1,9 @@
+penaltymodel==0.13.2
+networkx==2.0
+jsonschema==2.6.0
+dimod==0.6.7
+
+coverage
+sphinx
+sphinx_rtd_theme
+recommonmark
