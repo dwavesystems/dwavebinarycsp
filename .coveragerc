@@ -1,0 +1,6 @@
+[run]
+source = dwave_constraint_compilers
+
+[report]
+exclude_lines:
+    pragma: no cover
