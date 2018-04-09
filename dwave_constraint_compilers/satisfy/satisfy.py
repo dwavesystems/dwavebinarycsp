@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 The main functions for D-Wave Constraint Compilers.
 """
