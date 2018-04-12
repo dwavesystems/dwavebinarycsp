@@ -1,0 +1,46 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "title": "dwavecsp schema",
+    "type": "object",
+    "required": ["constraints", "vartype"],
+    "properties": {
+        "constraints": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["variables", "feasible_configurations"],
+                "properties": {
+                    "variables": {
+                        "type": "array",
+                        "minimum": 0
+                    },
+                    "feasible_configurations": {
+                        "type": "array",
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "type": "number",
+                                "enum": [0, -1, 1]
+                            }
+                        }
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "weight": {
+                        "type": "number"
+                    }
+                }
+            }
+        },
+        "vartype": {
+            "type": "string",
+            "enum": ["SPIN", "BINARY"]
+        },
+        "variable_weights": {
+            "type": "object"
+        }
+    }
+}
+
+
