@@ -10,7 +10,7 @@ __all__ = ['Constraint']
 
 
 class _ConstraintBase(Sized):
-    __slots__ = ('vartype', 'variables', 'configurations', 'func')
+    __slots__ = ('vartype', 'variables', 'configurations', 'func', 'name')
 
     def __init__(self):
         self.configurations = frozenset()
@@ -20,11 +20,19 @@ class _ConstraintBase(Sized):
 
         self.variables = tuple()
 
+        self.name = 'Constraint'
+
         # vartype is not meaningful for an empty Constraint
 
     def __len__(self):
         """The number of variables."""
         return self.variables.__len__()
+
+    def __repr__(self):
+        return "Constraint.from_configurations({}, {}, {}, name='{}')".format(self.configurations,
+                                                                              self.variables,
+                                                                              self.vartype,
+                                                                              self.name)
 
     def check(self, solution):
         """todo"""
@@ -55,7 +63,7 @@ class Constraint(_ConstraintBase):
             def union(*args):
                 return self.func(*args[:n]) or const.func(*args[n:])
 
-            return self.from_func(union, variables, self.vartype)
+            return self.from_func(union, variables, self.vartype, name='{} | {}'.format(self.name, const.name))
 
         variables = self.variables + tuple(v for v in const.variables if v not in shared_variables)
 
@@ -63,7 +71,7 @@ class Constraint(_ConstraintBase):
             solution = dict(zip(variables, args))
             return self.check(solution) or const.check(solution)
 
-        return self.from_func(union, variables, self.vartype)
+        return self.from_func(union, variables, self.vartype, name='{} | {}'.format(self.name, const.name))
 
     def __and__(self, const):
         if not isinstance(const, Constraint):
@@ -75,6 +83,7 @@ class Constraint(_ConstraintBase):
         shared_variables = set(self.variables).intersection(const.variables)
 
         # dev note: if they share all variables, we could just act on the configurations
+        name = '{} & {}'.format(self.name, const.name)
 
         if not shared_variables:
             # in this case we just append
@@ -85,7 +94,7 @@ class Constraint(_ConstraintBase):
             def intersection(*args):
                 return self.func(*args[:n]) and const.func(*args[n:])
 
-            return self.from_func(intersection, variables, self.vartype)
+            return self.from_func(intersection, variables, self.vartype, name=name)
 
         variables = self.variables + tuple(v for v in const.variables if v not in shared_variables)
 
@@ -93,11 +102,11 @@ class Constraint(_ConstraintBase):
             solution = dict(zip(variables, args))
             return self.check(solution) and const.check(solution)
 
-        return self.from_func(intersection, variables, self.vartype)
+        return self.from_func(intersection, variables, self.vartype, name=name)
 
     @classmethod
     @dimod.vartype_argument('vartype')
-    def from_func(cls, func, variables, vartype):
+    def from_func(cls, func, variables, vartype, name='Constraint'):
         """todo"""
         constraint = _ConstraintBase.__new__(cls)  # bypass __init__ because we're going to override anyway
 
@@ -114,11 +123,13 @@ class Constraint(_ConstraintBase):
                                               for config in itertools.product(vartype.value, repeat=len(variables))
                                               if func(*config))
 
+        constraint.name = name
+
         return constraint
 
     @classmethod
     @dimod.vartype_argument('vartype')
-    def from_configurations(cls, configurations, variables, vartype):
+    def from_configurations(cls, configurations, variables, vartype, name='Constraint'):
         """todo"""
         constraint = _ConstraintBase.__new__(cls)  # bypass __init__ because we're going to override anyway
 
@@ -139,6 +150,8 @@ class Constraint(_ConstraintBase):
 
         def func(*args): return args in configurations
         constraint.func = func
+
+        constraint.name = name
 
         return constraint
 
@@ -177,3 +190,5 @@ class Constraint(_ConstraintBase):
 
         def func(*args): return args in configurations
         self.func = func
+
+        self.name = '{} ({} fixed to {})'.format(self.name, v, value)

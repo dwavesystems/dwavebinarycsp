@@ -7,7 +7,7 @@ __all__ = ['AND', 'OR', 'XOR', 'HALF_ADDER', 'FULL_ADDER']
 
 class AND(Constraint):
     """AND constraint."""
-    __slots__ = ('name')
+    __slots__ = ()
 
     @dimod.vartype_argument('vartype')
     def __init__(self, in1, in2, out, vartype, name='AND'):
@@ -39,7 +39,7 @@ class AND(Constraint):
 
 class OR(Constraint):
     """OR constraint."""
-    __slots__ = ('name')
+    __slots__ = ()
 
     @dimod.vartype_argument('vartype')
     def __init__(self, in1, in2, out, vartype, name='OR'):
@@ -71,7 +71,7 @@ class OR(Constraint):
 
 class XOR(Constraint):
     """XOR constraint."""
-    __slots__ = ('name')
+    __slots__ = ()
 
     @dimod.vartype_argument('vartype')
     def __init__(self, in1, in2, out, vartype, name='XOR'):
@@ -103,7 +103,7 @@ class XOR(Constraint):
 
 class HALF_ADDER(Constraint):
     """HALF_ADDER constraint."""
-    __slots__ = ('name')
+    __slots__ = ()
 
     @dimod.vartype_argument('vartype')
     def __init__(self, augend, addend, sum_, carry, vartype, name='HALF_ADDER'):
@@ -142,7 +142,7 @@ class HALF_ADDER(Constraint):
 
 class FULL_ADDER(Constraint):
     """FULL_ADDER constraint."""
-    __slots__ = ('name')
+    __slots__ = ()
 
     @dimod.vartype_argument('vartype')
     def __init__(self, in1, in2, in3, sum_, carry, vartype, name='FULL_ADDER'):
