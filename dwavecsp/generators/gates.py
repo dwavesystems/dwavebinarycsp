@@ -2,10 +2,10 @@ import dimod
 
 from dwavecsp.core.constraint import Constraint
 
-__all__ = ['AND', 'OR', 'XOR', 'HALF_ADDER', 'FULL_ADDER']
+__all__ = ['and_gate', 'or_gate', 'xor_gate', 'halfadder_gate', 'fulladder_gate']
 
 
-class AND(Constraint):
+class and_gate(Constraint):
     """AND constraint."""
     __slots__ = ()
 
@@ -37,7 +37,7 @@ class AND(Constraint):
         self.func = func
 
 
-class OR(Constraint):
+class or_gate(Constraint):
     """OR constraint."""
     __slots__ = ()
 
@@ -69,7 +69,7 @@ class OR(Constraint):
         self.func = func
 
 
-class XOR(Constraint):
+class xor_gate(Constraint):
     """XOR constraint."""
     __slots__ = ()
 
@@ -101,8 +101,8 @@ class XOR(Constraint):
         self.func = func
 
 
-class HALF_ADDER(Constraint):
-    """HALF_ADDER constraint."""
+class halfadder_gate(Constraint):
+    """HALF_ADDER adder constraint."""
     __slots__ = ()
 
     @dimod.vartype_argument('vartype')
@@ -140,7 +140,7 @@ class HALF_ADDER(Constraint):
         self.func = func
 
 
-class FULL_ADDER(Constraint):
+class fulladder_gate(Constraint):
     """FULL_ADDER constraint."""
     __slots__ = ()
 
