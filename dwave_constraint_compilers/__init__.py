@@ -1,8 +1,0 @@
-from __future__ import absolute_import
-
-import dwave_constraint_compilers.constraints
-
-from dwave_constraint_compilers.satisfy import *
-import dwave_constraint_compilers.satisfy
-
-import dwave_constraint_compilers.utils

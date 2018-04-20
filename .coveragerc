@@ -1,5 +1,5 @@
 [run]
-source = dwave_constraint_compilers
+source = dwavecsp
 
 [report]
 exclude_lines:
