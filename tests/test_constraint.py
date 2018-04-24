@@ -8,25 +8,10 @@ import dwavecsp.testing as dcspt
 
 class TestConstraint(unittest.TestCase):
 
-    def test_instantiation(self):
-        const = dwavecsp.Constraint()
-
-        dcspt.assert_consistent_constraint(const)
-
-        self.assertEqual(const.configurations, frozenset())
-        self.assertEqual(const.variables, tuple())
-        self.assertTrue(const.func())  # should always return true
-
-        with self.assertRaises(AttributeError):
-            const.vartype
-
     def test__len__(self):
-        const = dwavecsp.Constraint()
-
-        self.assertEqual(len(const), 0)
 
         const = dwavecsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavecsp.SPIN)
-
+        dcspt.assert_consistent_constraint(const)
         self.assertEqual(len(const), 2)
 
     def test_from_func(self):

@@ -12,6 +12,9 @@ class ConstraintSatisfactionProblem(object):
         self.constraints = []
         self.variables = defaultdict(list)
 
+    def __len__(self):
+        return self.constraints.__len__()
+
     def add_constraint(self, constraint, variables=tuple()):
         if isinstance(constraint, Constraint):
             pass
@@ -25,6 +28,9 @@ class ConstraintSatisfactionProblem(object):
         self.constraints.append(constraint)
         for v in constraint.variables:
             self.variables[v].append(constraint)
+
+    def add_variable(self, v):
+        self.variables[v]  # because defaultdict will create it if it's not there
 
     def check(self, solution):
         return all(constraint.check(solution) for constraint in self.constraints)

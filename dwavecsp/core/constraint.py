@@ -1,6 +1,6 @@
 import itertools
 
-from collections import Sized
+from collections import Sized, Callable
 
 import dimod
 
@@ -9,20 +9,59 @@ from dwavecsp.exceptions import UnsatError
 __all__ = ['Constraint']
 
 
-class _ConstraintBase(Sized):
+class Constraint(Sized):
+    """tell folks to use from_*"""
+
     __slots__ = ('vartype', 'variables', 'configurations', 'func', 'name')
 
-    def __init__(self):
-        self.configurations = frozenset()
+    #
+    # Construction
+    #
 
-        def func(): return True
+    @dimod.vartype_argument('vartype')
+    def __init__(self, func, configurations, variables, vartype, name=None):
+
+        self.vartype = vartype  # checked by decorator
+
+        if not isinstance(func, Callable):
+            raise TypeError("excpected input 'func' to be callable")
         self.func = func
 
-        self.variables = tuple()
+        self.variables = variables = tuple(variables)
+        num_variables = len(variables)
 
-        self.name = 'Constraint'
+        if not isinstance(configurations, frozenset):
+            configurations = frozenset(configurations)
+        if not all(len(config) == num_variables for config in configurations):
+            raise ValueError("all configurations should be of the same length")
+        if len(vartype.value.union(*configurations)) > 3:
+            raise ValueError("configurations do not match vartype")
+        self.configurations = configurations
 
-        # vartype is not meaningful for an empty Constraint
+        if name is None:
+            name = 'Constraint'
+        self.name = name
+
+    @classmethod
+    @dimod.vartype_argument('vartype')
+    def from_func(cls, func, variables, vartype, name=None):
+        """todo"""
+        configurations = frozenset(config
+                                   for config in itertools.product(vartype.value, repeat=len(variables))
+                                   if func(*config))
+
+        return cls(func, configurations, variables, vartype, name)
+
+    @classmethod
+    def from_configurations(cls, configurations, variables, vartype, name='Constraint'):
+        """todo"""
+        def func(*args): return args in configurations
+
+        return cls(func, configurations, variables, vartype, name)
+
+    #
+    # special methods
+    #
 
     def __len__(self):
         """The number of variables."""
@@ -34,14 +73,15 @@ class _ConstraintBase(Sized):
                                                                               self.vartype,
                                                                               self.name)
 
-    def check(self, solution):
-        """todo"""
-        return self.func(*(solution[v] for v in self.variables))
+    def __eq__(self, constraint):
+        return self.variables == constraint.variables and self.configurations == constraint.configurations
 
+    def __ne__(self, constraint):
+        return not self.__eq__(constraint)
 
-class Constraint(_ConstraintBase):
-    """todo"""
-    __slots__ = ()
+    def __hash__(self):
+        # uniquely defined by configurations/variables
+        return hash((self.configurations, self.variables))
 
     def __or__(self, const):
         if not isinstance(const, Constraint):
@@ -78,7 +118,7 @@ class Constraint(_ConstraintBase):
             raise TypeError("unsupported operand type(s) for &: 'Constraint' and '{}'".format(type(const).__name__))
 
         if const and self and self.vartype is not const.vartype:
-            raise ValueError("operand | only meaningful for Constraints with matching vartype")
+            raise ValueError("operand & only meaningful for Constraints with matching vartype")
 
         shared_variables = set(self.variables).intersection(const.variables)
 
@@ -104,56 +144,17 @@ class Constraint(_ConstraintBase):
 
         return self.from_func(intersection, variables, self.vartype, name=name)
 
-    @classmethod
-    @dimod.vartype_argument('vartype')
-    def from_func(cls, func, variables, vartype, name='Constraint'):
+    #
+    # verification
+    #
+
+    def check(self, solution):
         """todo"""
-        constraint = _ConstraintBase.__new__(cls)  # bypass __init__ because we're going to override anyway
+        return self.func(*(solution[v] for v in self.variables))
 
-        # vartype checked by the dimod.vartype_argument decorator
-        constraint.vartype = vartype
-
-        constraint.func = func
-
-        constraint.variables = variables = tuple(variables)
-
-        # developer note: this implicitly checks that the length of variables and the input of func
-        #  are consistent
-        constraint.configurations = frozenset(config
-                                              for config in itertools.product(vartype.value, repeat=len(variables))
-                                              if func(*config))
-
-        constraint.name = name
-
-        return constraint
-
-    @classmethod
-    @dimod.vartype_argument('vartype')
-    def from_configurations(cls, configurations, variables, vartype, name='Constraint'):
-        """todo"""
-        constraint = _ConstraintBase.__new__(cls)  # bypass __init__ because we're going to override anyway
-
-        # vartype checked by the dimod.vartype_argument decorator
-        constraint.vartype = vartype
-
-        constraint.variables = variables = tuple(variables)
-        num_variables = len(variables)
-
-        if not isinstance(configurations, frozenset):
-            configurations = frozenset(configurations)
-        if not all(len(config) == num_variables for config in configurations):
-            raise ValueError("all configurations should be of the same length")
-        if len(vartype.value.union(*configurations)) > 3:
-            raise ValueError("configurations do not match vartype")
-
-        constraint.configurations = configurations
-
-        def func(*args): return args in configurations
-        constraint.func = func
-
-        constraint.name = name
-
-        return constraint
+    #
+    # checking
+    #
 
     def fix_variable(self, v, value):
         """Fix the value of a variable and remove it from the constraint.

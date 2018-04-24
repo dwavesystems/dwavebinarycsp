@@ -2,8 +2,7 @@
 from dwavecsp.core import *
 import dwavecsp.core
 
-from dwavecsp.generators import *
-import dwavecsp.generators
+import dwavecsp.factories
 
 import dwavecsp.exceptions
 
