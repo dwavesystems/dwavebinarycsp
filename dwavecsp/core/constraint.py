@@ -153,7 +153,7 @@ class Constraint(Sized):
         return self.func(*(solution[v] for v in self.variables))
 
     #
-    # checking
+    # transformation
     #
 
     def fix_variable(self, v, value):
