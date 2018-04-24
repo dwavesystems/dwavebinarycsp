@@ -95,3 +95,65 @@ class TestConstraint(unittest.TestCase):
 
         self.assertEqual(const.configurations, frozenset([(-1, -1, 1), (1, 1, -1)]))
         self.assertEqual(const.variables, ('a', 'b', 'c'))
+
+    def test_negate_variables_binary(self):
+        const = dwavecsp.Constraint.from_configurations([(0, 1), (1, 0)], ['a', 'b'], vartype=dwavecsp.BINARY)
+
+        const.flip_variable('a')
+
+        dcspt.assert_consistent_constraint(const)
+
+        self.assertEqual(const.configurations, frozenset([(1, 1), (0, 0)]))
+
+        #
+
+        const = dwavecsp.Constraint.from_configurations([(0, 1), (1, 0)], ['a', 'b'], vartype=dwavecsp.BINARY)
+
+        const.flip_variable('b')
+
+        dcspt.assert_consistent_constraint(const)
+
+        self.assertEqual(const.configurations, frozenset([(1, 1), (0, 0)]))
+
+        #
+
+        const = dwavecsp.Constraint.from_configurations([(0, 1, 1), (1, 0, 0)],
+                                                        ['a', 'b', 'c'],
+                                                        vartype=dwavecsp.BINARY)
+
+        const.flip_variable('b')
+
+        dcspt.assert_consistent_constraint(const)
+
+        self.assertEqual(const.configurations, frozenset([(1, 1, 0), (0, 0, 1)]))
+
+    def test_negate_variables_spi(self):
+        const = dwavecsp.Constraint.from_configurations([(-1, 1), (1, -1)], ['a', 'b'], vartype=dwavecsp.SPIN)
+
+        const.flip_variable('a')
+
+        dcspt.assert_consistent_constraint(const)
+
+        self.assertEqual(const.configurations, frozenset([(1, 1), (-1, -1)]))
+
+        #
+
+        const = dwavecsp.Constraint.from_configurations([(-1, 1), (1, -1)], ['a', 'b'], vartype=dwavecsp.SPIN)
+
+        const.flip_variable('b')
+
+        dcspt.assert_consistent_constraint(const)
+
+        self.assertEqual(const.configurations, frozenset([(1, 1), (-1, -1)]))
+
+        #
+
+        const = dwavecsp.Constraint.from_configurations([(-1, 1, 1), (1, -1, -1)],
+                                                        ['a', 'b', 'c'],
+                                                        vartype=dwavecsp.SPIN)
+
+        const.flip_variable('b')
+
+        dcspt.assert_consistent_constraint(const)
+
+        self.assertEqual(const.configurations, frozenset([(1, 1, -1), (-1, -1, 1)]))

@@ -193,3 +193,40 @@ class Constraint(Sized):
         self.func = func
 
         self.name = '{} ({} fixed to {})'.format(self.name, v, value)
+
+    def flip_variable(self, v):
+        """todo"""
+        try:
+            idx = self.variables.index(v)
+        except ValueError:
+            raise ValueError("variable {} is not a variable in constraint {}".format(v, self.name))
+
+        if self.vartype is dimod.BINARY:
+
+            original_func = self.func
+
+            def func(*args):
+                new_args = list(args)
+                new_args[idx] = 1 - new_args[idx]  # negate v
+                return original_func(*new_args)
+
+            self.func = func
+
+            self.configurations = frozenset(config[:idx] + (1 - config[idx],) + config[idx + 1:]
+                                            for config in self.configurations)
+
+        else:  # SPIN
+
+            original_func = self.func
+
+            def func(*args):
+                new_args = list(args)
+                new_args[idx] = -new_args[idx]  # negate v
+                return original_func(*new_args)
+
+            self.func = func
+
+            self.configurations = frozenset(config[:idx] + (-config[idx],) + config[idx + 1:]
+                                            for config in self.configurations)
+
+        self.name = '{} ({} flipped)'.format(self.name, v)
