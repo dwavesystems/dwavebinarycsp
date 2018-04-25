@@ -5,11 +5,9 @@ from __future__ import absolute_import
 
 from six import iteritems
 
-from dwave_constraint_compilers.compilers import stitch
-from dwave_constraint_compilers.constraint_specification_languages.internal import validate
-from dwave_constraint_compilers.utils import constraint_vartype, sample_vartype, convert_sample
+from dwavecsp.compilers import stitch
 
-__all__ = ['satisfy', 'is_satisfied', 'iter_unsatisfied_constraints']
+__all__ = ['satisfy']
 
 
 def satisfy(constraints, sampler, compilation_method=stitch, validate_constraints=True, **sampler_args):
@@ -89,77 +87,3 @@ def satisfy(constraints, sampler, compilation_method=stitch, validate_constraint
         sample = convert_sample(sample, vartype=original_vartype)
 
     return sample
-
-
-def is_satisfied(constraints, sample):
-    """Determine if the sample satisfied the constraints.
-
-    Args:
-        constraints (dict[str, dict]): A set of constraints conforming to the schema defined in the
-            `constraint_specification_language`.
-
-        sample (dict[hashable, int]):
-            A dict mapping each variable in the constraints to an assignment.
-
-    Returns:
-        bool: True if all if each constrain in constraints is met.
-
-    Examples:
-        >>> constraints = {
-        ...     'EQ1': {
-        ...         'feasible_configurations': [(0, 0), (1, 1)],
-        ...         'variables': ['a', 'b']},
-        ...     'EQ2': {
-        ...         'feasible_configurations': [(0, 0), (1, 1)],
-        ...         'variables': ['c', 'b']},
-        ...     'NEQ1': {
-        ...         'feasible_configurations': [(0, 1), (1, 0)],
-        ...         'variables': ['c', 'e']},
-        ...     'NEQ2': {
-        ...         'feasible_configurations': [(0, 1), (1, 0)],
-        ...         'variables': ['a', 'e']}}
-        >>> sample = {'a': 1, 'b': 1, 'c': 1, 'e': 0}
-        >>> dcc.is_satisfied(constraints, sample)
-        True
-
-    """
-    return not any(iter_unsatisfied_constraints(constraints, sample))
-
-
-def iter_unsatisfied_constraints(constraints, sample):
-    """Determine which constraints are not satisfied by sample.
-
-    Args:
-        constraints (dict[str, dict]): A set of constraints conforming to the schema defined in the
-            `constraint_specification_language`.
-
-        sample (dict[hashable, int]):
-            A dict mapping each variable in the constraints to an assignment.
-
-    Returns:
-        list: The names of the constraints in `constraints` that are not satisfied
-        by sample.
-
-    Examples:
-        >>> constraints = {
-        ...     'EQ1': {
-        ...         'feasible_configurations': [(0, 0), (1, 1)],
-        ...         'variables': ['a', 'b']},
-        ...     'EQ2': {
-        ...         'feasible_configurations': [(0, 0), (1, 1)],
-        ...         'variables': ['c', 'b']},
-        ...     'NEQ1': {
-        ...         'feasible_configurations': [(0, 1), (1, 0)],
-        ...         'variables': ['c', 'e']},
-        ...     'NEQ2': {
-        ...         'feasible_configurations': [(0, 1), (1, 0)],
-        ...         'variables': ['a', 'e']}}
-        >>> sample = {'a': 1, 'b': 1, 'c': 1, 'e': 1}
-        >>> list(dcc.iter_unsatisfied_constraints(constraints, sample))  # doctest: +SKIP
-        ['NEQ1', 'NEQ2']
-
-    """
-    for label, constraint in iteritems(constraints):
-        config = tuple(sample[v] for v in constraint['variables'])
-        if config not in constraint['feasible_configurations']:
-            yield label
