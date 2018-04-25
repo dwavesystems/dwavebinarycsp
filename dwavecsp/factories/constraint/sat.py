@@ -8,10 +8,15 @@ __all__ = ['sat2in4']
 
 
 @dimod.vartype_argument('vartype')
-def sat2in4(*args, vartype=dimod.BINARY, name='2-in-4', pos=tuple(), neg=tuple()):
-    """2in4sat"""
+def sat2in4(pos, neg=tuple(), vartype=dimod.BINARY, name='2-in-4'):
+    """Return a 2-in-4 constraint.
 
-    pos = args + tuple(pos)
+    Args:
+        pos (iterable):
+            An iterable of variable labels.
+
+    """
+    pos = tuple(pos)
     neg = tuple(neg)
 
     variables = pos + neg
@@ -53,8 +58,7 @@ def sat2in4(*args, vartype=dimod.BINARY, name='2-in-4', pos=tuple(), neg=tuple()
             # a != b
             return b == d
         else:
-            # a != b, a != c -> b == c
+            # a != b, a != c => b == c
             return a == d
 
-    return Constraint(func=func, configurations=configurations, variables=variables,
-                      vartype=vartype, name=name)
+    return Constraint(func, configurations, variables, vartype=vartype, name=name)

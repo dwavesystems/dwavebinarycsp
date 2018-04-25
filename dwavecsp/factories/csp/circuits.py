@@ -61,7 +61,7 @@ def multiplication_circuit(nbit, vartype=dimod.BINARY):
                 # carry out
                 andij = AND[i][j] = p[0]
 
-                gate = and_gate(ai, bj, andij, vartype=vartype, name='AND(%s, %s) = %s' % (ai, bj, andij))
+                gate = and_gate([ai, bj, andij], vartype=vartype, name='AND(%s, %s) = %s' % (ai, bj, andij))
                 csp.add_constraint(gate)
 
                 continue
@@ -69,7 +69,7 @@ def multiplication_circuit(nbit, vartype=dimod.BINARY):
             # we always need an AND gate
             andij = AND[i][j] = 'and%s,%s' % (i, j)
 
-            gate = and_gate(ai, bj, andij, vartype=vartype, name='AND(%s, %s) = %s' % (ai, bj, andij))
+            gate = and_gate([ai, bj, andij], vartype=vartype, name='AND(%s, %s) = %s' % (ai, bj, andij))
             csp.add_constraint(gate)
 
             # the number of inputs will determine the type of adder
@@ -97,8 +97,8 @@ def multiplication_circuit(nbit, vartype=dimod.BINARY):
 
                 carryij = CARRY[i][j] = 'carry%d,%d' % (i, j)
 
-                name = 'HALFADDER(%s, %s) = %s, %s' % (*inputs, sumij, carryij)
-                gate = halfadder_gate(*inputs, sumij, carryij, vartype=vartype, name=name)
+                name = 'HALFADDER(%s, %s) = %s, %s' % (inputs[0], inputs[1], sumij, carryij)
+                gate = halfadder_gate([inputs[0], inputs[1], sumij, carryij], vartype=vartype, name=name)
                 csp.add_constraint(gate)
             else:
                 assert len(inputs) == 3, 'unexpected number of inputs'
@@ -112,8 +112,8 @@ def multiplication_circuit(nbit, vartype=dimod.BINARY):
 
                 carryij = CARRY[i][j] = 'carry%d,%d' % (i, j)
 
-                name = 'FULLADDER(%s, %s, %s) = %s, %s' % (*inputs, sumij, carryij)
-                gate = fulladder_gate(*inputs, sumij, carryij, vartype=vartype, name=name)
+                name = 'FULLADDER(%s, %s, %s) = %s, %s' % (inputs[0], inputs[1], inputs[2], sumij, carryij)
+                gate = fulladder_gate([inputs[0], inputs[1], inputs[2], sumij, carryij], vartype=vartype, name=name)
                 csp.add_constraint(gate)
 
     # now we have a final row of full adders
@@ -124,8 +124,8 @@ def multiplication_circuit(nbit, vartype=dimod.BINARY):
             sumout = p[nbit + col]
             carryout = CARRY[nbit][col] = 'carry%d,%d' % (nbit, col)
 
-            name = 'HALFADDER(%s, %s) = %s, %s' % (*inputs, sumout, carryout)
-            gate = halfadder_gate(*inputs, sumout, carryout, vartype=vartype, name=name)
+            name = 'HALFADDER(%s, %s) = %s, %s' % (inputs[0], inputs[1], sumout, carryout)
+            gate = halfadder_gate([inputs[0], inputs[1], sumout, carryout], vartype=vartype, name=name)
             csp.add_constraint(gate)
 
             continue
@@ -138,8 +138,8 @@ def multiplication_circuit(nbit, vartype=dimod.BINARY):
         else:
             carryout = p[2 * nbit - 1]
 
-        name = 'FULLADDER(%s, %s, %s) = %s, %s' % (*inputs, sumout, carryout)
-        gate = fulladder_gate(*inputs, sumout, carryout, vartype=vartype, name=name)
+        name = 'FULLADDER(%s, %s, %s) = %s, %s' % (inputs[0], inputs[1], inputs[2], sumout, carryout)
+        gate = fulladder_gate([inputs[0], inputs[1], inputs[2], sumout, carryout], vartype=vartype, name=name)
         csp.add_constraint(gate)
 
     return csp

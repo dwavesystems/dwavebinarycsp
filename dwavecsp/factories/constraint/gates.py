@@ -10,10 +10,10 @@ __all__ = ['and_gate',
 
 
 @dimod.vartype_argument('vartype')
-def and_gate(in1, in2, out, vartype=dimod.BINARY, name='AND'):
+def and_gate(variables, vartype=dimod.BINARY, name='AND'):
     """AND gate."""
 
-    variables = (in1, in2, out)
+    variables = tuple(variables)
 
     if vartype is dimod.BINARY:
         configurations = frozenset([(0, 0, 0),
@@ -32,15 +32,14 @@ def and_gate(in1, in2, out, vartype=dimod.BINARY, name='AND'):
 
         def func(in1, in2, out): return ((in1 > 0) and (in2 > 0)) == (out > 0)
 
-    return Constraint(func=func, configurations=configurations, variables=variables,
-                      vartype=vartype, name=name)
+    return Constraint(func, configurations, variables, vartype=vartype, name=name)
 
 
 @dimod.vartype_argument('vartype')
-def or_gate(in1, in2, out, vartype=dimod.BINARY, name='OR'):
+def or_gate(variables, vartype=dimod.BINARY, name='OR'):
     """OR gate."""
 
-    variables = (in1, in2, out)
+    variables = tuple(variables)
 
     if vartype is dimod.BINARY:
         configs = frozenset([(0, 0, 0),
@@ -59,16 +58,14 @@ def or_gate(in1, in2, out, vartype=dimod.BINARY, name='OR'):
 
         def func(in1, in2, out): return ((in1 > 0) or (in2 > 0)) == (out > 0)
 
-    return Constraint(func=func, configurations=configs, variables=variables,
-                      vartype=vartype, name=name)
+    return Constraint(func, configs, variables, vartype=vartype, name=name)
 
 
 @dimod.vartype_argument('vartype')
-def xor_gate(in1, in2, out, vartype=dimod.BINARY, name='XOR'):
+def xor_gate(variables, vartype=dimod.BINARY, name='XOR'):
     """XOR constraint."""
 
-    variables = (in1, in2, out)
-
+    variables = tuple(variables)
     if vartype is dimod.BINARY:
         configs = frozenset([(0, 0, 0),
                              (0, 1, 1),
@@ -86,14 +83,14 @@ def xor_gate(in1, in2, out, vartype=dimod.BINARY, name='XOR'):
 
         def func(in1, in2, out): return ((in1 > 0) != (in2 > 0)) == (out > 0)
 
-    return Constraint(func=func, configurations=configs, variables=variables,
-                      vartype=vartype, name=name)
+    return Constraint(func, configs, variables, vartype=vartype, name=name)
 
 
 @dimod.vartype_argument('vartype')
-def halfadder_gate(augend, addend, sum_, carry, vartype, name='HALF_ADDER'):
+def halfadder_gate(variables, vartype, name='HALF_ADDER'):
     """HALF_ADDER adder constraint."""
-    variables = (augend, addend, sum_, carry)
+
+    variables = tuple(variables)
 
     if vartype is dimod.BINARY:
         configs = frozenset([(0, 0, 0, 0),
@@ -119,15 +116,14 @@ def halfadder_gate(augend, addend, sum_, carry, vartype, name='HALF_ADDER'):
         else:
             raise ValueError("func recieved unexpected values")
 
-    return Constraint(func=func, configurations=configs, variables=variables,
-                      vartype=vartype, name=name)
+    return Constraint(func, configs, variables, vartype=vartype, name=name)
 
 
 @dimod.vartype_argument('vartype')
-def fulladder_gate(in1, in2, in3, sum_, carry, vartype, name='FULL_ADDER'):
+def fulladder_gate(variables, vartype, name='FULL_ADDER'):
     """FULL_ADDER constraint."""
 
-    variables = (in1, in2, in3, sum_, carry)
+    variables = tuple(variables)
 
     if vartype is dimod.BINARY:
         configs = frozenset([(0, 0, 0, 0, 0),
@@ -163,5 +159,4 @@ def fulladder_gate(in1, in2, in3, sum_, carry, vartype, name='FULL_ADDER'):
         else:
             raise ValueError("func recieved unexpected values")
 
-    return Constraint(func=func, configurations=configs, variables=variables,
-                      vartype=vartype, name=name)
+    return Constraint(func, configs, variables, vartype=vartype, name=name)

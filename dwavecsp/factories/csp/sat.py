@@ -107,7 +107,7 @@ def random_xorsat(num_variables, num_clauses, vartype=dimod.BINARY, satisfiable=
                 x, y = y, x
 
             # get the constraint
-            const = xor_gate(x, y, z)
+            const = xor_gate([x, y, z], vartype=vartype)
 
             # pick (uniformly) a configuration and determine which variables we need to negate to
             # match the chosen configuration
@@ -129,7 +129,7 @@ def random_xorsat(num_variables, num_clauses, vartype=dimod.BINARY, satisfiable=
                 x, y = y, x
 
             # get the constraint
-            const = xor_gate(x, y, z)
+            const = xor_gate([x, y, z], vartype=vartype)
 
             # randomly flip each variable in the constraint
             for idx, v in enumerate(const.variables):
