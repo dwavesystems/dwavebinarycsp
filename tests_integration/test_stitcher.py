@@ -6,8 +6,15 @@ import dimod
 import dwavecsp
 from dwavecsp.compilers import stitcher
 
+try:
+    import penaltymodel_maxgap
+    _maxgap = True
+except ImportError:
+    _maxgap = False
+
 
 class TestStitch(unittest.TestCase):
+    @unittest.skipUnless(_maxgap, 'needs penaltymodel-maxgap installed')
     def test_stitch(self):
 
         csp = dwavecsp.CSP(dwavecsp.SPIN)
