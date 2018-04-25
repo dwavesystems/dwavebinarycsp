@@ -55,15 +55,15 @@ source_parsers = {'.md': 'recommonmark.parser.CommonMarkParser'}
 master_doc = 'index'
 
 # General information about the project.
-project = u'D-Wave Constraint Compilers'
-copyright = u'2017, D-Wave Systems Inc'
+project = u'dwavecsp'
+copyright = u'2018, D-Wave Systems Inc'
 author = u'D-Wave Systems Inc'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
-import dwave_constraint_compilers.package_info as pckinfo
+import dwavecsp.package_info as pckinfo
 # The short X.Y version.
 version = pckinfo.__version__
 # The full version, including alpha/beta/rc tags.
@@ -89,9 +89,9 @@ pygments_style = 'sphinx'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
-modindex_common_prefix = ['dwave_constraint_compilers.']
+modindex_common_prefix = ['dwavecsp.']
 
-doctest_global_setup = "import dwave_constraint_compilers as dcc"
+doctest_global_setup = "import dwavecsp"
 
 
 # -- Options for HTML output ----------------------------------------------
@@ -117,7 +117,7 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'dwave_constraint_compilers'
+htmlhelp_basename = 'dwavecsp'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -144,7 +144,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'dwave_constraint_compilers.tex', u'D-Wave Constraint Compilers Documentation',
+    (master_doc, 'dwavecsp.tex', u'dwavecsp',
      u'D-Wave Systems Inc', 'manual'),
 ]
 
@@ -154,7 +154,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'dwave_constraint_compilers', u'D-Wave Embedding Utilities Documentation',
+    (master_doc, 'dwavecsp', u'dwavecsp',
      [author], 1)
 ]
 
@@ -165,8 +165,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'dwave_constraint_compilers', u'D-Wave Constraint Compilers Documentation',
-     author, 'dimod', 'One line description of project.',
+    (master_doc, 'dwavecsp', u'dwavecsp',
+     author, 'dwavecsp', 'One line description of project.',
      'Miscellaneous'),
 ]
 
@@ -193,8 +193,10 @@ epub_exclude_files = ['search.html']
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/3': None,
-                       'http://penaltymodel.readthedocs.io/en/latest/': None}
+intersphinx_mapping = {'python': ('https://docs.python.org/3', None),
+                       'networkx': ('https://networkx.github.io/documentation/stable/', None),
+                       'dimod': ('http://dimod.readthedocs.io/en/stable/', None),
+                       'penaltymodel': ('http://penaltymodel.readthedocs.io/en/stable/', None)}
 
 
 # sort documentation they way the appear in the source file
