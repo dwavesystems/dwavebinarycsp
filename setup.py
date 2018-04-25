@@ -17,10 +17,12 @@ install_requires = ['penaltymodel>=0.13.2,<0.14.0',
                     'six>=1.11.0,<2.0.0']
 
 packages = ['dwavecsp',
-            'dwavecsp.core',
             'dwavecsp.compilers',
-            'dwavecsp.satisfy',
-            'dwavecsp.generators']
+            'dwavecsp.core',
+            'dwavecsp.factories',
+            'dwavecsp.factories.constraint',
+            'dwavecsp.factories.csp',
+            'dwavecsp.satisfy']
 
 setup(
     name='dwavecsp',
