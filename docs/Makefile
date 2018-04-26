@@ -2,7 +2,7 @@
 #
 
 # You can set these variables from the command line.
-SPHINXOPTS    =
+SPHINXOPTS    = -q
 SPHINXBUILD   = sphinx-build
 SPHINXPROJ    = dwave_constraint_compiler
 SOURCEDIR     = .
