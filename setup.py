@@ -21,8 +21,7 @@ packages = ['dwavecsp',
             'dwavecsp.core',
             'dwavecsp.factories',
             'dwavecsp.factories.constraint',
-            'dwavecsp.factories.csp',
-            'dwavecsp.satisfy']
+            'dwavecsp.factories.csp']
 
 setup(
     name='dwavecsp',
