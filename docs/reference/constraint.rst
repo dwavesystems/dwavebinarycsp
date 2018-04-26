@@ -42,4 +42,10 @@ Transformations
    Constraint.fix_variable
    Constraint.flip_variable
 
+Copy
+----
 
+.. autosummary::
+   :toctree: generated/
+
+   Constraint.copy
