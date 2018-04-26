@@ -89,7 +89,9 @@ class Constraint(Sized):
         num_variables = len(variables)
 
         if not isinstance(configurations, frozenset):
-            configurations = frozenset(configurations)
+            configurations = frozenset(tuple(config) for config in configurations)  # cast to tuples
+        if len(configurations) == 0 and num_variables > 0:
+            raise ValueError("constraint must have at least one feasible configuration")
         if not all(len(config) == num_variables for config in configurations):
             raise ValueError("all configurations should be of the same length")
         if len(vartype.value.union(*configurations)) >= 3:
@@ -379,3 +381,12 @@ class Constraint(Sized):
                                             for config in self.configurations)
 
         self.name = '{} ({} flipped)'.format(self.name, v)
+
+    #
+    # copy
+    #
+
+    def copy(self):
+        """Create a copy."""
+        # each object is itself immutable (except the function)
+        return self.__class__(self.func, self.configurations, self.variables, self.vartype, name=self.name)

@@ -4,6 +4,9 @@ import dwavecsp.compilers
 from dwavecsp.core import *
 import dwavecsp.core
 
+from dwavecsp.reduction import *
+import dwavecsp.reduction
+
 import dwavecsp.exceptions
 
 import dwavecsp.factories

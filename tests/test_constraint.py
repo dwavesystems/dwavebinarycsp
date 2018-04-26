@@ -176,3 +176,9 @@ class TestConstraint(unittest.TestCase):
         # bad vartype
         with self.assertRaises(ValueError):
             dwavecsp.Constraint(f, {(-1,), (0,)}, ['a'], dwavecsp.BINARY)
+
+    def test_copy(self):
+        const = dwavecsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavecsp.SPIN)
+        new_const = const.copy()
+
+        self.assertEqual(const, new_const)
