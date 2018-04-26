@@ -157,3 +157,22 @@ class TestConstraint(unittest.TestCase):
         dcspt.assert_consistent_constraint(const)
 
         self.assertEqual(const.configurations, frozenset([(1, 1, -1), (-1, -1, 1)]))
+
+    def test_construction_typechecking(self):
+
+        # not function
+        with self.assertRaises(TypeError):
+            dwavecsp.Constraint(1, {}, [], dwavecsp.BINARY)
+
+        def f():
+            pass
+
+        # mismatched lengths
+        with self.assertRaises(ValueError):
+            dwavecsp.Constraint(f, {tuple(), (1,)}, [], dwavecsp.BINARY)
+        with self.assertRaises(ValueError):
+            dwavecsp.Constraint(f, {(0,), (1,)}, ['a', 'b'], dwavecsp.BINARY)
+
+        # bad vartype
+        with self.assertRaises(ValueError):
+            dwavecsp.Constraint(f, {(-1,), (0,)}, ['a'], dwavecsp.BINARY)

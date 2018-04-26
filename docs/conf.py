@@ -91,7 +91,7 @@ todo_include_todos = True
 
 modindex_common_prefix = ['dwavecsp.']
 
-doctest_global_setup = "import dwavecsp"
+doctest_global_setup = "import dwavecsp, operator"
 
 
 # -- Options for HTML output ----------------------------------------------
