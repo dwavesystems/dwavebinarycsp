@@ -1,6 +1,6 @@
-.. image:: https://travis-ci.org/dwavesystems/dwave_constraint_compilers.svg?branch=master
-    :target: https://travis-ci.org/dwavesystems/dwave_constraint_compilers
-    :alt: Travis Status
+.. image:: https://circleci.com/gh/arcondello/dwavecsp.svg?style=svg
+    :target: https://circleci.com/gh/arcondello/dwavecsp
+    :alt: circle-ci Status
 
 .. image:: https://coveralls.io/repos/github/dwavesystems/dwave_constraint_compilers/badge.svg?branch=master
     :target: https://coveralls.io/github/dwavesystems/dwave_constraint_compilers?branch=master
