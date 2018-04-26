@@ -10,20 +10,24 @@
     :target: http://dwave_constraint_compilers.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-.. inclusion-marker-do-not-remove
+.. index-start-marker
 
-D-Wave Constraint Compilers
-===========================
+dwavecsp
+========
+
+todo
+
+Example Usage
+-------------
 
 todo
 
-Rational
---------
-
-todo
+.. index-end-marker
 
 Installation
 ------------
+
+.. installation-start-marker
 
 To install:
 
@@ -37,12 +41,14 @@ To build from souce:
     
     python setup.py install
 
-Example Usage
--------------
-
-todo
+.. installation-end-marker
 
 License
 -------
 
-Released under the Apache License 2.0
+Released under the Apache License 2.0. See LICENSE file.
+
+Contribution
+------------
+
+See CONTRIBUTING.rst file.

@@ -1,3 +1,6 @@
+"""
+todo - describe Constraint
+"""
 import itertools
 
 from collections import Sized, Callable
@@ -10,7 +13,62 @@ __all__ = ['Constraint']
 
 
 class Constraint(Sized):
-    """tell folks to use from_*"""
+    """A constraint.
+
+    Attributes:
+        variables (tuple):
+            The variables associated with the constraint.
+
+        func (function):
+            This function should return True for configurations of variables that satisfy the
+            constraint. The inputs to the function are ordered by :attr:`~Constraint.variables`.
+
+            Example:
+
+                >>> const = dwavecsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavecsp.BINARY)
+                >>> const.func(0, 0)  # order matches variables
+                True
+
+        configurations (frozenset[tuple]):
+            The valid configurations of the variables. Each configuration is a tuple of variable
+            assignments ordered by :attr:`~Constraint.variables`.
+
+            Example:
+
+                >>> const = dwavecsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavecsp.BINARY)
+                >>> (0, 1) in const.configurations
+                True
+                >>> (1, 0) in const.configurations
+                True
+
+        vartype (:class:`dimod.Vartype`):
+            The possible assignments for the constraint's variables.
+            One of :attr:`~dimod.Vartype.SPIN` or :attr:`~dimod.Vartype.BINARY`. If the vartype is
+            SPIN then the variables can be assigned -1 or 1, if BINARY then the variables can be
+            assigned 0 or 1.
+
+        name (str):
+            The name of the constraint. If not provided on construction, will default to
+            'Constraint'
+
+            Example:
+                >>> const = dwavecsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavecsp.BINARY)
+                >>> const.name
+                'Constraint'
+                >>> const = dwavecsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavecsp.BINARY, name='neq')
+                >>> const.name
+                'neq'
+
+    Several operations are also valid for constraints.
+
+    Examples:
+        Constraints have a length (the number of variables)
+
+        >>> const = dwavecsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavecsp.BINARY)
+        >>> len(const)
+        2
+
+    """
 
     __slots__ = ('vartype', 'variables', 'configurations', 'func', 'name')
 
@@ -24,7 +82,7 @@ class Constraint(Sized):
         self.vartype = vartype  # checked by decorator
 
         if not isinstance(func, Callable):
-            raise TypeError("excpected input 'func' to be callable")
+            raise TypeError("expected input 'func' to be callable")
         self.func = func
 
         self.variables = variables = tuple(variables)
@@ -34,7 +92,7 @@ class Constraint(Sized):
             configurations = frozenset(configurations)
         if not all(len(config) == num_variables for config in configurations):
             raise ValueError("all configurations should be of the same length")
-        if len(vartype.value.union(*configurations)) > 3:
+        if len(vartype.value.union(*configurations)) >= 3:
             raise ValueError("configurations do not match vartype")
         self.configurations = configurations
 
@@ -45,7 +103,32 @@ class Constraint(Sized):
     @classmethod
     @dimod.vartype_argument('vartype')
     def from_func(cls, func, variables, vartype, name=None):
-        """todo"""
+        """Construct a constraint from a validation function.
+
+        Args:
+            func (function):
+                A function that evaluates true when the variables satisfy the constraint.
+
+            variables (iterable):
+                An iterable of variable labels.
+
+            vartype (:class:`~dimod.Vartype`/str/set):
+                Variable type for the binary quadratic model. Accepted input values:
+                * :attr:`~dimod.Vartype.SPIN`, ``'SPIN'``, ``{-1, 1}``
+                * :attr:`~dimod.Vartype.BINARY`, ``'BINARY'``, ``{0, 1}``
+
+            name (string, optional, default='Constraint'):
+                Name for the constraint.
+
+        Examples:
+
+            Create a constraint that variables `a` and `b` are not equal.
+
+            >>> const = dwavecsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavecsp.BINARY)
+
+        """
+        variables = tuple(variables)
+
         configurations = frozenset(config
                                    for config in itertools.product(vartype.value, repeat=len(variables))
                                    if func(*config))
@@ -53,14 +136,38 @@ class Constraint(Sized):
         return cls(func, configurations, variables, vartype, name)
 
     @classmethod
-    def from_configurations(cls, configurations, variables, vartype, name='Constraint'):
-        """todo"""
+    def from_configurations(cls, configurations, variables, vartype, name=None):
+        """Construct a constraint from a validation function.
+
+        Args:
+            configurations (iterable[tuple]):
+                The valid configurations of the variables. Each configuration is a tuple of variable
+                assignments ordered by :attr:`~Constraint.variables`.
+
+            variables (iterable):
+                An iterable of variable labels.
+
+            vartype (:class:`~dimod.Vartype`/str/set):
+                Variable type for the binary quadratic model. Accepted input values:
+                * :attr:`~dimod.Vartype.SPIN`, ``'SPIN'``, ``{-1, 1}``
+                * :attr:`~dimod.Vartype.BINARY`, ``'BINARY'``, ``{0, 1}``
+
+            name (string, optional, default='Constraint'):
+                Name for the constraint.
+
+        Examples:
+
+            Create a constraint that variables `a` and `b` are not equal.
+
+            >>> const = dwavecsp.Constraint.from_configurations([(0, 1), (1, 0)], ['a', 'b'], dwavecsp.BINARY)
+
+        """
         def func(*args): return args in configurations
 
         return cls(func, configurations, variables, vartype, name)
 
     #
-    # special methods
+    # Special Methods
     #
 
     def __len__(self):
@@ -149,7 +256,25 @@ class Constraint(Sized):
     #
 
     def check(self, solution):
-        """todo"""
+        """Check that a solution satisfies the constraint.
+
+        Args:
+            solution (container):
+                An assignment for the variables in the constraint.
+
+        Returns:
+            bool: True if the solution satisfies the constraint, else False.
+
+        Examples:
+            >>> const = dwavecsp.Constraint.from_configurations([(0, 1), (1, 0)], ['a', 'b'], dwavecsp.BINARY)
+            >>> solution = {'a': 1, 'b': 1, 'c': 0}
+            >>> const.check(solution)
+            False
+            >>> solution = {'a': 1, 'b': 0, 'c': 0}
+            >>> const.check(solution)
+            True
+
+        """
         return self.func(*(solution[v] for v in self.variables))
 
     #
@@ -167,6 +292,14 @@ class Constraint(Sized):
                 Value assigned to the variable. Values must match the :class:`.Vartype` of the
                 constraint.
 
+        Examples:
+            >>> const = dwavecsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavecsp.BINARY)
+            >>> const.fix_variable('a', 0)
+            >>> const.check({'b': 1})
+            True
+            >>> const.check({'b': 0})
+            False
+
         """
         variables = self.variables
         try:
@@ -182,7 +315,7 @@ class Constraint(Sized):
                                    if config[idx] == value)
 
         if not configurations:
-            raise UnsatError("fixing {} to {} makes this constraint unsatisfieable".format(v, value))
+            raise UnsatError("fixing {} to {} makes this constraint unsatisfiable".format(v, value))
 
         variables = variables[:idx] + variables[idx + 1:]
 
@@ -195,7 +328,23 @@ class Constraint(Sized):
         self.name = '{} ({} fixed to {})'.format(self.name, v, value)
 
     def flip_variable(self, v):
-        """todo"""
+        """Flip a variable in the constraint.
+
+        Args:
+            v (variable):
+                A variable in the constraint to be flipped.
+
+        Examples:
+            >>> const = dwavecsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavecsp.BINARY)
+            >>> const.check({'a': 0, 'b': 0})
+            True
+            >>> const.flip_variable('a')
+            >>> const.check({'a': 1, 'b': 0})
+            True
+            >>> const.check({'a': 0, 'b': 0})
+            False
+
+        """
         try:
             idx = self.variables.index(v)
         except ValueError:

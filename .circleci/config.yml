@@ -36,11 +36,11 @@ jobs:
       #     command: |
       #       bash <(curl -s https://codecov.io/bash)
 
-      # - run:
-      #     name: doctest
-      #     command: |
-      #       . env/bin/activate
-      #       make -C docs/ doctest
+      - run:
+          name: doctest
+          command: |
+            . env/bin/activate
+            make -C docs/ doctest
 
   test-install-3.6: &install-test-template
     # test installing from setup.py rather than from requirements.txt
