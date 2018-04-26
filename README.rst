@@ -33,12 +33,13 @@ To install:
 
 .. code-block:: bash
 
-    pip install dwave_constraint_compilers
+    pip install dwavecsp
 
-To build from souce:
+To build from source:
 
 .. code-block:: bash
     
+    pip install -r requirements.txt
     python setup.py install
 
 .. installation-end-marker
