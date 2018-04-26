@@ -1,5 +1,6 @@
 import unittest
 import operator
+import itertools
 
 # try:
 #     import unittest.mock as mock
@@ -8,7 +9,7 @@ import operator
 
 import networkx as nx
 # import penaltymodel as pm
-# import dimod
+import dimod
 
 import dwavecsp
 from dwavecsp.compilers import stitcher
@@ -65,102 +66,118 @@ class TestStitch(unittest.TestCase):
 
         self.assertEqual(set(G2), {'a', 'b', 'aux0', 'aux1'})
 
+    def test__bqm_from_1sat(self):
+        const = dwavecsp.Constraint.from_configurations([(0,)], ['a'], dwavecsp.BINARY)
 
-    # @mock.patch('dwavecsp.compilers.stitcher.pm.get_penalty_model')
-    # def test_make_widgets_from(self, mock_get_penalty_model):
-    #     # we want to make get_penalty_model return an object we can treat
-    #     # as a signal
-    #     signal = object()
-    #     mock_get_penalty_model.return_value = signal
+        bqm = stitcher._bqm_from_1sat(const)
 
-    #     # if we give one constraint, should get back a list of exactly one signal
-    #     constraints = [dwavecsp.generators.AND('a', 'b', 'c', dwavecsp.BINARY)]
-    #     pmodels = list(stitcher.iter_penalty_models(constraints))
-    #     self.assertEqual(pmodels, [signal])
+        self.assertTrue(bqm.energy({'a': 0}) + 2 <= bqm.energy({'a': 1}))
 
-        # # now two constraints
-        # constraints['INVERT'] = {'feasible_configurations': [(0, 1), (1, 0)],
-        #                          'variables': [3, 0]}
-        # widgets = stitcher.make_widgets_from(constraints)
-        # self.assertEqual(widgets, [signal, signal])
+        #
 
-    # @mock.patch('dwave_constraint_compilers.compilers.stitcher.pm.get_penalty_model')
-    # def test_make_widgets_from_impossible_model(self, mock_get_penalty_model):
-    #     # we want to make get_penalty_model to always raise the ImpossibleModelError
-    #     signal = object()
-    #     mock_get_penalty_model.side_effect = pm.ImpossiblePenaltyModel
+        const = dwavecsp.Constraint.from_configurations([(1,)], ['a'], dwavecsp.BINARY)
 
-    #     # if we give one constraint, should get back a list of exactly one signal
-    #     constraints = {
-    #         'AND': {
-    #             'feasible_configurations': [(0, 0, 0), (0, 1, 0), (1, 0, 0), (0, 0, 0)],
-    #             'variables': [0, 1, 2]
-    #         }
-    #     }
-    #     # in this case we should get a runtime error saying that the model cannot be built
-    #     with self.assertRaises(RuntimeError):
-    #         widgets = stitcher.make_widgets_from(constraints)
+        bqm = stitcher._bqm_from_1sat(const)
 
-    # def test_stitch(self):
-    #     constraints = {
-    #         'gate': {
-    #             'feasible_configurations': [(0, 0, 0)],
-    #             'variables': [0, 1, 2]
-    #         }
-    #     }
-    #     linear = {0: -1, 1: -1, 2: -1}
-    #     quadratic = {(0, 1): -1, (0, 2): -1, (1, 2): -1}
-    #     offset = 0
-    #     expected_bqm = dimod.BinaryQuadraticModel(linear, quadratic, offset, dimod.SPIN)
-    #     mock_pm = mock.MagicMock()
-    #     mock_pm.model = expected_bqm
-    #     stitcher.pm.get_penalty_model = mock.MagicMock(return_value=mock_pm)
+        self.assertTrue(bqm.energy({'a': 1}) + 2 <= bqm.energy({'a': 0}))
 
-    #     self.assertEqual(expected_bqm, stitcher.stitch(constraints))
+        #
 
-    # def test_stitch_multiple_constraints(self):
-    #     constraints = {
-    #         'gate1': {
-    #             'feasible_configurations': [(0, 0, 0)],
-    #             'variables': [0, 1, 2]
-    #         },
-    #         'gate2': {
-    #             'feasible_configurations': [(0, 0, 0)],
-    #             'variables': [0, 1, 2]
-    #         }
-    #     }
+        const = dwavecsp.Constraint.from_configurations([(-1,)], ['a'], dwavecsp.SPIN)
 
-    #     linear = {0: -1, 1: -1, 2: -1}
-    #     quadratic = {(0, 1): -1, (0, 2): -1, (1, 2): -1}
-    #     offset = 1
-    #     mock_bqm = dimod.BinaryQuadraticModel(linear, quadratic, offset, dimod.SPIN)
-    #     mock_pm = mock.MagicMock()
-    #     mock_pm.model = mock_bqm
-    #     stitcher.pm.get_penalty_model = mock.MagicMock(return_value=mock_pm)
+        bqm = stitcher._bqm_from_1sat(const)
 
-    #     linear = {0: -2, 1: -2, 2: -2}
-    #     quadratic = {(0, 1): -2, (0, 2): -2, (1, 2): -2}
-    #     offset = 2
-    #     expected_bqm = dimod.BinaryQuadraticModel(linear, quadratic, offset, dimod.SPIN)
-    #     self.assertEqual(expected_bqm, stitcher.stitch(constraints))
+        self.assertTrue(bqm.energy({'a': -1}) + 2 <= bqm.energy({'a': 1}))
 
-    # @mock.patch('dwave_constraint_compilers.compilers.stitcher.pm.get_penalty_model')
-    # def test_stitch_constraint_propgation(self, mock_get_penalty_model):
-    #     def is_and(spec):
-    #         self.assertEqual(spec.feasible_configurations,
-    #                          {(-1, -1, -1): 0, (-1, 1, -1): 0, (1, -1, -1): 0, (1, 1, 1): 0})
-    #         return mock.MagicMock()
+        #
 
-    #     mock_get_penalty_model.side_effect = is_and
+        const = dwavecsp.Constraint.from_configurations([(+1,)], ['a'], dwavecsp.SPIN)
 
-    #     constraints = {
-    #         'AND': {
-    #             'feasible_configurations': [(0, 0, 0), (0, 1, 0), (1, 0, 0), (1, 1, 1)],
-    #             'variables': [0, 1, 2]
-    #         }
-    #     }
+        bqm = stitcher._bqm_from_1sat(const)
 
-    #     stitcher.stitch(constraints)
+        self.assertTrue(bqm.energy({'a': 1}) + 2 <= bqm.energy({'a': -1}))
+
+        #
+
+        const = dwavecsp.Constraint.from_configurations([(-1,), (+1,)], ['a'], dwavecsp.SPIN)
+
+        bqm = stitcher._bqm_from_1sat(const)
+
+        self.assertAlmostEqual(bqm.energy({'a': -1}), bqm.energy({'a': 1}))
+
+        #
+
+        const = dwavecsp.Constraint.from_configurations([(0,), (1,)], ['a'], dwavecsp.BINARY)
+
+        bqm = stitcher._bqm_from_1sat(const)
+
+        self.assertAlmostEqual(bqm.energy({'a': 0}), bqm.energy({'a': 1}))
+
+    def test__bqm_from_2set_BINARY(self):
+
+        # all configs of length 2
+        all_binary_configurations = {(i, j) for i in range(2) for j in range(2)}
+
+        # for all possible 2-variable constraints
+        for configurations in powerset(all_binary_configurations):
+            if not configurations:
+                continue
+
+            const = dwavecsp.Constraint.from_configurations(configurations, ['a', 'b'], dimod.BINARY)
+
+            bqm = stitcher._bqm_from_2sat(const)
+
+            ground_energies = set(bqm.energy(dict(zip(['a', 'b'], config))) for config in configurations)
+
+            self.assertEqual(len(ground_energies), 1, 'expected only one ground energy for {}, instead recieved {}'.format(const, ground_energies))
+
+            ground = ground_energies.pop()
+
+            for config in all_binary_configurations:
+                if config in configurations:
+                    continue
+                self.assertGreaterEqual(bqm.energy(dict(zip(['a', 'b'], config))), ground + 2.0)
+
+    def test__bqm_from_2set_SPIN(self):
+
+        # all configs of length 2
+        all_binary_configurations = {(i, j) for i in (-1, 1) for j in (-1, 1)}
+
+        # for all possible 2-variable constraints
+        for configurations in powerset(all_binary_configurations):
+            if not configurations:
+                continue
+
+            const = dwavecsp.Constraint.from_configurations(configurations, ['a', 'b'], dimod.SPIN)
+
+            bqm = stitcher._bqm_from_2sat(const)
+
+            ground_energies = set(bqm.energy(dict(zip(['a', 'b'], config))) for config in configurations)
+
+            self.assertEqual(len(ground_energies), 1, 'expected only one ground energy for {}, instead recieved {}'.format(const, ground_energies))
+
+            ground = ground_energies.pop()
+
+            for config in all_binary_configurations:
+                if config in configurations:
+                    continue
+                self.assertGreaterEqual(bqm.energy(dict(zip(['a', 'b'], config))), ground + 2.0)
+
+    def test_stitch_2sat(self):
+        csp = dwavecsp.ConstraintSatisfactionProblem(dwavecsp.SPIN)
+        for v in range(10):
+            csp.add_constraint(operator.eq, [v, v+1])
+
+        bqm = stitcher.stitch(csp)
+
+        self.assertTrue(all(bias == -1 for bias in bqm.quadratic.values()))
+        self.assertTrue(all(bias == 0 for bias in bqm.linear.values()))
+
+
+def powerset(iterable):
+    "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
+    s = list(iterable)
+    return itertools.chain.from_iterable(itertools.combinations(s, r) for r in range(len(s)+1))
 
 
 if __name__ == '__main__':

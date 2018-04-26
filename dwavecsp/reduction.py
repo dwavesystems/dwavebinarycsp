@@ -41,9 +41,9 @@ def _irreducible_components(configurations, variables):
 
     num_variables = len(variables)
 
-    if len(configurations) <= 1:
-        # if there is only one configuration then it is irreducible
-        return [variables]
+    # if len(configurations) <= 1:
+    #     # if there is only one configuration then it is irreducible
+    #     return [variables]
 
     # for every not-trivial subset (and it's complement), check if the contraint
     # is composed of the product of complement and subset
