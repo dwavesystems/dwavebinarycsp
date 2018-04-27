@@ -25,7 +25,7 @@ Example Usage
     import dwavecsp
     import dimod
 
-    csp = dwavecsp.factories.random_2in4sat(8, 4)  # 10 variables, 2 clauses
+    csp = dwavecsp.factories.random_2in4sat(8, 4)  # 8 variables, 2 clauses
 
     bqm = dwavecsp.stitch(csp)
 
