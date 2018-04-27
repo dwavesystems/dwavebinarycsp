@@ -20,7 +20,19 @@ todo
 Example Usage
 -------------
 
-todo
+.. code-block:: python
+
+    import dwavecsp
+    import dimod
+
+    csp = dwavecsp.factories.random_2in4sat(8, 4)  # 10 variables, 2 clauses
+
+    bqm = dwavecsp.stitch(csp)
+
+    resp = dimod.ExactSolver().sample(bqm)
+
+    for sample, energy in resp.data(['sample', 'energy']):
+        print(sample, csp.check(sample), energy)
 
 .. index-end-marker
 
