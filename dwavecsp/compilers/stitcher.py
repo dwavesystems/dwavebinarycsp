@@ -51,7 +51,7 @@ def stitch(csp, min_classical_gap=2.0, max_graph_size=8):
 
     """
     def aux_factory():
-        for i in itertools.count():
+        for i in count():
             yield 'aux{}'.format(i)
 
     aux = aux_factory()
@@ -62,6 +62,10 @@ def stitch(csp, min_classical_gap=2.0, max_graph_size=8):
     # penalty_models = {}
     for const in csp.constraints:
         configurations = const.configurations
+
+        if len(const) == 0:
+            # empty constraint
+            continue
 
         if min_classical_gap <= 2.0:
             if len(const) == 1:
