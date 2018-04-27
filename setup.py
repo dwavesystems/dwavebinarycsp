@@ -12,7 +12,6 @@ else:
 
 install_requires = ['penaltymodel>=0.13.2,<0.14.0',
                     'networkx>=2.0,<3.0',
-                    'jsonschema>=2.6.0,<3.0.0',
                     'dimod>=0.6.7,<0.7.0'
                     'six>=1.11.0,<2.0.0']
 
