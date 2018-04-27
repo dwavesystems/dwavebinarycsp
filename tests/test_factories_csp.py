@@ -18,6 +18,4 @@ class TestSAT(unittest.TestCase):
 class TestCircuits(unittest.TestCase):
     def test_multiplication_circuit(self):
         csp = problem.multiplication_circuit(3)
-        print()
-        for const in csp.constraints:
-            print(const.name)
+
