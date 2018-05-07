@@ -8,5 +8,6 @@ sphinx
 sphinx_rtd_theme
 recommonmark
 mock
+coveralls
 
 ipython
