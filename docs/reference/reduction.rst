@@ -1,8 +1,8 @@
 .. _reduction:
 
-=================
-Reduction methods
-=================
+====================
+Reducing Constraints
+====================
 
 .. automodule:: dwavebinarycsp.reduction
 .. currentmodule:: dwavebinarycsp
