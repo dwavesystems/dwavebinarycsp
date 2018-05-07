@@ -7,8 +7,8 @@ import networkx as nx
 import penaltymodel as pm
 import dimod
 
-from dwavecsp.core.constraint import Constraint
-from dwavecsp.reduction import irreducible_components
+from dwavebinarycsp.core.constraint import Constraint
+from dwavebinarycsp.reduction import irreducible_components
 
 __all__ = ['stitch']
 
@@ -46,12 +46,12 @@ def stitch(csp, min_classical_gap=2.0, max_graph_size=8):
         a binary quadratic model with a minimum energy level of -2 such that 
         each constraint violation by a solution adds the default minimum energy gap.
 
-        >>> import dwavecsp
+        >>> import dwavebinarycsp
         >>> import operator
-        >>> csp = dwavecsp.ConstraintSatisfactionProblem(dwavecsp.BINARY)
+        >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
         >>> csp.add_constraint(operator.eq, ['a', 'b'])  # a == b
         >>> csp.add_constraint(operator.ne, ['b', 'c'])  # b != c
-        >>> bqm = dwavecsp.stitch(csp)
+        >>> bqm = dwavebinarycsp.stitch(csp)
         >>> bqm.energy({'a': 0, 'b': 0, 'c': 1})  # satisfies csp
         -2.0
         >>> bqm.energy({'a': 0, 'b': 0, 'c': 0})  # violates one constraint

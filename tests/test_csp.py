@@ -1,12 +1,12 @@
 import unittest
 import operator
 
-import dwavecsp
+import dwavebinarycsp
 
 
 class TestCSP(unittest.TestCase):
     def test_add_constraint_function(self):
-        csp = dwavecsp.CSP(dwavecsp.BINARY)
+        csp = dwavebinarycsp.CSP(dwavebinarycsp.BINARY)
 
         def f(a, b, c): return a * b == c
 
@@ -16,7 +16,7 @@ class TestCSP(unittest.TestCase):
         self.assertFalse(csp.check({'a': 1, 'b': 0, 'c': 1}))
 
     def test_add_constraint_table_BINARY(self):
-        csp = dwavecsp.CSP(dwavecsp.BINARY)
+        csp = dwavebinarycsp.CSP(dwavebinarycsp.BINARY)
 
         neq = frozenset([(0, 1), (1, 0)])
 
@@ -43,7 +43,7 @@ class TestCSP(unittest.TestCase):
         self.assertFalse(csp.check({'a': 1, 'b': 1, 'c': 0}))
 
     def test_fix_variable(self):
-        csp = dwavecsp.CSP(dwavecsp.BINARY)
+        csp = dwavebinarycsp.CSP(dwavebinarycsp.BINARY)
 
         csp.add_constraint(operator.eq, ['a', 'b'])
         csp.add_constraint(operator.ne, ['b', 'c'])

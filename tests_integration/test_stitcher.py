@@ -3,7 +3,7 @@ import operator
 
 import dimod
 
-import dwavecsp
+import dwavebinarycsp
 
 try:
     import penaltymodel_maxgap
@@ -16,7 +16,7 @@ class TestStitch(unittest.TestCase):
     @unittest.skipUnless(_maxgap, 'needs penaltymodel-maxgap installed')
     def test_stitch_multiplication_circuit(self):
 
-        circuit = dwavecsp.factories.multiplication_circuit(3)  # 3x3=6 bit
+        circuit = dwavebinarycsp.factories.multiplication_circuit(3)  # 3x3=6 bit
 
         # the circuit csp is too large for dimod's exact solver to solve quickly, so let's go ahead
         # and fix the inputs and outputs to ones that satisfy the csp and solve for the aux variables
@@ -31,10 +31,10 @@ class TestStitch(unittest.TestCase):
             circuit.fix_variable(v, val)
 
         # original circuit
-        original_circuit = dwavecsp.factories.multiplication_circuit(3)
+        original_circuit = dwavebinarycsp.factories.multiplication_circuit(3)
 
         # we are using an exact solver, so we only need a positive classical gap
-        bqm = dwavecsp.stitch(circuit, min_classical_gap=.1)
+        bqm = dwavebinarycsp.stitch(circuit, min_classical_gap=.1)
 
         resp = dimod.ExactSolver().sample(bqm)
 

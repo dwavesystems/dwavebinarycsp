@@ -2,7 +2,7 @@ import itertools
 
 from dimod import Vartype
 
-from dwavecsp.core import Constraint
+from dwavebinarycsp.core import Constraint
 
 
 def assert_consistent_constraint(const):

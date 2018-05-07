@@ -25,8 +25,8 @@ def irreducible_components(constraint):
 
     Examples:
 
-        >>> const = dwavecsp.Constraint.from_configurations([(0, 0, 1), (1, 1, 1)], ['a', 'b', 'c'], dwavecsp.BINARY)
-        >>> dwavecsp.irreducible_components(const)
+        >>> const = dwavebinarycsp.Constraint.from_configurations([(0, 0, 1), (1, 1, 1)], ['a', 'b', 'c'], dwavebinarycsp.BINARY)
+        >>> dwavebinarycsp.irreducible_components(const)
         [('c',), ('a', 'b')]
 
     """

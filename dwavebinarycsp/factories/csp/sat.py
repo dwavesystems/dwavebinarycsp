@@ -7,9 +7,9 @@ from six.moves import range
 
 import dimod
 
-from dwavecsp.core.csp import ConstraintSatisfactionProblem
-from dwavecsp.factories.constraint.sat import sat2in4
-from dwavecsp.factories.constraint.gates import xor_gate
+from dwavebinarycsp.core.csp import ConstraintSatisfactionProblem
+from dwavebinarycsp.factories.constraint.sat import sat2in4
+from dwavebinarycsp.factories.constraint.gates import xor_gate
 
 __all__ = ['random_2in4sat',
            'random_xorsat']

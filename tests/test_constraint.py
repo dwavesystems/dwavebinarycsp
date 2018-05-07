@@ -2,20 +2,20 @@ import unittest
 import operator
 import itertools
 
-import dwavecsp
-import dwavecsp.testing as dcspt
+import dwavebinarycsp
+import dwavebinarycsp.testing as dcspt
 
 
 class TestConstraint(unittest.TestCase):
 
     def test__len__(self):
 
-        const = dwavecsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavecsp.SPIN)
+        const = dwavebinarycsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavebinarycsp.SPIN)
         dcspt.assert_consistent_constraint(const)
         self.assertEqual(len(const), 2)
 
     def test_from_func(self):
-        const = dwavecsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavecsp.SPIN)
+        const = dwavebinarycsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavebinarycsp.SPIN)
 
         dcspt.assert_consistent_constraint(const)
 
@@ -23,7 +23,7 @@ class TestConstraint(unittest.TestCase):
         self.assertEqual(('a', 'b'), const.variables)
 
     def test_from_configurations(self):
-        const = dwavecsp.Constraint.from_configurations([(-1, 1), (1, 1)], ['a', 'b'], dwavecsp.SPIN)
+        const = dwavebinarycsp.Constraint.from_configurations([(-1, 1), (1, 1)], ['a', 'b'], dwavebinarycsp.SPIN)
 
         dcspt.assert_consistent_constraint(const)
 
@@ -31,7 +31,7 @@ class TestConstraint(unittest.TestCase):
         self.assertEqual(const.variables, ('a', 'b'))
 
     def test_fix_variable(self):
-        const = dwavecsp.Constraint.from_configurations([(-1, 1), (1, 1)], ['a', 'b'], dwavecsp.SPIN)
+        const = dwavebinarycsp.Constraint.from_configurations([(-1, 1), (1, 1)], ['a', 'b'], dwavebinarycsp.SPIN)
 
         const.fix_variable('a', -1)
 
@@ -41,14 +41,14 @@ class TestConstraint(unittest.TestCase):
         self.assertEqual(const.variables, ('b',))
 
     def test_fix_variable_unsat(self):
-        const = dwavecsp.Constraint.from_configurations([(-1, 1), (1, 1)], ['a', 'b'], dwavecsp.SPIN)
+        const = dwavebinarycsp.Constraint.from_configurations([(-1, 1), (1, 1)], ['a', 'b'], dwavebinarycsp.SPIN)
 
-        with self.assertRaises(dwavecsp.exceptions.UnsatError):
+        with self.assertRaises(dwavebinarycsp.exceptions.UnsatError):
             const.fix_variable('b', -1)
 
     def test__or__disjoint(self):
-        eq_a_b = dwavecsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavecsp.SPIN)
-        ne_c_d = dwavecsp.Constraint.from_func(operator.ne, ['c', 'd'], dwavecsp.SPIN)
+        eq_a_b = dwavebinarycsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavebinarycsp.SPIN)
+        ne_c_d = dwavebinarycsp.Constraint.from_func(operator.ne, ['c', 'd'], dwavebinarycsp.SPIN)
 
         const = eq_a_b | ne_c_d
 
@@ -60,8 +60,8 @@ class TestConstraint(unittest.TestCase):
         self.assertFalse(const.check({'a': 1, 'b': 0, 'c': 0, 'd': 0}))  # neither satisified
 
     def test__or__(self):
-        eq_a_b = dwavecsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavecsp.SPIN)
-        ne_b_c = dwavecsp.Constraint.from_func(operator.ne, ['c', 'b'], dwavecsp.SPIN)
+        eq_a_b = dwavebinarycsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavebinarycsp.SPIN)
+        ne_b_c = dwavebinarycsp.Constraint.from_func(operator.ne, ['c', 'b'], dwavebinarycsp.SPIN)
 
         const = eq_a_b | ne_b_c
 
@@ -74,8 +74,8 @@ class TestConstraint(unittest.TestCase):
         self.assertTrue(const.check({'a': 0, 'b': 1, 'c': 0}))  # only ne_b_c is satisfied
 
     def test__and__disjoint(self):
-        eq_a_b = dwavecsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavecsp.SPIN)
-        ne_c_d = dwavecsp.Constraint.from_func(operator.ne, ['c', 'd'], dwavecsp.SPIN)
+        eq_a_b = dwavebinarycsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavebinarycsp.SPIN)
+        ne_c_d = dwavebinarycsp.Constraint.from_func(operator.ne, ['c', 'd'], dwavebinarycsp.SPIN)
 
         const = eq_a_b & ne_c_d
 
@@ -86,8 +86,8 @@ class TestConstraint(unittest.TestCase):
         self.assertEqual(const.variables, ('a', 'b', 'c', 'd'))
 
     def test__and__(self):
-        eq_a_b = dwavecsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavecsp.SPIN)
-        ne_b_c = dwavecsp.Constraint.from_func(operator.ne, ['c', 'b'], dwavecsp.SPIN)
+        eq_a_b = dwavebinarycsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavebinarycsp.SPIN)
+        ne_b_c = dwavebinarycsp.Constraint.from_func(operator.ne, ['c', 'b'], dwavebinarycsp.SPIN)
 
         const = eq_a_b & ne_b_c
 
@@ -97,7 +97,7 @@ class TestConstraint(unittest.TestCase):
         self.assertEqual(const.variables, ('a', 'b', 'c'))
 
     def test_negate_variables_binary(self):
-        const = dwavecsp.Constraint.from_configurations([(0, 1), (1, 0)], ['a', 'b'], vartype=dwavecsp.BINARY)
+        const = dwavebinarycsp.Constraint.from_configurations([(0, 1), (1, 0)], ['a', 'b'], vartype=dwavebinarycsp.BINARY)
 
         const.flip_variable('a')
 
@@ -107,7 +107,7 @@ class TestConstraint(unittest.TestCase):
 
         #
 
-        const = dwavecsp.Constraint.from_configurations([(0, 1), (1, 0)], ['a', 'b'], vartype=dwavecsp.BINARY)
+        const = dwavebinarycsp.Constraint.from_configurations([(0, 1), (1, 0)], ['a', 'b'], vartype=dwavebinarycsp.BINARY)
 
         const.flip_variable('b')
 
@@ -117,9 +117,9 @@ class TestConstraint(unittest.TestCase):
 
         #
 
-        const = dwavecsp.Constraint.from_configurations([(0, 1, 1), (1, 0, 0)],
+        const = dwavebinarycsp.Constraint.from_configurations([(0, 1, 1), (1, 0, 0)],
                                                         ['a', 'b', 'c'],
-                                                        vartype=dwavecsp.BINARY)
+                                                        vartype=dwavebinarycsp.BINARY)
 
         const.flip_variable('b')
 
@@ -128,7 +128,7 @@ class TestConstraint(unittest.TestCase):
         self.assertEqual(const.configurations, frozenset([(1, 1, 0), (0, 0, 1)]))
 
     def test_negate_variables_spi(self):
-        const = dwavecsp.Constraint.from_configurations([(-1, 1), (1, -1)], ['a', 'b'], vartype=dwavecsp.SPIN)
+        const = dwavebinarycsp.Constraint.from_configurations([(-1, 1), (1, -1)], ['a', 'b'], vartype=dwavebinarycsp.SPIN)
 
         const.flip_variable('a')
 
@@ -138,7 +138,7 @@ class TestConstraint(unittest.TestCase):
 
         #
 
-        const = dwavecsp.Constraint.from_configurations([(-1, 1), (1, -1)], ['a', 'b'], vartype=dwavecsp.SPIN)
+        const = dwavebinarycsp.Constraint.from_configurations([(-1, 1), (1, -1)], ['a', 'b'], vartype=dwavebinarycsp.SPIN)
 
         const.flip_variable('b')
 
@@ -148,9 +148,9 @@ class TestConstraint(unittest.TestCase):
 
         #
 
-        const = dwavecsp.Constraint.from_configurations([(-1, 1, 1), (1, -1, -1)],
+        const = dwavebinarycsp.Constraint.from_configurations([(-1, 1, 1), (1, -1, -1)],
                                                         ['a', 'b', 'c'],
-                                                        vartype=dwavecsp.SPIN)
+                                                        vartype=dwavebinarycsp.SPIN)
 
         const.flip_variable('b')
 
@@ -162,23 +162,23 @@ class TestConstraint(unittest.TestCase):
 
         # not function
         with self.assertRaises(TypeError):
-            dwavecsp.Constraint(1, {}, [], dwavecsp.BINARY)
+            dwavebinarycsp.Constraint(1, {}, [], dwavebinarycsp.BINARY)
 
         def f():
             pass
 
         # mismatched lengths
         with self.assertRaises(ValueError):
-            dwavecsp.Constraint(f, {tuple(), (1,)}, [], dwavecsp.BINARY)
+            dwavebinarycsp.Constraint(f, {tuple(), (1,)}, [], dwavebinarycsp.BINARY)
         with self.assertRaises(ValueError):
-            dwavecsp.Constraint(f, {(0,), (1,)}, ['a', 'b'], dwavecsp.BINARY)
+            dwavebinarycsp.Constraint(f, {(0,), (1,)}, ['a', 'b'], dwavebinarycsp.BINARY)
 
         # bad vartype
         with self.assertRaises(ValueError):
-            dwavecsp.Constraint(f, {(-1,), (0,)}, ['a'], dwavecsp.BINARY)
+            dwavebinarycsp.Constraint(f, {(-1,), (0,)}, ['a'], dwavebinarycsp.BINARY)
 
     def test_copy(self):
-        const = dwavecsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavecsp.SPIN)
+        const = dwavebinarycsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavebinarycsp.SPIN)
         new_const = const.copy()
 
         self.assertEqual(const, new_const)

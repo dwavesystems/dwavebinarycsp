@@ -1,6 +1,6 @@
 import unittest
 
-import dwavecsp.factories.csp as problem
+import dwavebinarycsp.factories.csp as problem
 
 import logging
 
