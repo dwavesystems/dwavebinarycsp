@@ -7,8 +7,8 @@
 .. image:: https://readthedocs.org/projects/dwavebinarycsp/badge/?version=latest
     :target: http://dwavebinarycsp.readthedocs.io/en/latest/?badge=latest
 
-.. image:: https://circleci.com/gh/arcondello/dwavebinarycsp.svg?style=svg
-    :target: https://circleci.com/gh/arcondello/dwavebinarycsp
+.. image:: https://circleci.com/gh/dwavesystems/dwavebinarycsp.svg?style=svg
+    :target: https://circleci.com/gh/dwavesystems/dwavebinarycsp
 
 .. index-start-marker
 
