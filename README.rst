@@ -1,18 +1,18 @@
-.. image:: https://circleci.com/gh/arcondello/dwavecsp.svg?style=svg
-    :target: https://circleci.com/gh/arcondello/dwavecsp
-    :alt: circle-ci Status
+.. image:: https://img.shields.io/pypi/v/dwavebinarycsp.svg
+    :target: https://pypi.python.org/pypi/dwavebinarycsp
 
-.. image:: https://coveralls.io/repos/github/dwavesystems/dwave_constraint_compilers/badge.svg?branch=master
-    :target: https://coveralls.io/github/dwavesystems/dwave_constraint_compilers?branch=master
-    :alt: Coverage Report
+.. image:: https://coveralls.io/repos/github/dwavesystems/dwavebinarycsp/badge.svg?branch=master
+    :target: https://coveralls.io/github/dwavesystems/dwavebinarycsp?branch=master
 
-.. image:: https://readthedocs.org/projects/dwave_constraint_compilers/badge/?version=latest
-    :target: http://dwave_constraint_compilers.readthedocs.io/en/latest/?badge=latest
-    :alt: Documentation Status
+.. image:: https://readthedocs.org/projects/dwavebinarycsp/badge/?version=latest
+    :target: http://dwavebinarycsp.readthedocs.io/en/latest/?badge=latest
+
+.. image:: https://circleci.com/gh/arcondello/dwavebinarycsp.svg?style=svg
+    :target: https://circleci.com/gh/arcondello/dwavebinarycsp
 
 .. index-start-marker
 
-dwavecsp
+dwavebinarycsp
 ========
 
 todo
@@ -22,12 +22,12 @@ Example Usage
 
 .. code-block:: python
 
-    import dwavecsp
+    import dwavebinarycsp
     import dimod
 
-    csp = dwavecsp.factories.random_2in4sat(8, 4)  # 8 variables, 4 clauses
+    csp = dwavebinarycsp.factories.random_2in4sat(8, 4)  # 8 variables, 4 clauses
 
-    bqm = dwavecsp.stitch(csp)
+    bqm = dwavebinarycsp.stitch(csp)
 
     resp = dimod.ExactSolver().sample(bqm)
 
@@ -45,7 +45,7 @@ To install:
 
 .. code-block:: bash
 
-    pip install dwavecsp
+    pip install dwavebinarycsp
 
 To build from source:
 
