@@ -2,7 +2,7 @@ import itertools
 
 import dimod
 
-from dwavecsp.core.constraint import Constraint
+from dwavebinarycsp.core.constraint import Constraint
 
 __all__ = ['sat2in4']
 

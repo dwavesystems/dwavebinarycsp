@@ -3,8 +3,8 @@ from collections import defaultdict
 
 import dimod
 
-from dwavecsp.core.csp import ConstraintSatisfactionProblem
-from dwavecsp.factories.constraint.gates import and_gate, halfadder_gate, fulladder_gate
+from dwavebinarycsp.core.csp import ConstraintSatisfactionProblem
+from dwavebinarycsp.factories.constraint.gates import and_gate, halfadder_gate, fulladder_gate
 
 __all__ = ['multiplication_circuit']
 

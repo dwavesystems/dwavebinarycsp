@@ -11,8 +11,8 @@ import networkx as nx
 # import penaltymodel as pm
 import dimod
 
-import dwavecsp
-from dwavecsp.compilers import stitcher
+import dwavebinarycsp
+from dwavebinarycsp.compilers import stitcher
 
 
 class TestStitch(unittest.TestCase):
@@ -67,7 +67,7 @@ class TestStitch(unittest.TestCase):
         self.assertEqual(set(G2), {'a', 'b', 'aux0', 'aux1'})
 
     def test__bqm_from_1sat(self):
-        const = dwavecsp.Constraint.from_configurations([(0,)], ['a'], dwavecsp.BINARY)
+        const = dwavebinarycsp.Constraint.from_configurations([(0,)], ['a'], dwavebinarycsp.BINARY)
 
         bqm = stitcher._bqm_from_1sat(const)
 
@@ -75,7 +75,7 @@ class TestStitch(unittest.TestCase):
 
         #
 
-        const = dwavecsp.Constraint.from_configurations([(1,)], ['a'], dwavecsp.BINARY)
+        const = dwavebinarycsp.Constraint.from_configurations([(1,)], ['a'], dwavebinarycsp.BINARY)
 
         bqm = stitcher._bqm_from_1sat(const)
 
@@ -83,7 +83,7 @@ class TestStitch(unittest.TestCase):
 
         #
 
-        const = dwavecsp.Constraint.from_configurations([(-1,)], ['a'], dwavecsp.SPIN)
+        const = dwavebinarycsp.Constraint.from_configurations([(-1,)], ['a'], dwavebinarycsp.SPIN)
 
         bqm = stitcher._bqm_from_1sat(const)
 
@@ -91,7 +91,7 @@ class TestStitch(unittest.TestCase):
 
         #
 
-        const = dwavecsp.Constraint.from_configurations([(+1,)], ['a'], dwavecsp.SPIN)
+        const = dwavebinarycsp.Constraint.from_configurations([(+1,)], ['a'], dwavebinarycsp.SPIN)
 
         bqm = stitcher._bqm_from_1sat(const)
 
@@ -99,7 +99,7 @@ class TestStitch(unittest.TestCase):
 
         #
 
-        const = dwavecsp.Constraint.from_configurations([(-1,), (+1,)], ['a'], dwavecsp.SPIN)
+        const = dwavebinarycsp.Constraint.from_configurations([(-1,), (+1,)], ['a'], dwavebinarycsp.SPIN)
 
         bqm = stitcher._bqm_from_1sat(const)
 
@@ -107,7 +107,7 @@ class TestStitch(unittest.TestCase):
 
         #
 
-        const = dwavecsp.Constraint.from_configurations([(0,), (1,)], ['a'], dwavecsp.BINARY)
+        const = dwavebinarycsp.Constraint.from_configurations([(0,), (1,)], ['a'], dwavebinarycsp.BINARY)
 
         bqm = stitcher._bqm_from_1sat(const)
 
@@ -123,7 +123,7 @@ class TestStitch(unittest.TestCase):
             if not configurations:
                 continue
 
-            const = dwavecsp.Constraint.from_configurations(configurations, ['a', 'b'], dimod.BINARY)
+            const = dwavebinarycsp.Constraint.from_configurations(configurations, ['a', 'b'], dimod.BINARY)
 
             bqm = stitcher._bqm_from_2sat(const)
 
@@ -148,7 +148,7 @@ class TestStitch(unittest.TestCase):
             if not configurations:
                 continue
 
-            const = dwavecsp.Constraint.from_configurations(configurations, ['a', 'b'], dimod.SPIN)
+            const = dwavebinarycsp.Constraint.from_configurations(configurations, ['a', 'b'], dimod.SPIN)
 
             bqm = stitcher._bqm_from_2sat(const)
 
@@ -164,7 +164,7 @@ class TestStitch(unittest.TestCase):
                 self.assertGreaterEqual(bqm.energy(dict(zip(['a', 'b'], config))), ground + 2.0)
 
     def test_stitch_2sat(self):
-        csp = dwavecsp.ConstraintSatisfactionProblem(dwavecsp.SPIN)
+        csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.SPIN)
         for v in range(10):
             csp.add_constraint(operator.eq, [v, v+1])
 

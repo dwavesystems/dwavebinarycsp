@@ -7,7 +7,7 @@ from collections import Sized, Callable
 
 import dimod
 
-from dwavecsp.exceptions import UnsatError
+from dwavebinarycsp.exceptions import UnsatError
 
 __all__ = ['Constraint']
 
@@ -25,7 +25,7 @@ class Constraint(Sized):
 
             Example:
 
-                >>> const = dwavecsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavecsp.BINARY)
+                >>> const = dwavebinarycsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavebinarycsp.BINARY)
                 >>> const.func(0, 0)  # order matches variables
                 True
 
@@ -35,7 +35,7 @@ class Constraint(Sized):
 
             Example:
 
-                >>> const = dwavecsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavecsp.BINARY)
+                >>> const = dwavebinarycsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavebinarycsp.BINARY)
                 >>> (0, 1) in const.configurations
                 True
                 >>> (1, 0) in const.configurations
@@ -52,10 +52,10 @@ class Constraint(Sized):
             'Constraint'
 
             Example:
-                >>> const = dwavecsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavecsp.BINARY)
+                >>> const = dwavebinarycsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavebinarycsp.BINARY)
                 >>> const.name
                 'Constraint'
-                >>> const = dwavecsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavecsp.BINARY, name='neq')
+                >>> const = dwavebinarycsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavebinarycsp.BINARY, name='neq')
                 >>> const.name
                 'neq'
 
@@ -64,7 +64,7 @@ class Constraint(Sized):
     Examples:
         Constraints have a length (the number of variables)
 
-        >>> const = dwavecsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavecsp.BINARY)
+        >>> const = dwavebinarycsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavebinarycsp.BINARY)
         >>> len(const)
         2
 
@@ -126,7 +126,7 @@ class Constraint(Sized):
 
             Create a constraint that variables `a` and `b` are not equal.
 
-            >>> const = dwavecsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavecsp.BINARY)
+            >>> const = dwavebinarycsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavebinarycsp.BINARY)
 
         """
         variables = tuple(variables)
@@ -161,7 +161,7 @@ class Constraint(Sized):
 
             Create a constraint that variables `a` and `b` are not equal.
 
-            >>> const = dwavecsp.Constraint.from_configurations([(0, 1), (1, 0)], ['a', 'b'], dwavecsp.BINARY)
+            >>> const = dwavebinarycsp.Constraint.from_configurations([(0, 1), (1, 0)], ['a', 'b'], dwavebinarycsp.BINARY)
 
         """
         def func(*args): return args in configurations
@@ -268,7 +268,7 @@ class Constraint(Sized):
             bool: True if the solution satisfies the constraint, else False.
 
         Examples:
-            >>> const = dwavecsp.Constraint.from_configurations([(0, 1), (1, 0)], ['a', 'b'], dwavecsp.BINARY)
+            >>> const = dwavebinarycsp.Constraint.from_configurations([(0, 1), (1, 0)], ['a', 'b'], dwavebinarycsp.BINARY)
             >>> solution = {'a': 1, 'b': 1, 'c': 0}
             >>> const.check(solution)
             False
@@ -295,7 +295,7 @@ class Constraint(Sized):
                 constraint.
 
         Examples:
-            >>> const = dwavecsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavecsp.BINARY)
+            >>> const = dwavebinarycsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavebinarycsp.BINARY)
             >>> const.fix_variable('a', 0)
             >>> const.check({'b': 1})
             True
@@ -337,7 +337,7 @@ class Constraint(Sized):
                 A variable in the constraint to be flipped.
 
         Examples:
-            >>> const = dwavecsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavecsp.BINARY)
+            >>> const = dwavebinarycsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavebinarycsp.BINARY)
             >>> const.check({'a': 0, 'b': 0})
             True
             >>> const.flip_variable('a')

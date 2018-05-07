@@ -4,12 +4,12 @@
 Defining Constraint Satisfaction Problems
 =========================================
 
-.. automodule:: dwavecsp.core.csp
+.. automodule:: dwavebinarycsp.core.csp
 
 Class
 =====
 
-.. currentmodule:: dwavecsp
+.. currentmodule:: dwavebinarycsp
 .. autoclass:: ConstraintSatisfactionProblem
 
 

@@ -55,7 +55,7 @@ source_parsers = {'.md': 'recommonmark.parser.CommonMarkParser'}
 master_doc = 'index'
 
 # General information about the project.
-project = u'dwavecsp'
+project = u'dwavebinarycsp'
 copyright = u'2018, D-Wave Systems Inc'
 author = u'D-Wave Systems Inc'
 
@@ -63,7 +63,7 @@ author = u'D-Wave Systems Inc'
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
-import dwavecsp.package_info as pckinfo
+import dwavebinarycsp.package_info as pckinfo
 # The short X.Y version.
 version = pckinfo.__version__
 # The full version, including alpha/beta/rc tags.
@@ -89,9 +89,9 @@ pygments_style = 'sphinx'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
-modindex_common_prefix = ['dwavecsp.']
+modindex_common_prefix = ['dwavebinarycsp.']
 
-doctest_global_setup = "import dwavecsp, operator"
+doctest_global_setup = "import dwavebinarycsp, operator"
 
 
 # -- Options for HTML output ----------------------------------------------
@@ -117,7 +117,7 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'dwavecsp'
+htmlhelp_basename = 'dwavebinarycsp'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -144,7 +144,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'dwavecsp.tex', u'dwavecsp',
+    (master_doc, 'dwavebinarycsp.tex', u'dwavebinarycsp',
      u'D-Wave Systems Inc', 'manual'),
 ]
 
@@ -154,7 +154,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'dwavecsp', u'dwavecsp',
+    (master_doc, 'dwavebinarycsp', u'dwavebinarycsp',
      [author], 1)
 ]
 
@@ -165,8 +165,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'dwavecsp', u'dwavecsp',
-     author, 'dwavecsp', 'One line description of project.',
+    (master_doc, 'dwavebinarycsp', u'dwavebinarycsp',
+     author, 'dwavebinarycsp', 'One line description of project.',
      'Miscellaneous'),
 ]
 

@@ -1,6 +1,6 @@
 import dimod
 
-from dwavecsp.core.constraint import Constraint
+from dwavebinarycsp.core.constraint import Constraint
 
 __all__ = ['and_gate',
            'or_gate',

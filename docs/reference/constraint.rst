@@ -7,9 +7,9 @@ Defining Constraints
 
 Overview
 ========
-.. automodule:: dwavecsp.core.constraint
+.. automodule:: dwavebinarycsp.core.constraint
 
-.. currentmodule:: dwavecsp
+.. currentmodule:: dwavebinarycsp
 .. autoclass:: Constraint
 
 

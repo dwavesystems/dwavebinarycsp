@@ -4,8 +4,8 @@
 Reduction methods
 =================
 
-.. automodule:: dwavecsp.reduction
-.. currentmodule:: dwavecsp
+.. automodule:: dwavebinarycsp.reduction
+.. currentmodule:: dwavebinarycsp
 
 Functions
 =========
