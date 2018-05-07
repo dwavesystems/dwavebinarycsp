@@ -10,6 +10,6 @@ Reference Documentation
    :maxdepth: 2
 
    csp
-   constraint
    compilers
    reduction
+   constraint

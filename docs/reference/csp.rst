@@ -4,10 +4,10 @@
 Defining Constraint Satisfaction Problems
 =========================================
 
-
-Overview
-========
 .. automodule:: dwavecsp.core.csp
+
+Class
+=====
 
 .. currentmodule:: dwavecsp
 .. autoclass:: ConstraintSatisfactionProblem
