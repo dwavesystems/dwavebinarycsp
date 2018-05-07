@@ -4,14 +4,15 @@
 Converting to a Binary Quadratic Model
 ======================================
 
-Constraint satisfaction problems can be converted to binary quadratic models to be solved.
+Constraint satisfaction problems can be converted to binary quadratic models to be solved
+on samplers such as the D-Wave system.
 
 .. currentmodule:: dwavecsp
 
 Compilers
 =========
 
-Each compiler accepts a constraint satisfaction problem and returns a
+Compilers accept a constraint satisfaction problem and return a
 :obj:`dimod.BinaryQuadraticModel`.
 
 ..

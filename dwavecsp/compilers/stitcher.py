@@ -14,40 +14,50 @@ __all__ = ['stitch']
 
 
 def stitch(csp, min_classical_gap=2.0, max_graph_size=8):
-    """Build a binary quadratic model such that a solution that satisfies the constraint satisfaction
-    problem minimizes the energy of the binary quadratic model.
+    """Build a binary quadratic model with minimal energy levels at solutions to the specified constraint satisfaction
+    problem.
 
     Args:
         csp (:obj:`.ConstraintSatisfactionProblem`):
-            A constraint satisfaction problem.
+            Constraint satisfaction problem.
 
         min_classical_gap (float, optional, default=2.0):
-            Minimum energy gap allowed for each constraint. That is any solution that
-            violates the constraint should have an energy in the bqm greater than ground + 2.
+            Minimum energy gap from ground. Each constraint violated by the solution increases
+            the energy level of the binary quadratic model by at least this much relative
+            to ground energy.
 
         max_graph_size (int, optional, default=8):
-            Maximum number of variable in the bqm that can be used to represent a single
-            constraint.
+            Maximum number of variables in the binary quadratic model that can be used to
+            represent a single constraint.
 
     Returns:
         :class:`~dimod.BinaryQuadraticModel`
 
     Notes:
-        Requires access to factories from the penaltymodel_ ecosystem to construct the binary quadratic
-        models for each constrain with more than two variables or for a min_classical_gap > 2.
+        For a `min_classical_gap` > 2 or constraints with more than two variables, requires
+        access to factories from the penaltymodel_ ecosystem to construct the binary quadratic
+        model.
 
     .. _penaltymodel: https://github.com/dwavesystems/penaltymodel
 
     Examples:
+        This example creates a binary-valued constraint satisfaction problem
+        with two constraints, :math:`a = b` and :math:`b \\ne c`, and builds
+        a binary quadratic model with a minimum energy level of -2 such that 
+        each constraint violation by a solution adds the default minimum energy gap.
 
+        >>> import dwavecsp
+        >>> import operator
         >>> csp = dwavecsp.ConstraintSatisfactionProblem(dwavecsp.BINARY)
         >>> csp.add_constraint(operator.eq, ['a', 'b'])  # a == b
         >>> csp.add_constraint(operator.ne, ['b', 'c'])  # b != c
         >>> bqm = dwavecsp.stitch(csp)
         >>> bqm.energy({'a': 0, 'b': 0, 'c': 1})  # satisfies csp
         -2.0
-        >>> bqm.energy({'a': 0, 'b': 0, 'c': 0})  # does not satisfy csp
+        >>> bqm.energy({'a': 0, 'b': 0, 'c': 0})  # violates one constraint
         0.0
+        >>> bqm.energy({'a': 1, 'b': 0, 'c': 0}) # violates two constraints
+        2.0
 
     """
     def aux_factory():
