@@ -13,9 +13,10 @@
 .. index-start-marker
 
 dwavebinarycsp
-========
+==============
 
-todo
+Library to construct a binary quadratic model from a constraint satisfaction problem with
+small constraints over binary variables.
 
 Example Usage
 -------------
