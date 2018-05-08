@@ -5,6 +5,8 @@ import dimod
 
 import dwavebinarycsp
 
+import penaltymodel as pm
+
 try:
     import penaltymodel_maxgap
     _maxgap = True
@@ -12,8 +14,9 @@ except ImportError:
     _maxgap = False
 
 
+@unittest.skipUnless(_maxgap, 'needs penaltymodel-maxgap installed')
 class TestStitch(unittest.TestCase):
-    @unittest.skipUnless(_maxgap, 'needs penaltymodel-maxgap installed')
+
     def test_stitch_multiplication_circuit(self):
 
         circuit = dwavebinarycsp.factories.multiplication_circuit(3)  # 3x3=6 bit
@@ -54,3 +57,35 @@ class TestStitch(unittest.TestCase):
                 self.assertTrue(original_circuit.check(fixed))
             else:
                 self.assertFalse(original_circuit.check(fixed))
+
+    def test_csp_one_xor(self):
+
+        csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
+
+        variables = ['a', 'b', 'c']
+        xor = dwavebinarycsp.factories.constraint.gates.xor_gate(variables)
+        csp.add_constraint(xor)
+        bqm = dwavebinarycsp.stitch(csp)
+
+        resp = dimod.ExactSolver().sample(bqm)
+
+        ground_energy = min(resp.data_vectors['energy'])
+
+        for sample, energy in resp.data(['sample', 'energy']):
+            if energy == ground_energy:
+                self.assertTrue(csp.check(sample))
+            else:
+                if abs(energy - ground_energy) < 2:
+                    # if classical gap is less than 2
+                    self.assertTrue(csp.check(sample))
+
+    def test_csp_one_xor(self):
+
+        csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
+
+        variables = ['a', 'b', 'c']
+        xor = dwavebinarycsp.factories.constraint.gates.xor_gate(variables)
+        csp.add_constraint(xor)
+
+        with self.assertRaises(pm.ImpossiblePenaltyModel):
+            bqm = dwavebinarycsp.stitch(csp, max_graph_size=3)
