@@ -8,6 +8,7 @@ import penaltymodel as pm
 import dimod
 
 from dwavebinarycsp.core.constraint import Constraint
+from dwavebinarycsp.exceptions import ImpossibleBQM
 from dwavebinarycsp.reduction import irreducible_components
 
 __all__ = ['stitch']
@@ -43,7 +44,7 @@ def stitch(csp, min_classical_gap=2.0, max_graph_size=8):
     Examples:
         This example creates a binary-valued constraint satisfaction problem
         with two constraints, :math:`a = b` and :math:`b \\ne c`, and builds
-        a binary quadratic model with a minimum energy level of -2 such that 
+        a binary quadratic model with a minimum energy level of -2 such that
         each constraint violation by a solution adds the default minimum energy gap.
 
         >>> import dwavebinarycsp
@@ -60,6 +61,7 @@ def stitch(csp, min_classical_gap=2.0, max_graph_size=8):
         2.0
 
     """
+
     def aux_factory():
         for i in count():
             yield 'aux{}'.format(i)
@@ -73,15 +75,17 @@ def stitch(csp, min_classical_gap=2.0, max_graph_size=8):
     for const in csp.constraints:
         configurations = const.configurations
 
+        pmodel = None
+
         if len(const) == 0:
             # empty constraint
             continue
 
         if min_classical_gap <= 2.0:
-            if len(const) == 1:
+            if len(const) == 1 and max_graph_size >= 1:
                 bqm.update(_bqm_from_1sat(const))
                 continue
-            elif len(const) == 2:
+            elif len(const) == 2 and max_graph_size >= 2:
                 bqm.update(_bqm_from_2sat(const))
                 continue
 
@@ -90,25 +94,31 @@ def stitch(csp, min_classical_gap=2.0, max_graph_size=8):
         #     raise NotImplementedError
 
         for G in iter_complete_graphs(const.variables, max_graph_size, aux):
+
+            # construct a specification
             spec = pm.Specification(
                 graph=G,
                 decision_variables=const.variables,
                 feasible_configurations=configurations,
                 vartype=csp.vartype
             )
+
+            # try to use the penaltymodel ecosystem
             try:
                 pmodel = pm.get_penalty_model(spec)
             except pm.ImpossiblePenaltyModel:
-                pass
-
-            if pmodel is None:
-                raise RuntimeError("cannot build a penalty model")
+                # hopefully adding more variables will make it possible
+                continue
 
             if pmodel.classical_gap >= min_classical_gap:
                 break
 
         # developer note: we could cache them and relabel, for now though let's do the simple thing
         # penalty_models[configurations] = pmodel
+
+        if pmodel is None:
+            msg = ("No penalty model can be build for constraint {}".format(const))
+            raise ImpossibleBQM(msg)
 
         bqm.update(pmodel.model)
 

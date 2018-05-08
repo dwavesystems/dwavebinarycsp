@@ -173,6 +173,15 @@ class TestStitch(unittest.TestCase):
         self.assertTrue(all(bias == -1 for bias in bqm.quadratic.values()))
         self.assertTrue(all(bias == 0 for bias in bqm.linear.values()))
 
+    def test_stitch_max_graph_size_is_1(self):
+        csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
+
+        csp.add_constraint(operator.eq, ['a', 'b'])
+        csp.add_constraint(operator.ne, ['b', 'c'])
+
+        with self.assertRaises(dwavebinarycsp.exceptions.ImpossibleBQM):
+            bqm = dwavebinarycsp.stitch(csp, max_graph_size=1)
+
 
 def powerset(iterable):
     "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
