@@ -23,26 +23,38 @@ from collections import defaultdict
 
 
 def irreducible_components(constraint):
-    """Determine the sets of variables which are irreducible.
+    """Determine the sets of variables that are irreducible.
 
     Let V(C) denote the variables of constraint C. For a configuration x, let x|A denote the
-    restriction of the configuration to the variables of A. A constraint C is reducible_if there
-    is a partition of V(C) into nonempty subsets A and B, and two constraints C_A, C_B with
+    restriction of the configuration to the variables of A. Constraint C is reducible if there
+    is a partition of V(C) into nonempty subsets A and B, and two constraints C_A and C_B, with
     V(C_A) = A and C_B V(C_B) = B, such that a configuration x is feasible in C if and only if x|A
     is feasible in C_A and x|B is feasible in C_B. A constraint is irreducible if it is not
     reducible.
 
     Args:
-        constraint (:obj:`.Constraint`)
+        constraint (:obj:`.Constraint`):
+            Constraint to attempt to reduce.
 
     Returns:
-        list[tuple]: A list of tuples. Each tuple is a set of variables which is irreducible.
+        list[tuple]: List of tuples in which each tuple is a set of variables that is irreducible.
 
     Examples:
+        This example reduces a constraint, created by specifying its valid configurations, to two
+        constraints. The original constraint, that valid configurations for a,b,c are 0,0,1 and
+        1,1,1, can be represented by two reduced constraints, for example, (c=1) & (a=b). For
+        comparison, an attempt to reduce a constraint representing an AND gate fails to find a
+        valid reduction.
 
-        >>> const = dwavebinarycsp.Constraint.from_configurations([(0, 0, 1), (1, 1, 1)], ['a', 'b', 'c'], dwavebinarycsp.BINARY)
+        >>> import dwavebinarycsp
+        >>> const = dwavebinarycsp.Constraint.from_configurations([(0, 0, 1), (1, 1, 1)],
+        ...                                                       ['a', 'b', 'c'], dwavebinarycsp.BINARY)
         >>> dwavebinarycsp.irreducible_components(const)
         [('c',), ('a', 'b')]
+        >>> const_and = dwavebinarycsp.Constraint.from_configurations([(0, 0, 0), (0, 1, 0), (1, 0, 0), (1, 1, 1)],
+        ...                                                           ['a', 'b', 'c'], dwavebinarycsp.BINARY)
+        >>> dwavebinarycsp.irreducible_components(const_and)
+        [('a', 'b', 'c')]
 
     """
 
