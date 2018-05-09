@@ -4,10 +4,10 @@
 Defining Constraints
 ====================
 
-
-Overview
-========
 .. automodule:: dwavebinarycsp.core.constraint
+
+Class
+=====
 
 .. currentmodule:: dwavebinarycsp
 .. autoclass:: Constraint

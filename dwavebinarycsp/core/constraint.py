@@ -14,7 +14,11 @@
 #
 # ================================================================================================
 """
-todo - describe Constraint
+Solutions to a constraint satisfaction problem must satisfy certains conditions, the
+constraints of the problem, such as equality and inequality constraints.
+The :class:`Constraint` class defines constraints and provides functionality to
+assist in constraint definition, such as verifying whether a candidate solution satisfies
+a constraint.
 """
 import itertools
 
@@ -32,56 +36,63 @@ class Constraint(Sized):
 
     Attributes:
         variables (tuple):
-            The variables associated with the constraint.
+            Variables associated with the constraint.
 
         func (function):
-            This function should return True for configurations of variables that satisfy the
-            constraint. The inputs to the function are ordered by :attr:`~Constraint.variables`.
-
-            Example:
-
-                >>> const = dwavebinarycsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavebinarycsp.BINARY)
-                >>> const.func(0, 0)  # order matches variables
-                True
+            Function that returns True for configurations of variables that satisfy the
+            constraint. Inputs to the function are ordered by :attr:`~Constraint.variables`.
 
         configurations (frozenset[tuple]):
-            The valid configurations of the variables. Each configuration is a tuple of variable
+            Valid configurations of the variables. Each configuration is a tuple of variable
             assignments ordered by :attr:`~Constraint.variables`.
 
-            Example:
-
-                >>> const = dwavebinarycsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavebinarycsp.BINARY)
-                >>> (0, 1) in const.configurations
-                True
-                >>> (1, 0) in const.configurations
-                True
-
         vartype (:class:`dimod.Vartype`):
-            The possible assignments for the constraint's variables.
-            One of :attr:`~dimod.Vartype.SPIN` or :attr:`~dimod.Vartype.BINARY`. If the vartype is
-            SPIN then the variables can be assigned -1 or 1, if BINARY then the variables can be
-            assigned 0 or 1.
+            Variable type for the constraint. Accepted input values:
+
+            * :attr:`~dimod.Vartype.SPIN` with variables assigned -1 or 1.
+            * :attr:`~dimod.Vartype.BINARY` with variables assigned 0 or 1.
 
         name (str):
-            The name of the constraint. If not provided on construction, will default to
-            'Constraint'
-
-            Example:
-                >>> const = dwavebinarycsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavebinarycsp.BINARY)
-                >>> const.name
-                'Constraint'
-                >>> const = dwavebinarycsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavebinarycsp.BINARY, name='neq')
-                >>> const.name
-                'neq'
-
-    Several operations are also valid for constraints.
+            Name of the constraint. If not provided on construction, defaults to
+            'Constraint'.
 
     Examples:
-        Constraints have a length (the number of variables)
+        This example defines a constraint, named "plus1", based on a function that
+        is True for :math:`(y1,y0) = (x1,x0)+1` on binary variables, and demonstrates
+        some of the constraint's functionality.
 
-        >>> const = dwavebinarycsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavebinarycsp.BINARY)
+        >>> import dwavebinarycsp
+        >>> def plus_one(y1, y0, x1, x0):  # y=x++ for two bit binary numbers
+        ...     return (y1, y0, x1, x0) in [(0, 1, 0, 0), (1, 0, 0, 1), (1, 1, 1, 0)]
+        ...
+        >>> const = dwavebinarycsp.Constraint.from_func(
+        ...               plus_one,
+        ...               ['out1', 'out0', 'in1', 'in0'],
+        ...               dwavebinarycsp.BINARY,
+        ...               name='plus1')
+        >>> print(const.name)   # Check constraint defined as intended
+        plus1
         >>> len(const)
-        2
+        4
+        >>> in0, in1, out0, out1 = 0, 0, 1, 0
+        >>> const.func(out1, out0, in1, in0)   # Order matches variables
+        True
+
+        This example defines a constraint based on specified valid configurations
+        that represents an AND gate for spin variables, and demonstrates some of
+        the constraint's functionality.
+
+        >>> import dwavebinarycsp
+        >>> const = dwavebinarycsp.Constraint.from_configurations(
+        ...           [(-1, -1, -1), (-1, -1, 1), (-1, 1, -1), (1, 1, 1)],
+        ...           ['y', 'x1', 'x2'],
+        ...           dwavebinarycsp.SPIN)
+        >>> print(const.name)   # Check constraint defined as intended
+        Constraint
+        >>> isinstance(const, dwavebinarycsp.core.constraint.Constraint)
+        True
+        >>> (-1, 1, -1) in const.configurations   # Order matches variables: y,x1,x2
+        True
 
     """
 
