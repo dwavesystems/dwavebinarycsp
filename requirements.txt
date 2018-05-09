@@ -1,4 +1,4 @@
-penaltymodel==0.13.2
+penaltymodel[all]==0.14.0
 networkx==2.0
 dimod==0.6.7
 six==1.11.0
