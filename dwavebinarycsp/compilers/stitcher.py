@@ -76,6 +76,46 @@ def stitch(csp, min_classical_gap=2.0, max_graph_size=8):
         >>> bqm.energy({'a': 1, 'b': 0, 'c': 0}) # violates two constraints
         2.0
 
+        This example creates a binary-valued constraint satisfaction problem
+        with two constraints, :math:`a = b` and :math:`b \\ne c`, and builds
+        a binary quadratic model with a minimum energy gap of 4.
+        Note that in this case the conversion to binary quadratic model adds two
+        ancillary variables that must be minimized over when solving.
+
+        >>> import dwavebinarycsp
+        >>> import operator
+        >>> import itertools
+        >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
+        >>> csp.add_constraint(operator.eq, ['a', 'b'])  # a == b
+        >>> csp.add_constraint(operator.ne, ['b', 'c'])  # b != c
+        >>> bqm = dwavebinarycsp.stitch(csp, min_classical_gap=4.0)
+        >>> list(bqm)   # # doctest: +SKIP
+        ['a', 'aux1', 'aux0', 'b', 'c']
+        >>> min([bqm.energy({'a': 0, 'b': 0, 'c': 1, 'aux0': aux0, 'aux1': aux1}) for
+        ... aux0, aux1 in list(itertools.product([0, 1], repeat=2))])  # satisfies csp
+        -6.0
+        >>> min([bqm.energy({'a': 0, 'b': 0, 'c': 0, 'aux0': aux0, 'aux1': aux1}) for
+        ... aux0, aux1 in list(itertools.product([0, 1], repeat=2))])  # violates one constraint
+        -2.0
+        >>> min([bqm.energy({'a': 1, 'b': 0, 'c': 0, 'aux0': aux0, 'aux1': aux1}) for
+        ... aux0, aux1 in list(itertools.product([0, 1], repeat=2))])  # violates two constraints
+        2.0
+
+        This example finds for the previous example the minimum graph size.
+
+        >>> import dwavebinarycsp
+        >>> import operator
+        >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
+        >>> csp.add_constraint(operator.eq, ['a', 'b'])  # a == b
+        >>> csp.add_constraint(operator.ne, ['b', 'c'])  # b != c
+        >>> for n in range(8, 1, -1):
+        ...     try:
+        ...         bqm = dwavebinarycsp.stitch(csp, min_classical_gap=4.0, max_graph_size=n)
+        ...     except dwavebinarycsp.exceptions.ImpossibleBQM:
+        ...         print(n+1)
+        ...
+        3
+
     """
 
     def aux_factory():
