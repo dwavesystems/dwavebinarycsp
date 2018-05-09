@@ -49,11 +49,11 @@ class Constraint(Sized):
         vartype (:class:`dimod.Vartype`):
             Variable type for the constraint. Accepted input values:
 
-            * :attr:`~dimod.Vartype.SPIN` with variables assigned -1 or 1.
-            * :attr:`~dimod.Vartype.BINARY` with variables assigned 0 or 1.
+            * :attr:`~dimod.Vartype.SPIN`, ``'SPIN'``, ``{-1, 1}``
+            * :attr:`~dimod.Vartype.BINARY`, ``'BINARY'``, ``{0, 1}``
 
         name (str):
-            Name of the constraint. If not provided on construction, defaults to
+            Name for the constraint. If not provided on construction, defaults to
             'Constraint'.
 
     Examples:
@@ -135,13 +135,14 @@ class Constraint(Sized):
 
         Args:
             func (function):
-                A function that evaluates true when the variables satisfy the constraint.
+                Function that evaluates True when the variables satisfy the constraint.
 
             variables (iterable):
-                An iterable of variable labels.
+                Iterable of variable labels.
 
             vartype (:class:`~dimod.Vartype`/str/set):
-                Variable type for the binary quadratic model. Accepted input values:
+                Variable type for the constraint. Accepted input values:
+
                 * :attr:`~dimod.Vartype.SPIN`, ``'SPIN'``, ``{-1, 1}``
                 * :attr:`~dimod.Vartype.BINARY`, ``'BINARY'``, ``{0, 1}``
 
@@ -149,10 +150,33 @@ class Constraint(Sized):
                 Name for the constraint.
 
         Examples:
+            This example creates a constraint that binary variables `a` and `b`
+            are not equal.
 
-            Create a constraint that variables `a` and `b` are not equal.
+            >>> import dwavebinarycsp
+            >>> import operator
+            >>> const = dwavebinarycsp.Constraint.from_func(operator.ne, ['a', 'b'], 'BINARY')
+            >>> print(const.name)
+            Constraint
+            >>> (0, 1) in const.configurations
+            True
 
-            >>> const = dwavebinarycsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavebinarycsp.BINARY)
+            This example creates a constraint that :math:`out = NOT(x)`
+            for spin variables.
+
+            >>> import dwavebinarycsp
+            >>> def not_(y, x):  # y=NOT(x) for spin variables
+            ...     return (y == -x)
+            ...
+            >>> const = dwavebinarycsp.Constraint.from_func(
+            ...               not_,
+            ...               ['out', 'in'],
+            ...               {1, -1},
+            ...               name='not_spin')
+            >>> print(const.name)
+            not_spin
+            >>> (1, -1) in const.configurations
+            True
 
         """
         variables = tuple(variables)
@@ -165,18 +189,19 @@ class Constraint(Sized):
 
     @classmethod
     def from_configurations(cls, configurations, variables, vartype, name=None):
-        """Construct a constraint from a validation function.
+        """Construct a constraint from valid configurations.
 
         Args:
             configurations (iterable[tuple]):
-                The valid configurations of the variables. Each configuration is a tuple of variable
+                Valid configurations of the variables. Each configuration is a tuple of variable
                 assignments ordered by :attr:`~Constraint.variables`.
 
             variables (iterable):
-                An iterable of variable labels.
+                Iterable of variable labels.
 
             vartype (:class:`~dimod.Vartype`/str/set):
-                Variable type for the binary quadratic model. Accepted input values:
+                Variable type for the constraint. Accepted input values:
+
                 * :attr:`~dimod.Vartype.SPIN`, ``'SPIN'``, ``{-1, 1}``
                 * :attr:`~dimod.Vartype.BINARY`, ``'BINARY'``, ``{0, 1}``
 
@@ -185,9 +210,28 @@ class Constraint(Sized):
 
         Examples:
 
-            Create a constraint that variables `a` and `b` are not equal.
+            This example creates a constraint that variables `a` and `b` are not equal.
 
-            >>> const = dwavebinarycsp.Constraint.from_configurations([(0, 1), (1, 0)], ['a', 'b'], dwavebinarycsp.BINARY)
+            >>> import dwavebinarycsp
+            >>> const = dwavebinarycsp.Constraint.from_configurations([(0, 1), (1, 0)],
+            ...                   ['a', 'b'], dwavebinarycsp.BINARY)
+            >>> print(const.name)
+            Constraint
+            >>> (0, 0) in const.configurations   # Order matches variables: a,b
+            False
+
+            This example creates a constraint based on specified valid configurations
+            that represents an OR gate for spin variables.
+
+            >>> import dwavebinarycsp
+            >>> const = dwavebinarycsp.Constraint.from_configurations(
+            ...           [(-1, -1, -1), (1, -1, 1), (1, 1, -1), (1, 1, 1)],
+            ...           ['y', 'x1', 'x2'],
+            ...           dwavebinarycsp.SPIN, name='or_spin')
+            >>> print(const.name)
+            or_spin
+            >>> (1, 1, -1) in const.configurations   # Order matches variables: y,x1,x2
+            True
 
         """
         def func(*args): return args in configurations
