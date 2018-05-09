@@ -26,7 +26,7 @@ if _PY2:
 else:
     exec(open("./dwavebinarycsp/package_info.py").read())
 
-install_requires = ['penaltymodel>=0.13.2,<0.14.0',
+install_requires = ['penaltymodel[all]>=0.14.0,<0.15.0',
                     'networkx>=2.0,<3.0',
                     'dimod>=0.6.7,<0.7.0'
                     'six>=1.11.0,<2.0.0']
