@@ -10,10 +10,10 @@
 .. image:: https://circleci.com/gh/dwavesystems/dwavebinarycsp.svg?style=svg
     :target: https://circleci.com/gh/dwavesystems/dwavebinarycsp
 
-.. index-start-marker
-
 dwavebinarycsp
 ==============
+
+.. index-start-marker
 
 Library to construct a binary quadratic model from a constraint satisfaction problem with
 small constraints over binary variables.
@@ -51,7 +51,7 @@ To install:
 To build from source:
 
 .. code-block:: bash
-    
+
     pip install -r requirements.txt
     python setup.py install
 

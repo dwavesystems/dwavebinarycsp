@@ -11,14 +11,7 @@ Learn the relevant terminology at
 Index
 =====
 
-Terms defined in dimod:
+Terms defined in dwavebinarycsp:
 
-    * :term:`chain`
-    * :term:`chain strength`
-    * :term:`composed sampler`
-    * :term:`graph`
     * :term:`model`
     * :term:`sampler`
-    * :term:`source graph/model<source>`
-    * :term:`structured sampler`
-    * :term:`target graph/model<target>`
