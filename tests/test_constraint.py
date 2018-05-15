@@ -198,3 +198,27 @@ class TestConstraint(unittest.TestCase):
         new_const = const.copy()
 
         self.assertEqual(const, new_const)
+        self.assertIsNot(const, new_const)
+
+    def test_projection_identity(self):
+        const = dwavebinarycsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavebinarycsp.SPIN)
+
+        proj = const.projection(['a', 'b'])
+
+        self.assertEqual(const, proj)
+        self.assertIsNot(const, proj)
+
+    def test_projection_unknown_variables(self):
+        const = dwavebinarycsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavebinarycsp.SPIN)
+
+        with self.assertRaises(ValueError):
+            proj = const.projection(['a', 'c'])
+
+    def test_projection_reducible(self):
+        const = dwavebinarycsp.Constraint.from_configurations([(0, 0), (0, 1)], ['a', 'b'], dwavebinarycsp.BINARY)
+
+        a = dwavebinarycsp.Constraint.from_configurations([(0,)], ['a'], dwavebinarycsp.BINARY)
+        b = dwavebinarycsp.Constraint.from_configurations([(0,), (1,)], ['b'], dwavebinarycsp.BINARY)
+
+        self.assertEqual(const.projection(['b']), b)
+        self.assertEqual(const.projection(['a']), a)
