@@ -131,6 +131,13 @@ def stitch(csp, min_classical_gap=2.0, max_graph_size=8):
     for const in csp.constraints:
         configurations = const.configurations
 
+        if len(const.variables) > max_graph_size:
+            msg = ("The given csp contains a constraint {const} with {num_var} variables. "
+                   "This cannot be mapped to a graph with {max_graph_size} nodes. "
+                   "Consider checking whether your constraint is irreducible."
+                   "").format(const=const, num_var=len(const.variables), max_graph_size=max_graph_size)
+            raise ImpossibleBQM(msg)
+
         pmodel = None
 
         if len(const) == 0:
