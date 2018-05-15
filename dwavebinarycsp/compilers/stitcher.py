@@ -149,7 +149,7 @@ def stitch(csp, min_classical_gap=2.0, max_graph_size=8):
         # if configurations in penalty_models:
         #     raise NotImplementedError
 
-        for G in iter_complete_graphs(const.variables, max_graph_size, aux):
+        for G in iter_complete_graphs(const.variables, max_graph_size + 1, aux):
 
             # construct a specification
             spec = pm.Specification(

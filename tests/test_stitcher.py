@@ -25,7 +25,7 @@ import dwavebinarycsp
 from dwavebinarycsp.compilers import stitcher
 
 
-class TestStitch(unittest.TestCase):
+class TestIterCompleteGraph(unittest.TestCase):
     def test_iter_complete_graph_simple(self):
 
         graphs = list(stitcher.iter_complete_graphs(4, 6))
@@ -76,6 +76,19 @@ class TestStitch(unittest.TestCase):
 
         self.assertEqual(set(G2), {'a', 'b', 'aux0', 'aux1'})
 
+    def test_start_8_stop_8(self):
+        variables = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+
+        # should produce at least one graph
+        G, = stitcher.iter_complete_graphs(variables, 9)
+
+        G0 = nx.complete_graph(variables)
+
+        self.assertEqual(G.nodes, G0.nodes)
+        self.assertEqual(G.edges, G0.edges)
+
+
+class TestStitch(unittest.TestCase):
     def test__bqm_from_1sat(self):
         const = dwavebinarycsp.Constraint.from_configurations([(0,)], ['a'], dwavebinarycsp.BINARY)
 
