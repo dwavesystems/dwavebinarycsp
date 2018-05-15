@@ -95,7 +95,7 @@ class TestStitch(unittest.TestCase):
                     # if classical gap is less than 2
                     self.assertTrue(csp.check(sample))
 
-    def test_csp_one_xor(self):
+    def test_csp_one_xor_impossible(self):
 
         csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
 
@@ -105,3 +105,35 @@ class TestStitch(unittest.TestCase):
 
         with self.assertRaises(pm.ImpossiblePenaltyModel):
             bqm = dwavebinarycsp.stitch(csp, max_graph_size=3)
+
+    def test_eight_variable_constraint_smoketest(self):
+
+        csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
+
+        variables = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+
+        # this is reducible but for our purposes here that's fine
+        def f(a, b, c, d, e, f, g, h):
+            if a and b:
+                return False
+            if c and d:
+                return False
+            if e and f:
+                return False
+            return not (g and h)
+
+        csp.add_constraint(f, variables)
+
+        bqm = dwavebinarycsp.stitch(csp)
+
+        resp = dimod.ExactSolver().sample(bqm)
+
+        ground_energy = min(resp.data_vectors['energy'])
+
+        for sample, energy in resp.data(['sample', 'energy']):
+            if energy == ground_energy:
+                self.assertTrue(csp.check(sample))
+            else:
+                if abs(energy - ground_energy) < 2:
+                    # if classical gap is less than 2
+                    self.assertTrue(csp.check(sample))
