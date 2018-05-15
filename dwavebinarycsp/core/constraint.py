@@ -383,24 +383,6 @@ class Constraint(Sized):
             >>> const.check({'b': 0})
             False
 
-            This example reduces a constraint, created by specifying its valid configurations,
-            to two simpler constraints, equivalent to (c=1) & (a=b), and attempts to fix a value
-            for the single-variable constraint.
-
-            >>> import dwavebinarycsp
-            >>> const = dwavebinarycsp.Constraint.from_configurations([(0, 0, 1), (1, 1, 1)],
-            ...                                                       ['a', 'b', 'c'], dwavebinarycsp.BINARY)
-            >>> dwavebinarycsp.irreducible_components(const)
-            [('c',), ('a', 'b')]
-            >>> for x in (0, 1):
-            ...     try:
-            ...         const.fix_variable('c', x)
-            ...         c = x
-            ...     except dwavebinarycsp.exceptions.UnsatError:
-            ...         pass
-            ...
-            >>> print(c)
-            1
         """
         variables = self.variables
         try:
