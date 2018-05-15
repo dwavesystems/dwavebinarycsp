@@ -335,10 +335,16 @@ class Constraint(Sized):
                 An assignment for the variables in the constraint.
 
         Returns:
-            bool: True if the solution satisfies the constraint, else False.
+            bool: True if the solution satisfies the constraint; otherwise False.
 
         Examples:
-            >>> const = dwavebinarycsp.Constraint.from_configurations([(0, 1), (1, 0)], ['a', 'b'], dwavebinarycsp.BINARY)
+            This example creates a constraint that :math:`a \\ne b` on binary variables
+            and tests it for two candidate solutions, with additional unconstrained
+            variable c.
+
+            >>> import dwavebinarycsp
+            >>> const = dwavebinarycsp.Constraint.from_configurations([(0, 1), (1, 0)],
+            ...             ['a', 'b'], dwavebinarycsp.BINARY)
             >>> solution = {'a': 1, 'b': 1, 'c': 0}
             >>> const.check(solution)
             False
@@ -358,14 +364,19 @@ class Constraint(Sized):
 
         Args:
             v (variable):
-                A variable in the constraint to be fixed.
+                Variable in the constraint to be set to a constant value.
 
             val (int):
                 Value assigned to the variable. Values must match the :class:`.Vartype` of the
                 constraint.
 
         Examples:
-            >>> const = dwavebinarycsp.Constraint.from_func(operator.ne, ['a', 'b'], dwavebinarycsp.BINARY)
+            This example creates a constraint that :math:`a \\ne b` on binary variables,
+            fixes variable a to 0, and tests two candidate solutions.
+
+            >>> import dwavebinarycsp
+            >>> const = dwavebinarycsp.Constraint.from_func(operator.ne,
+            ...             ['a', 'b'], dwavebinarycsp.BINARY)
             >>> const.fix_variable('a', 0)
             >>> const.check({'b': 1})
             True
@@ -382,7 +393,7 @@ class Constraint(Sized):
         if value not in self.vartype.value:
             raise ValueError("expected value to be in {}, received {} instead".format(self.vartype.value, value))
 
-        configurations = frozenset(config[:idx] + config[idx + 1:]  # exclide the fixed var
+        configurations = frozenset(config[:idx] + config[idx + 1:]  # exclude the fixed var
                                    for config in self.configurations
                                    if config[idx] == value)
 
@@ -404,10 +415,16 @@ class Constraint(Sized):
 
         Args:
             v (variable):
-                A variable in the constraint to be flipped.
+                Variable in the constraint to take the complementary value of its
+                construction value.
 
         Examples:
-            >>> const = dwavebinarycsp.Constraint.from_func(operator.eq, ['a', 'b'], dwavebinarycsp.BINARY)
+            This example creates a constraint that :math:`a = b` on binary variables
+            and flips variable a.
+
+            >>> import dwavebinarycsp
+            >>> const = dwavebinarycsp.Constraint.from_func(operator.eq,
+            ...             ['a', 'b'], dwavebinarycsp.BINARY)
             >>> const.check({'a': 0, 'b': 0})
             True
             >>> const.flip_variable('a')
@@ -457,6 +474,22 @@ class Constraint(Sized):
     #
 
     def copy(self):
-        """Create a copy."""
+        """Create a copy.
+
+        Examples:
+            This example copies constraint :math:`a \\ne b` and tests a solution
+            on the copied constraint.
+
+            >>> import dwavebinarycsp
+            >>> import operator
+            >>> const = dwavebinarycsp.Constraint.from_func(operator.ne,
+            ...             ['a', 'b'], 'BINARY')
+            >>> const2 = const.copy()
+            >>> const2 is const
+            False
+            >>> const2.check({'a': 1, 'b': 1})
+            False
+
+        """
         # each object is itself immutable (except the function)
         return self.__class__(self.func, self.configurations, self.variables, self.vartype, name=self.name)
