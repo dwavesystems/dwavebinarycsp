@@ -11,7 +11,7 @@ Learn the relevant terminology at
 Index
 =====
 
-Terms defined in dwavebinarycsp:
+Terms defined in `dwavebinarycsp`:
 
     * :term:`model`
     * :term:`sampler`
