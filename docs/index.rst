@@ -2,6 +2,10 @@
 
 .. _contents:
 
+=================
+D-Wave Binary CSP
+=================
+
 .. include:: ../README.rst
   :start-after: index-start-marker
   :end-before: index-end-marker
