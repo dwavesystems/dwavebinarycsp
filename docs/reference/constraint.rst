@@ -42,10 +42,11 @@ Transformations
    Constraint.fix_variable
    Constraint.flip_variable
 
-Copy
-----
+Copies and projections
+----------------------
 
 .. autosummary::
    :toctree: generated/
 
    Constraint.copy
+   Constraint.projection
