@@ -23,6 +23,7 @@ Documentation
 
   reference/index
   installation
+  examples/index
   license
   bibliography
 
