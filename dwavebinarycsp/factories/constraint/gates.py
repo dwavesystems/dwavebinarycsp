@@ -103,7 +103,7 @@ def xor_gate(variables, vartype=dimod.BINARY, name='XOR'):
 
 
 @dimod.vartype_argument('vartype')
-def halfadder_gate(variables, vartype, name='HALF_ADDER'):
+def halfadder_gate(variables, vartype=dimod.BINARY, name='HALF_ADDER'):
     """HALF_ADDER adder constraint."""
 
     variables = tuple(variables)
@@ -136,7 +136,7 @@ def halfadder_gate(variables, vartype, name='HALF_ADDER'):
 
 
 @dimod.vartype_argument('vartype')
-def fulladder_gate(variables, vartype, name='FULL_ADDER'):
+def fulladder_gate(variables, vartype=dimod.BINARY, name='FULL_ADDER'):
     """FULL_ADDER constraint."""
 
     variables = tuple(variables)
