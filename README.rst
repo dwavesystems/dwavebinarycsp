@@ -1,8 +1,8 @@
 .. image:: https://img.shields.io/pypi/v/dwavebinarycsp.svg
     :target: https://pypi.python.org/pypi/dwavebinarycsp
 
-.. image:: https://coveralls.io/repos/github/dwavesystems/dwavebinarycsp/badge.svg?branch=master
-    :target: https://coveralls.io/github/dwavesystems/dwavebinarycsp?branch=master
+.. image:: https://codecov.io/gh/dwavesystems/dwavebinarycsp/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/dwavesystems/dwavebinarycsp
 
 .. image:: https://readthedocs.org/projects/dwavebinarycsp/badge/?version=latest
     :target: http://dwavebinarycsp.readthedocs.io/en/latest/?badge=latest
