@@ -3,7 +3,7 @@ networkx==2.0
 dimod==0.6.8
 six==1.11.0
 
-coverage
+codecov
 sphinx
 sphinx_rtd_theme
 recommonmark
