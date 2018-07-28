@@ -14,7 +14,7 @@
 #
 # ================================================================================================
 
-import penaltymodel as pm
+import penaltymodel.core as pm
 
 
 class UnsatError(Exception):

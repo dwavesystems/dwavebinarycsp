@@ -1,4 +1,7 @@
-penaltymodel[all]==0.14.0
+penaltymodel==0.15.1
+penaltymodel-mip==0.1.2; platform_machine != "x86" and python_version != "3.4"
+penaltymodel-maxgap==0.4.0; platform_machine == "x86" or python_version == "3.4"
+penaltymodel-cache==0.3.0
 networkx==2.0
 dimod>=0.6.8,<0.7.0
 six==1.11.0
