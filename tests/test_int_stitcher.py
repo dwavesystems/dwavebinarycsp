@@ -22,16 +22,9 @@ import dimod
 
 import dwavebinarycsp
 
-import penaltymodel as pm
-
-try:
-    import penaltymodel_maxgap
-    _maxgap = True
-except ImportError:
-    _maxgap = False
+import penaltymodel.core as pm
 
 
-@unittest.skipUnless(_maxgap, 'needs penaltymodel-maxgap installed')
 class TestStitch(unittest.TestCase):
 
     def test_stitch_multiplication_circuit(self):

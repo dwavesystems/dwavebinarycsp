@@ -20,7 +20,7 @@ import operator
 from six import itervalues, iteritems
 
 import networkx as nx
-import penaltymodel as pm
+import penaltymodel.core as pm
 import dimod
 
 from dwavebinarycsp.core.constraint import Constraint
