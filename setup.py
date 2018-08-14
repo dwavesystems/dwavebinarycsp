@@ -33,7 +33,7 @@ install_requires = ['penaltymodel>=0.15.0,<0.16.0',
                     'penaltymodel-maxgap>=0.4.0,<0.5.0; platform_machine == "x86" or python_version == "3.4"',
                     'penaltymodel-mip>=0.1.2,<0.2.0; platform_machine != "x86" and python_version != "3.4"',
                     'networkx>=2.0,<3.0',
-                    'dimod>=0.6.7,<0.7.0',
+                    'dimod>=0.6.7,<0.8.0',
                     'six>=1.11.0,<2.0.0']
 
 packages = ['dwavebinarycsp',
