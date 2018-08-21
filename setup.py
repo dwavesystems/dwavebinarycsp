@@ -41,7 +41,9 @@ packages = ['dwavebinarycsp',
             'dwavebinarycsp.core',
             'dwavebinarycsp.factories',
             'dwavebinarycsp.factories.constraint',
-            'dwavebinarycsp.factories.csp']
+            'dwavebinarycsp.factories.csp',
+            'dwavebinarycsp.io',
+            ]
 
 classifiers = [
     'License :: OSI Approved :: Apache Software License',
