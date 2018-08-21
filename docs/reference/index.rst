@@ -12,5 +12,6 @@ Reference Documentation
    intro
    csp
    compilers
+   loading
    reduction
    constraint
