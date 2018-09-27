@@ -7,8 +7,8 @@
 .. image:: https://codecov.io/gh/dwavesystems/dwavebinarycsp/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/dwavesystems/dwavebinarycsp
 
-.. image:: https://readthedocs.org/projects/dwavebinarycsp/badge/?version=latest
-    :target: http://dwavebinarycsp.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.com/projects/d-wave-systems-binarycsp/badge/?version=latest
+    :target: https://docs.ocean.dwavesys.com/projects/binarycsp/en/latest/?badge=latest
 
 .. image:: https://circleci.com/gh/dwavesystems/dwavebinarycsp.svg?style=svg
     :target: https://circleci.com/gh/dwavesystems/dwavebinarycsp
