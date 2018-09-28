@@ -30,7 +30,7 @@ def and_gate(variables, vartype=dimod.BINARY, name='AND'):
     """AND gate.
 
     Args:
-        variables (list): Variable lables for the and gate as `[in1, in2, out]`,
+        variables (list): Variable labels for the and gate as `[in1, in2, out]`,
             where `in1, in2` are inputs and `out` the gate's output.
         vartype (Vartype, optional, default='BINARY'): Variable type. Accepted
             input values:
@@ -75,7 +75,7 @@ def or_gate(variables, vartype=dimod.BINARY, name='OR'):
     """OR gate.
 
     Args:
-        variables (list): Variable lables for the and gate as `[in1, in2, out]`,
+        variables (list): Variable labels for the and gate as `[in1, in2, out]`,
             where `in1, in2` are inputs and `out` the gate's output.
         vartype (Vartype, optional, default='BINARY'): Variable type. Accepted
             input values:
@@ -120,7 +120,7 @@ def xor_gate(variables, vartype=dimod.BINARY, name='XOR'):
     """XOR gate.
 
     Args:
-        variables (list): Variable lables for the and gate as `[in1, in2, out]`,
+        variables (list): Variable labels for the and gate as `[in1, in2, out]`,
             where `in1, in2` are inputs and `out` the gate's output.
         vartype (Vartype, optional, default='BINARY'): Variable type. Accepted
             input values:
@@ -161,7 +161,28 @@ def xor_gate(variables, vartype=dimod.BINARY, name='XOR'):
 
 @dimod.vartype_argument('vartype')
 def halfadder_gate(variables, vartype=dimod.BINARY, name='HALF_ADDER'):
-    """Half adder constraint."""
+    """Half adder.
+
+    Args:
+        variables (list): Variable labels for the and gate as `[in1, in2, sum, carry]`,
+            where `in1, in2` are inputs to be added and `sum` and 'carry' the resultant
+            outputs.
+        vartype (Vartype, optional, default='BINARY'): Variable type. Accepted
+            input values:
+
+            * Vartype.SPIN, 'SPIN', {-1, 1}
+            * Vartype.BINARY, 'BINARY', {0, 1}
+        name (str, optional, default='HALF_ADDER'): Name for the constraint.
+
+    Examples:
+        >>> import dwavebinarycsp
+        >>> import dwavebinarycsp.factories.constraint.gates as gates
+        >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
+        >>> csp.add_constraint(gates.halfadder_gate(['a', 'b', 'total', 'carry'], name='HA1'))
+        >>> csp.check({'a': 1, 'b': 1, 'total': 0, 'carry': 1})
+        True
+
+    """
 
     variables = tuple(variables)
 
@@ -194,7 +215,28 @@ def halfadder_gate(variables, vartype=dimod.BINARY, name='HALF_ADDER'):
 
 @dimod.vartype_argument('vartype')
 def fulladder_gate(variables, vartype=dimod.BINARY, name='FULL_ADDER'):
-    """Full adder constraint."""
+    """Full adder.
+
+    Args:
+        variables (list): Variable labels for the and gate as `[in1, in2, in3, sum, carry]`,
+            where `in1, in2, in3` are inputs to be added and `sum` and 'carry' the resultant
+            outputs.
+        vartype (Vartype, optional, default='BINARY'): Variable type. Accepted
+            input values:
+
+            * Vartype.SPIN, 'SPIN', {-1, 1}
+            * Vartype.BINARY, 'BINARY', {0, 1}
+        name (str, optional, default='FULL_ADDER'): Name for the constraint.
+
+    Examples:
+        >>> import dwavebinarycsp
+        >>> import dwavebinarycsp.factories.constraint.gates as gates
+        >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
+        >>> csp.add_constraint(gates.fulladder_gate(['a', 'b', 'c_in', 'total', 'c_out'], name='FA1'))
+        >>> csp.check({'a': 1, 'b': 0, 'c_in': 1, 'total': 0, 'c_out': 1})
+        True
+
+    """
 
     variables = tuple(variables)
 

@@ -26,7 +26,7 @@ __all__ = ['multiplication_circuit']
 
 
 def multiplication_circuit(nbit, vartype=dimod.BINARY):
-    """todo
+    """Multiplication circuit.
 
                                             and20         and10         and00
                                               |             |             |
@@ -38,9 +38,8 @@ def multiplication_circuit(nbit, vartype=dimod.BINARY):
      ┌───────────┘|             |             |             |             |
     p5            p4            p3            p2            p1            p0
 
-
-
     """
+
     if nbit < 1:
         raise ValueError("num_multiplier_bits, num_multiplicand_bits must be positive integers")
 
