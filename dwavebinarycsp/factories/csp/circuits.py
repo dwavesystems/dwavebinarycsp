@@ -26,17 +26,52 @@ __all__ = ['multiplication_circuit']
 
 
 def multiplication_circuit(nbit, vartype=dimod.BINARY):
-    """Multiplication circuit.
+    """Multiplication circuit constraint satisfaction problem.
 
-                                            and20         and10         and00
-                                              |             |             |
-                              and21         add11──and11  add01──and01    |
-                                |┌───────────┘|┌───────────┘|             |
-                and22         add12──and12  add02──and02    |             |
-                  |┌───────────┘|┌───────────┘|             |             |
-                add13─────────add03           |             |             |
-     ┌───────────┘|             |             |             |             |
-    p5            p4            p3            p2            p1            p0
+    A constraint satisfaction problem that represents the binary multiplication :math:`ab=p`,
+    where the multiplicands are binary variables of length `nbit`; for example,
+    :math:`a_0 + 2a_1 + 4a_2 +... +2^ma_{nbit}`.
+
+    The square below shows a graphic representation of the circuit::
+
+      ________________________________________________________________________________
+      |                                         and20         and10         and00    |
+      |                                           |             |             |      |
+      |                           and21         add11──and11  add01──and01    |      |
+      |                             |┌───────────┘|┌───────────┘|             |      |
+      |             and22         add12──and12  add02──and02    |             |      |
+      |               |┌───────────┘|┌───────────┘|             |             |      |
+      |             add13─────────add03           |             |             |      |
+      |  ┌───────────┘|             |             |             |             |      |
+      | p5            p4            p3            p2            p1            p0     |
+      --------------------------------------------------------------------------------
+
+    Args:
+        nbit (int): Number of bits in the multiplicands.
+        vartype (Vartype, optional, default='BINARY'): Variable type. Accepted
+            input values:
+
+            * Vartype.SPIN, 'SPIN', {-1, 1}
+            * Vartype.BINARY, 'BINARY', {0, 1}
+
+    Examples:
+        This example creates a multiplication circuit CSP that multiplies two 3-bit numbers,
+        which is then formulated as a binary quadratic model (BQM). It fixes the multiplacands
+        as :math:`a=5, b=6` (:math:`101` and :math:`110`) and uses a simulated annealing sampler
+        to find the product, :math:`p=30` (:math:`111100`).
+
+        >>> import dwavebinarycsp
+        >>> from dwavebinarycsp.factories.csp.circuits import multiplication_circuit
+        >>> import neal
+        >>> csp = multiplication_circuit(3)
+        >>> bqm = dwavebinarycsp.stitch(csp)
+        >>> bqm.fix_variable('a0', 1); bqm.fix_variable('a1', 0); bqm.fix_variable('a2', 1)
+        >>> bqm.fix_variable('b0', 1); bqm.fix_variable('b1', 1); bqm.fix_variable('b2', 0)
+        >>> sampler = neal.SimulatedAnnealingSampler()
+        >>> response = sampler.sample(bqm)
+        >>> p = next(response.samples(n=1, sorted_by='energy'))
+        >>> print(p['p0'], p['p1'], p['p2'], p['p3'], p['p4'], p['p5'])    # doctest: +SKIP
+        1 1 1 1 0 0
 
     """
 
