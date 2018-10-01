@@ -54,6 +54,10 @@ def multiplication_circuit(nbit, vartype=dimod.BINARY):
             * Vartype.SPIN, 'SPIN', {-1, 1}
             * Vartype.BINARY, 'BINARY', {0, 1}
 
+    Returns:
+        CSP (:obj:`.ConstraintSatisfactionProblem`): CSP that is satisfied when variables
+        :math:`a,b,p` are assigned values that correctly solve binary multiplication :math:`ab=p`.
+
     Examples:
         This example creates a multiplication circuit CSP that multiplies two 3-bit numbers,
         which is then formulated as a binary quadratic model (BQM). It fixes the multiplacands

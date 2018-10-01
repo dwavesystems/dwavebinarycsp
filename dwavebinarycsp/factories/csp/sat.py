@@ -45,6 +45,10 @@ def random_2in4sat(num_variables, num_clauses, vartype=dimod.BINARY, satisfiable
             * Vartype.BINARY, 'BINARY', {0, 1}
         satisfiable (bool, optional, default=True): True if the CSP can be satisfied.
 
+    Returns:
+        CSP (:obj:`.ConstraintSatisfactionProblem`): CSP that is satisfied when its variables
+        are assigned values that satisfy a two-in-four satisfiability problem.
+
     Examples:
         This example creates a CSP with 6 variables and two random constraints and checks
         whether a particular assignment of variables satisifies it.
@@ -137,6 +141,10 @@ def random_xorsat(num_variables, num_clauses, vartype=dimod.BINARY, satisfiable=
             * Vartype.SPIN, 'SPIN', {-1, 1}
             * Vartype.BINARY, 'BINARY', {0, 1}
         satisfiable (bool, optional, default=True): True if the CSP can be satisfied.
+
+    Returns:
+        CSP (:obj:`.ConstraintSatisfactionProblem`): CSP that is satisfied when its variables
+        are assigned values that satisfy a XOR satisfiability problem.
 
     Examples:
         This example creates a CSP with 5 variables and two random constraints and checks

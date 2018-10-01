@@ -39,6 +39,10 @@ def and_gate(variables, vartype=dimod.BINARY, name='AND'):
             * Vartype.BINARY, 'BINARY', {0, 1}
         name (str, optional, default='AND'): Name for the constraint.
 
+    Returns:
+        Constraint(:obj:`.Constraint`): Constraint that is satisfied when its variables are
+        assigned values that match the valid states of an AND gate.
+
     Examples:
         >>> import dwavebinarycsp
         >>> import dwavebinarycsp.factories.constraint.gates as gates
@@ -83,6 +87,10 @@ def or_gate(variables, vartype=dimod.BINARY, name='OR'):
             * Vartype.SPIN, 'SPIN', {-1, 1}
             * Vartype.BINARY, 'BINARY', {0, 1}
         name (str, optional, default='OR'): Name for the constraint.
+
+    Returns:
+        Constraint(:obj:`.Constraint`): Constraint that is satisfied when its variables are
+        assigned values that match the valid states of an OR gate.
 
     Examples:
         >>> import dwavebinarycsp
@@ -129,6 +137,10 @@ def xor_gate(variables, vartype=dimod.BINARY, name='XOR'):
             * Vartype.BINARY, 'BINARY', {0, 1}
         name (str, optional, default='XOR'): Name for the constraint.
 
+    Returns:
+        Constraint(:obj:`.Constraint`): Constraint that is satisfied when its variables are
+        assigned values that match the valid states of an XOR gate.
+
     Examples:
         >>> import dwavebinarycsp
         >>> import dwavebinarycsp.factories.constraint.gates as gates
@@ -173,6 +185,10 @@ def halfadder_gate(variables, vartype=dimod.BINARY, name='HALF_ADDER'):
             * Vartype.SPIN, 'SPIN', {-1, 1}
             * Vartype.BINARY, 'BINARY', {0, 1}
         name (str, optional, default='HALF_ADDER'): Name for the constraint.
+
+    Returns:
+        Constraint(:obj:`.Constraint`): Constraint that is satisfied when its variables are
+        assigned values that match the valid states of a Boolean half adder.
 
     Examples:
         >>> import dwavebinarycsp
@@ -227,6 +243,10 @@ def fulladder_gate(variables, vartype=dimod.BINARY, name='FULL_ADDER'):
             * Vartype.SPIN, 'SPIN', {-1, 1}
             * Vartype.BINARY, 'BINARY', {0, 1}
         name (str, optional, default='FULL_ADDER'): Name for the constraint.
+
+    Returns:
+        Constraint(:obj:`.Constraint`): Constraint that is satisfied when its variables are
+        assigned values that match the valid states of a Boolean full adder.
 
     Examples:
         >>> import dwavebinarycsp

@@ -41,6 +41,10 @@ def sat2in4(pos, neg=tuple(), vartype=dimod.BINARY, name='2-in-4'):
             * Vartype.BINARY, 'BINARY', {0, 1}
         name (str, optional, default='2-in-4'): Name for the constraint.
 
+    Returns:
+        Constraint(:obj:`.Constraint`): Constraint that is satisfied when its variables are
+        assigned values that satisfy a two-in-four satisfiability problem.
+
     Examples:
         >>> import dwavebinarycsp
         >>> import dwavebinarycsp.factories.constraint.sat as sat
