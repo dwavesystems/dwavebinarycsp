@@ -25,11 +25,33 @@ __all__ = ['sat2in4']
 
 @dimod.vartype_argument('vartype')
 def sat2in4(pos, neg=tuple(), vartype=dimod.BINARY, name='2-in-4'):
-    """Return a 2-in-4 constraint.
+    """Two-in-four (2-in-4) satisfiability.
 
     Args:
         pos (iterable):
-            An iterable of variable labels.
+            Variable labels, as an iterable, for non-negated variables of the constraint.
+            Exactly four variables are specified by `pos` and `neg` together.
+        neg (tuple):
+            Variable labels, as an iterable, for negated variables of the constraint.
+            Exactly four variables are specified by `pos` and `neg` together.
+        vartype (Vartype, optional, default='BINARY'): Variable type. Accepted
+            input values:
+
+            * Vartype.SPIN, 'SPIN', {-1, 1}
+            * Vartype.BINARY, 'BINARY', {0, 1}
+        name (str, optional, default='2-in-4'): Name for the constraint.
+
+    Returns:
+        Constraint(:obj:`.Constraint`): Constraint that is satisfied when its variables are
+        assigned values that satisfy a two-in-four satisfiability problem.
+
+    Examples:
+        >>> import dwavebinarycsp
+        >>> import dwavebinarycsp.factories.constraint.sat as sat
+        >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
+        >>> csp.add_constraint(sat.sat2in4(['w', 'x', 'y', 'z'], vartype='BINARY', name='sat1'))
+        >>> csp.check({'w': 1, 'x': 1, 'y': 0, 'z': 0})
+        True
 
     """
     pos = tuple(pos)

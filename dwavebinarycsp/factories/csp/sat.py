@@ -32,7 +32,40 @@ __all__ = ['random_2in4sat',
 
 
 def random_2in4sat(num_variables, num_clauses, vartype=dimod.BINARY, satisfiable=True):
-    """todo"""
+    """Random two-in-four (2-in-4) constraint satisfaction problem.
+
+    Args:
+        num_variables (integer): Number of variables (at least four).
+        num_clauses (integer): Number of constraints that together constitute the
+            constraint satisfaction problem.
+        vartype (Vartype, optional, default='BINARY'): Variable type. Accepted
+            input values:
+
+            * Vartype.SPIN, 'SPIN', {-1, 1}
+            * Vartype.BINARY, 'BINARY', {0, 1}
+        satisfiable (bool, optional, default=True): True if the CSP can be satisfied.
+
+    Returns:
+        CSP (:obj:`.ConstraintSatisfactionProblem`): CSP that is satisfied when its variables
+        are assigned values that satisfy a two-in-four satisfiability problem.
+
+    Examples:
+        This example creates a CSP with 6 variables and two random constraints and checks
+        whether a particular assignment of variables satisifies it.
+
+        >>> import dwavebinarycsp
+        >>> import dwavebinarycsp.factories.constraint.sat as sat
+        >>> csp = sat.random_2in4sat(6, 2)
+        >>> csp.constraints    # doctest: +SKIP
+        [Constraint.from_configurations(frozenset({(1, 0, 1, 0), (1, 0, 0, 1), (1, 1, 1, 1), (0, 1, 1, 0), (0, 0, 0, 0),
+         (0, 1, 0, 1)}), (2, 4, 0, 1), Vartype.BINARY, name='2-in-4'),
+         Constraint.from_configurations(frozenset({(1, 0, 1, 1), (1, 1, 0, 1), (1, 1, 1, 0), (0, 0, 0, 1),
+         (0, 1, 0, 0), (0, 0, 1, 0)}), (1, 2, 4, 5), Vartype.BINARY, name='2-in-4')]
+        >>> csp.check({0: 1, 1: 0, 2: 1, 3: 1, 4: 0, 5: 0})       # doctest: +SKIP
+        True
+
+
+    """
 
     if num_variables < 4:
         raise ValueError("a 2in4 problem needs at least 4 variables")
@@ -96,7 +129,39 @@ def random_2in4sat(num_variables, num_clauses, vartype=dimod.BINARY, satisfiable
 
 
 def random_xorsat(num_variables, num_clauses, vartype=dimod.BINARY, satisfiable=True):
-    """todo"""
+    """Random XOR constraint satisfaction problem.
+
+    Args:
+        num_variables (integer): Number of variables (at least three).
+        num_clauses (integer): Number of constraints that together constitute the
+            constraint satisfaction problem.
+        vartype (Vartype, optional, default='BINARY'): Variable type. Accepted
+            input values:
+
+            * Vartype.SPIN, 'SPIN', {-1, 1}
+            * Vartype.BINARY, 'BINARY', {0, 1}
+        satisfiable (bool, optional, default=True): True if the CSP can be satisfied.
+
+    Returns:
+        CSP (:obj:`.ConstraintSatisfactionProblem`): CSP that is satisfied when its variables
+        are assigned values that satisfy a XOR satisfiability problem.
+
+    Examples:
+        This example creates a CSP with 5 variables and two random constraints and checks
+        whether a particular assignment of variables satisifies it.
+
+        >>> import dwavebinarycsp
+        >>> import dwavebinarycsp.factories.constraint.sat as sat
+        >>> csp = sat.random_xorsat(5, 2)
+        >>> csp.constraints    # doctest: +SKIP
+        [Constraint.from_configurations(frozenset({(1, 0, 0), (1, 1, 1), (0, 1, 0), (0, 0, 1)}), (4, 3, 0),
+         Vartype.BINARY, name='XOR (0 flipped)'),
+         Constraint.from_configurations(frozenset({(1, 1, 0), (0, 1, 1), (0, 0, 0), (1, 0, 1)}), (2, 0, 4),
+         Vartype.BINARY, name='XOR (2 flipped) (0 flipped)')]
+        >>> csp.check({0: 1, 1: 0, 2: 0, 3: 1, 4: 1})       # doctest: +SKIP
+        True
+
+    """
     if num_variables < 3:
         raise ValueError("a xor problem needs at least 3 variables")
     if num_clauses > 8 * _nchoosek(num_variables, 3):  # 8 different negation patterns

@@ -9,9 +9,9 @@ Reference Documentation
 .. toctree::
    :maxdepth: 2
 
-   intro
    csp
    compilers
    loading
    reduction
    constraint
+   factory_constraints
