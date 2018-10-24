@@ -57,7 +57,7 @@ class PenaltyModelCheck(install):
 
 install_requires = [
     'penaltymodel>=0.15.0,<0.16.0',
-    'penaltymodel-cache>=0.3.0,<0.4.0',
+    'penaltymodel-cache>=0.3.2,<0.4.0',
     'networkx>=2.0,<3.0',
     'dimod>=0.6.7,<0.8.0',
     'six>=1.11.0,<2.0.0',
