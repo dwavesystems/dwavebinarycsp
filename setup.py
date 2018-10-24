@@ -38,21 +38,21 @@ class PenaltyModelCheck(install):
         # factory has to be installed. Decision on which is up to the user
         # (see the note above `extras_require`).
 
+        from pkg_resources import iter_entry_points
+        from penaltymodel.core import FACTORY_ENTRYPOINT
+        from itertools import chain
+
+        supported = ('maxgap', 'mip')
+        factories = chain(*(iter_entry_points(FACTORY_ENTRYPOINT, name) for name in supported))
+
         try:
-            from penaltymodel.core import iter_factories
-
-            factories = iter_factories()
-
-            # penaltymodel-cache is one
             next(factories)
-
-            # but we require also mip or maxgap
-            next(factories)
-
         except StopIteration:
             raise RuntimeError(
-                "At least one penaltymodel factory must be specified. Try "
-                "'pip install dwavebinarycsp[mip]' or 'pip install dwavebinarycsp[maxgap]'.")
+                "At least one penaltymodel factory must be specified. "
+                "Try {}.".format(
+                    " or ".join("'pip install dwavebinarycsp[{}]'".format(name) for name in supported)
+                ))
 
 
 install_requires = [
