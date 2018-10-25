@@ -16,6 +16,7 @@
 
 import sys
 from setuptools import setup
+from setuptools.command.install import install
 
 _PY2 = sys.version_info.major == 2
 
@@ -26,24 +27,67 @@ if _PY2:
 else:
     exec(open("./dwavebinarycsp/package_info.py").read())
 
-# we prefer penaltymodel-mip over penaltymodel-maxgap, but mip cannot be used for python3.4 or for
-# 32bit architectures
-install_requires = ['penaltymodel>=0.15.0,<0.16.0',
-                    'penaltymodel-cache>=0.3.0,<0.4.0',
-                    'penaltymodel-maxgap>=0.4.0,<0.5.0; platform_machine == "x86" or python_version == "3.4"',
-                    'penaltymodel-mip>=0.1.2,<0.2.0; platform_machine != "x86" and python_version != "3.4"',
-                    'networkx>=2.0,<3.0',
-                    'dimod>=0.6.7,<0.8.0',
-                    'six>=1.11.0,<2.0.0']
 
-packages = ['dwavebinarycsp',
-            'dwavebinarycsp.compilers',
-            'dwavebinarycsp.core',
-            'dwavebinarycsp.factories',
-            'dwavebinarycsp.factories.constraint',
-            'dwavebinarycsp.factories.csp',
-            'dwavebinarycsp.io',
-            ]
+class PenaltyModelCheck(install):
+    """Check that at least one of penaltymodel-{mip,maxgap} is installed."""
+
+    def run(self):
+        install.run(self)
+
+        # For `dwavebinarycsp` to be functional, at least one penalty model
+        # factory has to be installed. Decision on which is up to the user
+        # (see the note above `extras_require`).
+
+        from pkg_resources import iter_entry_points
+        from penaltymodel.core import FACTORY_ENTRYPOINT
+        from itertools import chain
+
+        supported = ('maxgap', 'mip')
+        factories = chain(*(iter_entry_points(FACTORY_ENTRYPOINT, name) for name in supported))
+
+        try:
+            next(factories)
+        except StopIteration:
+            raise RuntimeError(
+                "At least one penaltymodel factory must be specified. "
+                "Try {}.".format(
+                    " or ".join("'pip install dwavebinarycsp[{}]'".format(name) for name in supported)
+                ))
+
+
+install_requires = [
+    'penaltymodel>=0.15.0,<0.16.0',
+    'penaltymodel-cache>=0.3.2,<0.4.0',
+    'networkx>=2.0,<3.0',
+    'dimod>=0.6.7,<0.8.0',
+    'six>=1.11.0,<2.0.0',
+]
+
+# We prefer penaltymodel-mip over penaltymodel-maxgap, but mip cannot be used
+# for python3.4 or for 32bit pythons (running on either 32- or 64-bit architectures).
+#
+# Since it's currently impossible to test for "bitness" of the interpreter via
+# PEP-508 environment markers (note: it is possible to run 32-bit python on
+# 64-bit platform; and that's the case we can't catch), we delegate the selection
+# of penaltymodel factory to the user (or the caller; e.g. `dwave-ocean-sdk` installer).
+extras_require = {
+    'mip': [
+        'penaltymodel-mip>=0.1.2,<0.2.0'
+    ],
+    'maxgap': [
+        'penaltymodel-maxgap>=0.4.0,<0.5.0'
+    ]
+}
+
+packages = [
+    'dwavebinarycsp',
+    'dwavebinarycsp.compilers',
+    'dwavebinarycsp.core',
+    'dwavebinarycsp.factories',
+    'dwavebinarycsp.factories.constraint',
+    'dwavebinarycsp.factories.csp',
+    'dwavebinarycsp.io',
+]
 
 classifiers = [
     'License :: OSI Approved :: Apache Software License',
@@ -55,7 +99,7 @@ classifiers = [
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
     'Programming Language :: Python :: 3.7',
-    ]
+]
 
 python_requires = '>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*'
 
@@ -71,5 +115,8 @@ setup(
     packages=packages,
     classifiers=classifiers,
     python_requires=python_requires,
-    install_requires=install_requires
+    install_requires=install_requires,
+    extras_require=extras_require,
+    cmdclass={'install': PenaltyModelCheck},
+    zipsafe=False,
 )
