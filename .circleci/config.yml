@@ -188,7 +188,6 @@ jobs:
           command: |
             . env/bin/activate
             python setup.py sdist
-            python setup.py bdist_wheel
 
       - run:
           name: upload
