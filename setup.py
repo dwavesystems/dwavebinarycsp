@@ -16,7 +16,6 @@
 
 import sys
 from setuptools import setup
-from setuptools.command.install import install
 
 _PY2 = sys.version_info.major == 2
 
@@ -28,33 +27,6 @@ else:
     exec(open("./dwavebinarycsp/package_info.py").read())
 
 
-class PenaltyModelCheck(install):
-    """Check that at least one of penaltymodel-{mip,maxgap} is installed."""
-
-    def run(self):
-        install.run(self)
-
-        # For `dwavebinarycsp` to be functional, at least one penalty model
-        # factory has to be installed. Decision on which is up to the user
-        # (see the note above `extras_require`).
-
-        from pkg_resources import iter_entry_points
-        from penaltymodel.core import FACTORY_ENTRYPOINT
-        from itertools import chain
-
-        supported = ('maxgap', 'mip')
-        factories = chain(*(iter_entry_points(FACTORY_ENTRYPOINT, name) for name in supported))
-
-        try:
-            next(factories)
-        except StopIteration:
-            raise RuntimeError(
-                "At least one penaltymodel factory must be specified. "
-                "Try {}.".format(
-                    " or ".join("'pip install dwavebinarycsp[{}]'".format(name) for name in supported)
-                ))
-
-
 install_requires = [
     'penaltymodel>=0.15.0,<0.16.0',
     'penaltymodel-cache>=0.3.2,<0.4.0',
@@ -63,6 +35,9 @@ install_requires = [
     'six>=1.11.0,<2.0.0',
 ]
 
+# For `dwavebinarycsp` to be functional, at least one penalty model factory has
+# to be installed. Decision on which is up to the user.
+#
 # We prefer penaltymodel-mip over penaltymodel-maxgap, but mip cannot be used
 # for python3.4 or for 32bit pythons (running on either 32- or 64-bit architectures).
 #
@@ -117,6 +92,4 @@ setup(
     python_requires=python_requires,
     install_requires=install_requires,
     extras_require=extras_require,
-    cmdclass={'install': PenaltyModelCheck},
-    zipsafe=False,
 )

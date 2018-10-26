@@ -26,6 +26,7 @@ import dimod
 from dwavebinarycsp.core.constraint import Constraint
 from dwavebinarycsp.exceptions import ImpossibleBQM
 from dwavebinarycsp.reduction import irreducible_components
+import dwavebinarycsp
 
 __all__ = ['stitch']
 
@@ -117,6 +118,12 @@ def stitch(csp, min_classical_gap=2.0, max_graph_size=8):
         3
 
     """
+
+    # ensure we have penaltymodel factory available
+    try:
+        dwavebinarycsp.assert_penaltymodel_factory_available()
+    except AssertionError as e:
+        raise RuntimeError(e)
 
     def aux_factory():
         for i in count():
