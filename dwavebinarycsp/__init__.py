@@ -38,7 +38,7 @@ import dwavebinarycsp.testing
 from dimod import Vartype, SPIN, BINARY
 
 
-def _assert_pm_factory_available():
+def assert_penaltymodel_factory_available():
     """For `dwavebinarycsp` to be functional, at least one penalty model factory
     has to be installed. See discussion in setup.py for details.
     """
@@ -60,8 +60,9 @@ def _assert_pm_factory_available():
             ))
 
 # Check that at least one of penaltymodel-{mip,maxgap} is installed.
+# Raise warning on import, error on first use (stitch).
 try:
-    _assert_pm_factory_available()
+    assert_penaltymodel_factory_available()
 except AssertionError as e:
     import warnings
     warnings.warn(str(e), RuntimeWarning)
