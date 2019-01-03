@@ -14,7 +14,7 @@
 #
 # ================================================================================================
 
-__version__ = '0.0.9'
+__version__ = '0.0.10'
 __author__ = 'D-Wave Systems Inc.'
 __authoremail__ = 'acondello@dwavesys.com'
 __description__ = 'Solves constraints satisfaction problems with binary quadratic model samplers'
