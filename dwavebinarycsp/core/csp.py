@@ -64,7 +64,7 @@ class ConstraintSatisfactionProblem(object):
         True
 
     """
-    @dimod.vartype_argument('vartype')
+    @dimod.decorators.vartype_argument('vartype')
     def __init__(self, vartype):
         self.vartype = vartype
         self.constraints = []

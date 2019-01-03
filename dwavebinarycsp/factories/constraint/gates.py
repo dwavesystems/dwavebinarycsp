@@ -25,7 +25,7 @@ __all__ = ['and_gate',
            'fulladder_gate']
 
 
-@dimod.vartype_argument('vartype')
+@dimod.decorators.vartype_argument('vartype')
 def and_gate(variables, vartype=dimod.BINARY, name='AND'):
     """AND gate.
 
@@ -74,7 +74,7 @@ def and_gate(variables, vartype=dimod.BINARY, name='AND'):
     return Constraint(func, configurations, variables, vartype=vartype, name=name)
 
 
-@dimod.vartype_argument('vartype')
+@dimod.decorators.vartype_argument('vartype')
 def or_gate(variables, vartype=dimod.BINARY, name='OR'):
     """OR gate.
 
@@ -123,7 +123,7 @@ def or_gate(variables, vartype=dimod.BINARY, name='OR'):
     return Constraint(func, configs, variables, vartype=vartype, name=name)
 
 
-@dimod.vartype_argument('vartype')
+@dimod.decorators.vartype_argument('vartype')
 def xor_gate(variables, vartype=dimod.BINARY, name='XOR'):
     """XOR gate.
 
@@ -171,7 +171,7 @@ def xor_gate(variables, vartype=dimod.BINARY, name='XOR'):
     return Constraint(func, configs, variables, vartype=vartype, name=name)
 
 
-@dimod.vartype_argument('vartype')
+@dimod.decorators.vartype_argument('vartype')
 def halfadder_gate(variables, vartype=dimod.BINARY, name='HALF_ADDER'):
     """Half adder.
 
@@ -229,7 +229,7 @@ def halfadder_gate(variables, vartype=dimod.BINARY, name='HALF_ADDER'):
     return Constraint(func, configs, variables, vartype=vartype, name=name)
 
 
-@dimod.vartype_argument('vartype')
+@dimod.decorators.vartype_argument('vartype')
 def fulladder_gate(variables, vartype=dimod.BINARY, name='FULL_ADDER'):
     """Full adder.
 

@@ -102,7 +102,7 @@ class Constraint(Sized):
     # Construction
     #
 
-    @dimod.vartype_argument('vartype')
+    @dimod.decorators.vartype_argument('vartype')
     def __init__(self, func, configurations, variables, vartype, name=None):
 
         self.vartype = vartype  # checked by decorator
@@ -129,7 +129,7 @@ class Constraint(Sized):
         self.name = name
 
     @classmethod
-    @dimod.vartype_argument('vartype')
+    @dimod.decorators.vartype_argument('vartype')
     def from_func(cls, func, variables, vartype, name=None):
         """Construct a constraint from a validation function.
 

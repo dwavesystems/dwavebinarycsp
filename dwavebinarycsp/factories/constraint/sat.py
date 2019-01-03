@@ -23,7 +23,7 @@ from dwavebinarycsp.core.constraint import Constraint
 __all__ = ['sat2in4']
 
 
-@dimod.vartype_argument('vartype')
+@dimod.decorators.vartype_argument('vartype')
 def sat2in4(pos, neg=tuple(), vartype=dimod.BINARY, name='2-in-4'):
     """Two-in-four (2-in-4) satisfiability.
 
