@@ -181,7 +181,6 @@ def stitch(csp, min_classical_gap=2.0, max_graph_size=8):
                 # hopefully adding more variables will make it possible
                 continue
 
-            #TODO: remove classical gap check
             if pmodel.classical_gap >= min_classical_gap:
                 break
 
