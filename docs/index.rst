@@ -27,6 +27,7 @@ Documentation
   examples/index
   license
   bibliography
+  Source <https://github.com/dwavesystems/dwavebinarycsp>
 
 .. toctree::
   :caption: Ocean Software
@@ -40,9 +41,9 @@ Documentation
   :caption: D-Wave
   :maxdepth: 1
 
-  dwave
-  leap
-  sysdocs
+  D-Wave <https://www.dwavesys.com>
+  Leap <https://cloud.dwavesys.com/leap/>
+  D-Wave System Documentation <https://docs.dwavesys.com/docs/latest/index.html>
 
 Indices and tables
 ------------------
