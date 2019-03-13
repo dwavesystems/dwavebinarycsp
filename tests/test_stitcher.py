@@ -239,6 +239,31 @@ class TestStitch(unittest.TestCase):
         with self.assertRaises(dwavebinarycsp.exceptions.ImpossibleBQM):
             dwavebinarycsp.stitch(csp, min_classical_gap=4, max_graph_size=2)
 
+    def test_returned_gap_with_aux(self):
+        """Verify that stitch is only allowing gaps that satisfy min_classical_gap to be returned.
+        In this case, by allowing an auxiliary variable, the min_classical_gap should be achieved
+        and stitch should allow a bqm to be returned.
+        """
+        csp = dwavebinarycsp.ConstraintSatisfactionProblem("SPIN")
+        csp.add_constraint(operator.eq, ['a', 'b'])
+        min_classical_gap = 3
+
+        # No aux case: max_graph_size=2
+        # Note: Should not be possible to satisfy min_classical_gap
+        with self.assertRaises(dwavebinarycsp.exceptions.ImpossibleBQM):
+            dwavebinarycsp.stitch(csp, min_classical_gap=min_classical_gap, max_graph_size=2)
+
+        # One aux case: max_graph_size=3
+        # Note: min_classical_gap should be satisfied when we have three nodes
+        bqm = dwavebinarycsp.stitch(csp, min_classical_gap=min_classical_gap, max_graph_size=3)
+
+        # Verify one aux case
+        sampleset = dimod.ExactSolver().sample(bqm)
+        energy_array = sampleset.record['energy']
+        gap = max(energy_array) - min(energy_array)
+        self.assertGreaterEqual(gap, min_classical_gap)
+
+
 def powerset(iterable):
     "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
     s = list(iterable)
