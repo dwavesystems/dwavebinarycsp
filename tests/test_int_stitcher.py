@@ -51,7 +51,7 @@ class TestStitch(unittest.TestCase):
 
         resp = dimod.ExactSolver().sample(bqm)
 
-        ground_energy = min(resp.data_vectors['energy'])
+        ground_energy = min(resp.record['energy'])
 
         for sample, energy in resp.data(['sample', 'energy']):
             if energy == ground_energy:
@@ -79,7 +79,7 @@ class TestStitch(unittest.TestCase):
 
         resp = dimod.ExactSolver().sample(bqm)
 
-        ground_energy = min(resp.data_vectors['energy'])
+        ground_energy = min(resp.record['energy'])
 
         for sample, energy in resp.data(['sample', 'energy']):
             if energy == ground_energy:
@@ -122,7 +122,7 @@ class TestStitch(unittest.TestCase):
 
         resp = dimod.ExactSolver().sample(bqm)
 
-        ground_energy = min(resp.data_vectors['energy'])
+        ground_energy = min(resp.record['energy'])
 
         for sample, energy in resp.data(['sample', 'energy']):
             if energy == ground_energy:
