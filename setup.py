@@ -28,7 +28,7 @@ else:
 
 
 install_requires = [
-    'penaltymodel>=0.15.0,<0.16.0',
+    'penaltymodel>=0.16.0,<0.17.0',
     'penaltymodel-cache>=0.3.2,<0.4.0',
     'networkx>=2.0,<3.0',
     'dimod>=0.6.7,<0.9.0',
@@ -47,10 +47,10 @@ install_requires = [
 # of penaltymodel factory to the user (or the caller; e.g. `dwave-ocean-sdk` installer).
 extras_require = {
     'mip': [
-        'penaltymodel-mip>=0.1.2,<0.2.0'
+        'penaltymodel-mip>=0.2.0,<0.3.0'
     ],
     'maxgap': [
-        'penaltymodel-maxgap>=0.4.0,<0.5.0'
+        'penaltymodel-maxgap>=0.5.0,<0.6.0'
     ]
 }
 
