@@ -54,7 +54,7 @@ def random_2in4sat(num_variables, num_clauses, vartype=dimod.BINARY, satisfiable
         whether a particular assignment of variables satisifies it.
 
         >>> import dwavebinarycsp
-        >>> import dwavebinarycsp.factories.constraint.sat as sat
+        >>> import dwavebinarycsp.factories as sat
         >>> csp = sat.random_2in4sat(6, 2)
         >>> csp.constraints    # doctest: +SKIP
         [Constraint.from_configurations(frozenset({(1, 0, 1, 0), (1, 0, 0, 1), (1, 1, 1, 1), (0, 1, 1, 0), (0, 0, 0, 0),
@@ -151,7 +151,7 @@ def random_xorsat(num_variables, num_clauses, vartype=dimod.BINARY, satisfiable=
         whether a particular assignment of variables satisifies it.
 
         >>> import dwavebinarycsp
-        >>> import dwavebinarycsp.factories.constraint.sat as sat
+        >>> import dwavebinarycsp.factories as sat
         >>> csp = sat.random_xorsat(5, 2)
         >>> csp.constraints    # doctest: +SKIP
         [Constraint.from_configurations(frozenset({(1, 0, 0), (1, 1, 1), (0, 1, 0), (0, 0, 1)}), (4, 3, 0),
