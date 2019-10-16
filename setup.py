@@ -30,6 +30,7 @@ else:
 install_requires = [
     'penaltymodel>=0.16.0,<0.17.0',
     'penaltymodel-cache>=0.4.0,<0.5.0',
+    'penaltymodel-lp>=0.1.0,<0.2.0',
     'networkx>=2.0,<3.0',
     'dimod>=0.6.7,<0.9.0',
     'six>=1.11.0,<2.0.0',
