@@ -30,7 +30,7 @@ def multiplication_circuit(nbit, vartype=dimod.BINARY):
 
     A constraint satisfaction problem that represents the binary multiplication :math:`ab=p`,
     where the multiplicands are binary variables of length `nbit`; for example,
-    :math:`a_0 + 2a_1 + 4a_2 +... +2^ma_{nbit}`.
+    :math:`2^ma_{nbit} + ... + 4a_2 + 2a_1 + a0`.
 
     The square below shows a graphic representation of the circuit::
 
@@ -61,8 +61,8 @@ def multiplication_circuit(nbit, vartype=dimod.BINARY):
     Examples:
         This example creates a multiplication circuit CSP that multiplies two 3-bit numbers,
         which is then formulated as a binary quadratic model (BQM). It fixes the multiplacands
-        as :math:`a=5, b=6` (:math:`101` and :math:`110`) and uses a simulated annealing sampler
-        to find the product, :math:`p=30` (:math:`111100`).
+        as :math:`a=5, b=3` (:math:`101` and :math:`011`) and uses a simulated annealing sampler
+        to find the product, :math:`p=15` (:math:`001111`).
 
         >>> import dwavebinarycsp
         >>> from dwavebinarycsp.factories.csp.circuits import multiplication_circuit
@@ -74,8 +74,8 @@ def multiplication_circuit(nbit, vartype=dimod.BINARY):
         >>> sampler = neal.SimulatedAnnealingSampler()
         >>> response = sampler.sample(bqm)
         >>> p = next(response.samples(n=1, sorted_by='energy'))
-        >>> print(p['p0'], p['p1'], p['p2'], p['p3'], p['p4'], p['p5'])    # doctest: +SKIP
-        1 1 1 1 0 0
+        >>> print(p['p5'], p['p4'], p['p3'], p['p2'], p['p1'], p['p0'])    # doctest: +SKIP
+        0 0 1 1 1 1
 
     """
 
