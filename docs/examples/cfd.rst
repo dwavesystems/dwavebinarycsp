@@ -4,14 +4,14 @@ Circuit Fault Diagnosis
 
 Fault diagnosis is the combinational problem of quickly localizing failures as soon as they are detected in systems. Circuit fault diagnosis (CFD) is the problem of identifying a minimum-sized set of gates that, if faulty, explains an observation of incorrect outputs given a set of inputs.
 
-.. figure:: ../_static/HA.png
+.. figure:: ../_images/HA.png
    :name: Half_Adder
    :alt: image
    :align: center
 
    A Half Adder made up of an XOR gate and an AND gate.
 
-.. figure:: ../_static/FA_from_HA.png
+.. figure:: ../_images/FA_from_HA.png
    :name: Full_Adder
    :alt: image
    :align: center
@@ -33,13 +33,13 @@ We can construct the constraints for the circuit fault diagnosis in the followin
 To build these constraints, we start with the truth table for the gate we wish to encode, say an
 AND gate:
 
-=====  =====  ====== 
-  A      B    Output 
-=====  =====  ====== 
-0       0       0 
+=====  =====  ======
+  A      B    Output
+=====  =====  ======
+0       0       0
 1       0       0
 0       1       0
-1       1       1 
+1       1       1
 =====  =====  ======
 
 We then add a new *explicit fault variable*, which encodes whether the gate is faulty or now.

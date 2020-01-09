@@ -18,16 +18,25 @@ Documentation
   :Release: |version|
   :Date: |today|
 
+.. sdk-start-marker
+
 .. toctree::
   :maxdepth: 1
 
   intro
   reference/index
-  installation
   examples/index
-  license
   bibliography
+  
+.. sdk-end-marker
+
+.. toctree::
+  :caption: Code
+  :maxdepth: 1
+
   Source <https://github.com/dwavesystems/dwavebinarycsp>
+  installation
+  license
 
 .. toctree::
   :caption: Ocean Software
