@@ -1,4 +1,4 @@
-.. _io:
+.. _io_csp:
 
 =================
 Other CSP Formats

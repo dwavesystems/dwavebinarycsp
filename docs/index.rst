@@ -1,6 +1,6 @@
 ..  -*- coding: utf-8 -*-
 
-.. _contents:
+.. _index_csp:
 
 =================
 D-Wave Binary CSP
@@ -27,7 +27,7 @@ Documentation
   reference/index
   examples/index
   bibliography
-  
+
 .. sdk-end-marker
 
 .. toctree::

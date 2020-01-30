@@ -1,4 +1,4 @@
-.. _reduction:
+.. _reduction_csp:
 
 ====================
 Reducing Constraints

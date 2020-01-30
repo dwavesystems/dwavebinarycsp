@@ -1,4 +1,4 @@
-.. _compilers:
+.. _compilers_csp:
 
 ======================================
 Converting to a Binary Quadratic Model
