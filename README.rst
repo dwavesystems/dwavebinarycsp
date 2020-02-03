@@ -21,8 +21,7 @@ dwavebinarycsp
 Library to construct a binary quadratic model from a constraint satisfaction problem with
 small constraints over binary variables.
 
-Example Usage
--------------
+Below is an example usage:
 
 .. code-block:: python
 
