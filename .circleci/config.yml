@@ -67,10 +67,10 @@ jobs:
 
   test-osx-3.7: &osx-tests-template
     macos:
-      xcode: "9.4.1"
+      xcode: "10.1.0"
     environment:
       PYTHON: 3.7.0
-      # HOMEBREW_NO_AUTO_UPDATE: 1  # for 3.7 we need to update homebrew
+      HOMEBREW_NO_AUTO_UPDATE: 1
 
     working_directory: ~/repo
 
@@ -189,14 +189,14 @@ workflows:
   version: 2
   test:
     jobs:
-      - test-3.7
-      - test-3.6
-      - test-3.5
-      - test-2.7
+     #  - test-3.7
+     #  - test-3.6
+     #  - test-3.5
+     #  - test-2.7
       - test-osx-3.7
-      - test-osx-3.6
-      - test-osx-3.5
-      - test-osx-2.7
+     #  - test-osx-3.6
+     #  - test-osx-3.5
+     #  - test-osx-2.7
       - deploy:
           filters:
             tags:
