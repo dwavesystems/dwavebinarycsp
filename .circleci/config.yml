@@ -77,6 +77,11 @@ jobs:
       PYTHON: 3.8.0
       HOMEBREW_NO_AUTO_UPDATE: 1
 
+      # Force (lie about) macOS 10.9 binary compatibility.
+      # Needed for properly versioned wheels.
+      # See: https://github.com/MacPython/wiki/wiki/Spinning-wheels
+      MACOSX_DEPLOYMENT_TARGET: 10.9
+
     working_directory: ~/repo
 
     steps: 
@@ -89,7 +94,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - pyenv-{{ .Environment.CIRCLE_JOB }}-xcode11.2.1
+            - pyenv-{{ .Environment.CIRCLE_JOB }}-xcode11.2.1-macos-10.9
 
       - run:
           name: install python
@@ -99,7 +104,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.pyenv
-          key: pyenv-{{ .Environment.CIRCLE_JOB }}-xcode11.2.1
+          key: pyenv-{{ .Environment.CIRCLE_JOB }}-xcode11.2.1-macos-10.9
 
       - run:
           name: create virtualenv
@@ -127,24 +132,28 @@ jobs:
     environment:
       PYTHON: 3.7.4
       HOMEBREW_NO_AUTO_UPDATE: 1
+      MACOSX_DEPLOYMENT_TARGET: 10.9
 
   test-osx-3.6:
     <<: *osx-tests-template
     environment:
       PYTHON: 3.6.5
       HOMEBREW_NO_AUTO_UPDATE: 1
+      MACOSX_DEPLOYMENT_TARGET: 10.9
 
   test-osx-3.5:
     <<: *osx-tests-template
     environment:
       PYTHON: 3.5.5
       HOMEBREW_NO_AUTO_UPDATE: 1
+      MACOSX_DEPLOYMENT_TARGET: 10.9
 
   test-osx-2.7:
     <<: *osx-tests-template
     environment:
       PYTHON: 2.7.15
       HOMEBREW_NO_AUTO_UPDATE: 1
+      MACOSX_DEPLOYMENT_TARGET: 10.9
 
   deploy:
     docker:
