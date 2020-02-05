@@ -2,7 +2,7 @@ version: 2
 jobs:
   test-3.8: &full-test-template
     docker:
-      - image: circleci/python:3.8
+      - image: circleci/python:3.8-buster
 
     working_directory: ~/repo
 
@@ -53,22 +53,22 @@ jobs:
   test-3.7:
     <<: *full-test-template
     docker:
-      - image: circleci/python:3.7
+      - image: circleci/python:3.7-stretch
 
   test-3.6:
     <<: *full-test-template
     docker:
-      - image: circleci/python:3.6
+      - image: circleci/python:3.6-jessie
 
   test-3.5:
     <<: *full-test-template
     docker:
-      - image: circleci/python:3.5
+      - image: circleci/python:3.5-jessie
 
   test-2.7:
     <<: *full-test-template
     docker:
-      - image: circleci/python:2.7
+      - image: circleci/python:2.7-jessie
 
   test-osx-3.8: &osx-tests-template
     macos:
