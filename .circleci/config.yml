@@ -157,7 +157,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/python:3.6
+      - image: circleci/python:3.6-jessie
 
     working_directory: ~/repo
 
