@@ -66,4 +66,4 @@ Example Code
 The following code demonstrates how to find both fault diagnoses and minimum fault diagnoses
 for the above Full Adder.
 
-.. literalinclude:: ../../examples/explicit_circuit_fault_diagnosis.py
+.. literalinclude:: explicit_circuit_fault_diagnosis.py

@@ -1,12 +1,12 @@
 ..  -*- coding: utf-8 -*-
 
-.. _contents:
+.. _index_csp:
 
 =================
 D-Wave Binary CSP
 =================
 
-.. include:: ../README.rst
+.. include:: README.rst
   :start-after: index-start-marker
   :end-before: index-end-marker
 
@@ -67,4 +67,4 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-* :ref:`glossary`
+* `Glossary <https://docs.ocean.dwavesys.com/en/latest/glossary.html>`_

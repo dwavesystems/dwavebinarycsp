@@ -1,4 +1,4 @@
-.. _constraint:
+.. _constraint_csp:
 
 ====================
 Defining Constraints
