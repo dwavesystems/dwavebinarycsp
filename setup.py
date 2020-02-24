@@ -17,14 +17,9 @@
 import sys
 from setuptools import setup
 
-_PY2 = sys.version_info.major == 2
-
 # add __version__, __author__, __authoremail__, __description__ to this namespace
 # equivalent to:
-if _PY2:
-    execfile("./dwavebinarycsp/package_info.py")
-else:
-    exec(open("./dwavebinarycsp/package_info.py").read())
+exec(open("./dwavebinarycsp/package_info.py").read())
 
 
 install_requires = [
@@ -68,8 +63,6 @@ packages = [
 classifiers = [
     'License :: OSI Approved :: Apache Software License',
     'Operating System :: OS Independent',
-    'Programming Language :: Python :: 2',
-    'Programming Language :: Python :: 2.7',
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.4',
     'Programming Language :: Python :: 3.5',
@@ -77,7 +70,7 @@ classifiers = [
     'Programming Language :: Python :: 3.7',
 ]
 
-python_requires = '>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*'
+python_requires = '>=3.5'
 
 setup(
     name='dwavebinarycsp',
