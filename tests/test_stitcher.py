@@ -136,56 +136,6 @@ class TestStitch(unittest.TestCase):
 
         self.assertAlmostEqual(bqm.energy({'a': 0}), bqm.energy({'a': 1}))
 
-    def test__bqm_from_2set_BINARY(self):
-
-        # all configs of length 2
-        all_binary_configurations = {(i, j) for i in range(2) for j in range(2)}
-
-        # for all possible 2-variable constraints
-        for configurations in powerset(all_binary_configurations):
-            if not configurations:
-                continue
-
-            const = dwavebinarycsp.Constraint.from_configurations(configurations, ['a', 'b'], dimod.BINARY)
-
-            bqm = stitcher._bqm_from_2sat(const)
-
-            ground_energies = set(bqm.energy(dict(zip(['a', 'b'], config))) for config in configurations)
-
-            self.assertEqual(len(ground_energies), 1, 'expected only one ground energy for {}, instead recieved {}'.format(const, ground_energies))
-
-            ground = ground_energies.pop()
-
-            for config in all_binary_configurations:
-                if config in configurations:
-                    continue
-                self.assertGreaterEqual(bqm.energy(dict(zip(['a', 'b'], config))), ground + 2.0)
-
-    def test__bqm_from_2set_SPIN(self):
-
-        # all configs of length 2
-        all_binary_configurations = {(i, j) for i in (-1, 1) for j in (-1, 1)}
-
-        # for all possible 2-variable constraints
-        for configurations in powerset(all_binary_configurations):
-            if not configurations:
-                continue
-
-            const = dwavebinarycsp.Constraint.from_configurations(configurations, ['a', 'b'], dimod.SPIN)
-
-            bqm = stitcher._bqm_from_2sat(const)
-
-            ground_energies = set(bqm.energy(dict(zip(['a', 'b'], config))) for config in configurations)
-
-            self.assertEqual(len(ground_energies), 1, 'expected only one ground energy for {}, instead recieved {}'.format(const, ground_energies))
-
-            ground = ground_energies.pop()
-
-            for config in all_binary_configurations:
-                if config in configurations:
-                    continue
-                self.assertGreaterEqual(bqm.energy(dict(zip(['a', 'b'], config))), ground + 2.0)
-
     def test_stitch_2sat(self):
         csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.SPIN)
         for v in range(10):
@@ -193,8 +143,10 @@ class TestStitch(unittest.TestCase):
 
         bqm = stitcher.stitch(csp)
 
-        self.assertTrue(all(bias == -1 for bias in bqm.quadratic.values()))
-        self.assertTrue(all(bias == 0 for bias in bqm.linear.values()))
+        for bias in bqm.linear.values():
+            self.assertAlmostEqual(bias, 0)
+        for bias in bqm.quadratic.values():
+            self.assertAlmostEqual(bias, -1)
 
     def test_stitch_max_graph_size_is_1(self):
         csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
