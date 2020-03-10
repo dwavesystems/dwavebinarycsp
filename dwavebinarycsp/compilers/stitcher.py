@@ -110,7 +110,6 @@ def stitch(csp, min_classical_gap=2.0, max_graph_size=8):
 
         This example finds for the previous example the minimum graph size.
 
-        >>> import dwavebinarycsp
         >>> import operator
         >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
         >>> csp.add_constraint(operator.eq, ['a', 'b'])  # a == b

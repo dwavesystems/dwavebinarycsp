@@ -61,7 +61,6 @@ class Constraint(Sized):
         is True for :math:`(y1,y0) = (x1,x0)+1` on binary variables, and demonstrates
         some of the constraint's functionality.
 
-        >>> import dwavebinarycsp
         >>> def plus_one(y1, y0, x1, x0):  # y=x++ for two bit binary numbers
         ...     return (y1, y0, x1, x0) in [(0, 1, 0, 0), (1, 0, 0, 1), (1, 1, 1, 0)]
         ...
@@ -82,7 +81,6 @@ class Constraint(Sized):
         that represents an AND gate for spin variables, and demonstrates some of
         the constraint's functionality.
 
-        >>> import dwavebinarycsp
         >>> const = dwavebinarycsp.Constraint.from_configurations(
         ...           [(-1, -1, -1), (-1, -1, 1), (-1, 1, -1), (1, 1, 1)],
         ...           ['y', 'x1', 'x2'],
@@ -153,7 +151,6 @@ class Constraint(Sized):
             This example creates a constraint that binary variables `a` and `b`
             are not equal.
 
-            >>> import dwavebinarycsp
             >>> import operator
             >>> const = dwavebinarycsp.Constraint.from_func(operator.ne, ['a', 'b'], 'BINARY')
             >>> print(const.name)
@@ -164,7 +161,6 @@ class Constraint(Sized):
             This example creates a constraint that :math:`out = NOT(x)`
             for spin variables.
 
-            >>> import dwavebinarycsp
             >>> def not_(y, x):  # y=NOT(x) for spin variables
             ...     return (y == -x)
             ...
@@ -212,7 +208,6 @@ class Constraint(Sized):
 
             This example creates a constraint that variables `a` and `b` are not equal.
 
-            >>> import dwavebinarycsp
             >>> const = dwavebinarycsp.Constraint.from_configurations([(0, 1), (1, 0)],
             ...                   ['a', 'b'], dwavebinarycsp.BINARY)
             >>> print(const.name)
@@ -223,7 +218,6 @@ class Constraint(Sized):
             This example creates a constraint based on specified valid configurations
             that represents an OR gate for spin variables.
 
-            >>> import dwavebinarycsp
             >>> const = dwavebinarycsp.Constraint.from_configurations(
             ...           [(-1, -1, -1), (1, -1, 1), (1, 1, -1), (1, 1, 1)],
             ...           ['y', 'x1', 'x2'],
@@ -342,7 +336,6 @@ class Constraint(Sized):
             and tests it for two candidate solutions, with additional unconstrained
             variable c.
 
-            >>> import dwavebinarycsp
             >>> const = dwavebinarycsp.Constraint.from_configurations([(0, 1), (1, 0)],
             ...             ['a', 'b'], dwavebinarycsp.BINARY)
             >>> solution = {'a': 1, 'b': 1, 'c': 0}
@@ -374,7 +367,6 @@ class Constraint(Sized):
             This example creates a constraint that :math:`a \\ne b` on binary variables,
             fixes variable a to 0, and tests two candidate solutions.
 
-            >>> import dwavebinarycsp
             >>> const = dwavebinarycsp.Constraint.from_func(operator.ne,
             ...             ['a', 'b'], dwavebinarycsp.BINARY)
             >>> const.fix_variable('a', 0)
@@ -422,7 +414,6 @@ class Constraint(Sized):
             This example creates a constraint that :math:`a = b` on binary variables
             and flips variable a.
 
-            >>> import dwavebinarycsp
             >>> const = dwavebinarycsp.Constraint.from_func(operator.eq,
             ...             ['a', 'b'], dwavebinarycsp.BINARY)
             >>> const.check({'a': 0, 'b': 0})
@@ -480,7 +471,6 @@ class Constraint(Sized):
             This example copies constraint :math:`a \\ne b` and tests a solution
             on the copied constraint.
 
-            >>> import dwavebinarycsp
             >>> import operator
             >>> const = dwavebinarycsp.Constraint.from_func(operator.ne,
             ...             ['a', 'b'], 'BINARY')
