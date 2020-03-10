@@ -506,16 +506,14 @@ class Constraint(Sized):
 
         Examples:
 
-            >>> import dwavebinarycsp
-            ...
             >>> const = dwavebinarycsp.Constraint.from_configurations([(0, 0), (0, 1)],
             ...                                                       ['a', 'b'],
             ...                                                       dwavebinarycsp.BINARY)
             >>> proj = const.projection(['a'])
             >>> proj.variables
-            ['a']
+            ('a',)
             >>> proj.configurations
-            {(0,)}
+            frozenset({(0,)})
 
         """
         # resolve iterables or mutability problems by casting the variables to a set
