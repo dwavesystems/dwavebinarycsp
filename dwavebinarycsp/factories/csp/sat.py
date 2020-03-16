@@ -53,7 +53,6 @@ def random_2in4sat(num_variables, num_clauses, vartype=dimod.BINARY, satisfiable
         This example creates a CSP with 6 variables and two random constraints and checks
         whether a particular assignment of variables satisifies it.
 
-        >>> import dwavebinarycsp
         >>> import dwavebinarycsp.factories as sat
         >>> csp = sat.random_2in4sat(6, 2)
         >>> csp.constraints    # doctest: +SKIP
@@ -150,7 +149,6 @@ def random_xorsat(num_variables, num_clauses, vartype=dimod.BINARY, satisfiable=
         This example creates a CSP with 5 variables and two random constraints and checks
         whether a particular assignment of variables satisifies it.
 
-        >>> import dwavebinarycsp
         >>> import dwavebinarycsp.factories as sat
         >>> csp = sat.random_xorsat(5, 2)
         >>> csp.constraints    # doctest: +SKIP

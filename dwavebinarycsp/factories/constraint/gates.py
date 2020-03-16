@@ -44,7 +44,6 @@ def and_gate(variables, vartype=dimod.BINARY, name='AND'):
         assigned values that match the valid states of an AND gate.
 
     Examples:
-        >>> import dwavebinarycsp
         >>> import dwavebinarycsp.factories.constraint.gates as gates
         >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
         >>> csp.add_constraint(gates.and_gate(['a', 'b', 'c'], name='AND1'))
@@ -93,7 +92,6 @@ def or_gate(variables, vartype=dimod.BINARY, name='OR'):
         assigned values that match the valid states of an OR gate.
 
     Examples:
-        >>> import dwavebinarycsp
         >>> import dwavebinarycsp.factories.constraint.gates as gates
         >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.SPIN)
         >>> csp.add_constraint(gates.or_gate(['x', 'y', 'z'], {-1,1}, name='OR1'))
@@ -142,7 +140,6 @@ def xor_gate(variables, vartype=dimod.BINARY, name='XOR'):
         assigned values that match the valid states of an XOR gate.
 
     Examples:
-        >>> import dwavebinarycsp
         >>> import dwavebinarycsp.factories.constraint.gates as gates
         >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
         >>> csp.add_constraint(gates.xor_gate(['x', 'y', 'z'], name='XOR1'))
@@ -191,7 +188,6 @@ def halfadder_gate(variables, vartype=dimod.BINARY, name='HALF_ADDER'):
         assigned values that match the valid states of a Boolean half adder.
 
     Examples:
-        >>> import dwavebinarycsp
         >>> import dwavebinarycsp.factories.constraint.gates as gates
         >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
         >>> csp.add_constraint(gates.halfadder_gate(['a', 'b', 'total', 'carry'], name='HA1'))
@@ -249,7 +245,6 @@ def fulladder_gate(variables, vartype=dimod.BINARY, name='FULL_ADDER'):
         assigned values that match the valid states of a Boolean full adder.
 
     Examples:
-        >>> import dwavebinarycsp
         >>> import dwavebinarycsp.factories.constraint.gates as gates
         >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
         >>> csp.add_constraint(gates.fulladder_gate(['a', 'b', 'c_in', 'total', 'c_out'], name='FA1'))

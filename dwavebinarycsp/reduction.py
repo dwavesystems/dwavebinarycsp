@@ -46,7 +46,6 @@ def irreducible_components(constraint):
         comparison, an attempt to reduce a constraint representing an AND gate fails to find a
         valid reduction.
 
-        >>> import dwavebinarycsp
         >>> const = dwavebinarycsp.Constraint.from_configurations([(0, 0, 1), (1, 1, 1)],
         ...                                                       ['a', 'b', 'c'], dwavebinarycsp.BINARY)
         >>> dwavebinarycsp.irreducible_components(const)

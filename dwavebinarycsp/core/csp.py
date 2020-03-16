@@ -55,7 +55,6 @@ class ConstraintSatisfactionProblem(object):
         This example creates a binary-valued constraint satisfaction problem, adds two constraints,
         :math:`a = b` and :math:`b \\ne c`, and tests :math:`a,b,c = 1,1,0`.
 
-        >>> import dwavebinarycsp
         >>> import operator
         >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem('BINARY')
         >>> csp.add_constraint(operator.eq, ['a', 'b'])
@@ -94,7 +93,6 @@ class ConstraintSatisfactionProblem(object):
             This example defines a function that evaluates True when the constraint is satisfied.
             The function's input arguments match the order and type of the `variables` argument.
 
-            >>> import dwavebinarycsp
             >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
             >>> def all_equal(a, b, c):  # works for both dwavebinarycsp.BINARY and dwavebinarycsp.SPIN
             ...     return (a == b) and (b == c)
@@ -106,7 +104,6 @@ class ConstraintSatisfactionProblem(object):
 
             This example explicitly lists allowed configurations.
 
-            >>> import dwavebinarycsp
             >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.SPIN)
             >>> eq_configurations = {(-1, -1), (1, 1)}
             >>> csp.add_constraint(eq_configurations, ['v0', 'v1'])
@@ -117,7 +114,6 @@ class ConstraintSatisfactionProblem(object):
 
             This example uses a :obj:`.Constraint` object built by :mod:`dwavebinarycsp.factories`.
 
-            >>> import dwavebinarycsp
             >>> import dwavebinarycsp.factories.constraint.gates as gates
             >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
             >>> csp.add_constraint(gates.and_gate(['a', 'b', 'c']))  # add an AND gate
@@ -152,7 +148,6 @@ class ConstraintSatisfactionProblem(object):
             This example adds two variables, one of which is already used in a constraint
             of the constraint satisfaction problem.
 
-            >>> import dwavebinarycsp
             >>> import operator
             >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.SPIN)
             >>> csp.add_constraint(operator.eq, ['a', 'b'])
@@ -182,7 +177,6 @@ class ConstraintSatisfactionProblem(object):
             and :math:`d = a \oplus c`, and verifies that the combined problem is satisfied
             for a given assignment.
 
-            >>> import dwavebinarycsp
             >>> import dwavebinarycsp.factories.constraint.gates as gates
             >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
             >>> csp.add_constraint(gates.and_gate(['a', 'b', 'c']))  # add an AND gate
@@ -209,7 +203,6 @@ class ConstraintSatisfactionProblem(object):
             This example creates a spin-valued constraint satisfaction problem, adds two constraints,
             :math:`a = b` and :math:`b \\ne c`, and fixes variable b to +1.
 
-            >>> import dwavebinarycsp
             >>> import operator
             >>> csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.SPIN)
             >>> csp.add_constraint(operator.eq, ['a', 'b'])

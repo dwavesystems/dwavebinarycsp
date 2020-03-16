@@ -64,7 +64,6 @@ def multiplication_circuit(nbit, vartype=dimod.BINARY):
         as :math:`a=5, b=3` (:math:`101` and :math:`011`) and uses a simulated annealing sampler
         to find the product, :math:`p=15` (:math:`001111`).
 
-        >>> import dwavebinarycsp
         >>> from dwavebinarycsp.factories.csp.circuits import multiplication_circuit
         >>> import neal
         >>> csp = multiplication_circuit(3)
