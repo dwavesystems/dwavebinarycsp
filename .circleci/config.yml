@@ -30,7 +30,7 @@ jobs:
           paths:
             - ./env
           key: v2-dependencies-{{ checksum "requirements.txt" }}-{{ .Environment.CIRCLE_JOB }}
-        
+
       - run: &run-tests-template
           name: run unittests
           command: |
@@ -49,6 +49,12 @@ jobs:
           command: |
             . env/bin/activate
             make -C docs/ doctest
+
+      - run:
+          name: linkcheck
+          command: |
+            . env/bin/activate
+            make -C docs/ linkcheck linkcheck_retries=3 linkcheck_anchors=False linkcheck_ignore=[https:\/\/codecov.*]
 
   test-3.7:
     <<: *full-test-template
@@ -74,10 +80,10 @@ jobs:
 
     working_directory: ~/repo
 
-    steps: 
+    steps:
       - checkout
 
-      - run: 
+      - run:
           name: install pyenv
           command: |
             brew install pyenv
@@ -114,7 +120,7 @@ jobs:
           paths:
             - ./env
           key: v2-dependencies-{{ checksum "requirements.txt" }}-{{ .Environment.CIRCLE_JOB }}
-        
+
       - run: *run-tests-template
 
   test-osx-3.7:
