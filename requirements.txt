@@ -6,10 +6,3 @@ penaltymodel-cache==0.4.0
 networkx==2.0
 dimod==0.7.2
 six==1.11.0
-
-codecov
-sphinx
-sphinx_rtd_theme
-recommonmark
-mock
-coveralls
