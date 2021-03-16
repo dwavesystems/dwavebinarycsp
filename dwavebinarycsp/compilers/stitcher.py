@@ -191,7 +191,7 @@ def stitch(csp, min_classical_gap=2.0, max_graph_size=8):
         # penalty_models[configurations] = pmodel
 
         else:
-            msg = ("No penalty model can be build for constraint {}".format(const))
+            msg = ("No penalty model can be built for constraint {}".format(const))
             raise ImpossibleBQM(msg)
 
         bqm.update(pmodel.model)
