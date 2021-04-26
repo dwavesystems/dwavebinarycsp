@@ -1,5 +1,5 @@
 .. image:: https://img.shields.io/pypi/v/dwavebinarycsp.svg
-    :target: https://pypi.python.org/pypi/dwavebinarycsp
+    :target: https://pypi.org/project/dwavebinarycsp
 
 .. image:: https://ci.appveyor.com/api/projects/status/b99rhw0l6ljsgw5t?svg=true
     :target: https://ci.appveyor.com/project/dwave-adtt/dwavebinarycsp
