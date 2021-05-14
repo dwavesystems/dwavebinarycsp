@@ -86,7 +86,7 @@ jobs:
       - run:
           name: install pyenv
           command: |
-            HOMEBREW_NO_AUTO_UPDATE=1 brew install pyenv
+            brew install pyenv
 
       - restore_cache:
           keys:
@@ -138,13 +138,13 @@ jobs:
     <<: *osx-tests-template
     environment:
       PYTHON: 3.7.4
-      MACOSX_DEPLOYMENT_TARGET: 10.9
+      HOMEBREW_NO_AUTO_UPDATE: 1
 
   test-osx-3.6:
     <<: *osx-tests-template
     environment:
       PYTHON: 3.6.5
-      HMACOSX_DEPLOYMENT_TARGET: 10.9
+      HOMEBREW_NO_AUTO_UPDATE: 1
 
   deploy:
     docker:
