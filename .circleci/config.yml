@@ -54,7 +54,7 @@ jobs:
           name: linkcheck
           command: |
             . env/bin/activate
-            make -C docs/ linkcheck 
+            make -C docs/ linkcheck
 
   test-3.7:
     <<: *full-test-template
@@ -65,11 +65,6 @@ jobs:
     <<: *full-test-template
     docker:
       - image: circleci/python:3.6-jessie
-
-  test-3.5:
-    <<: *full-test-template
-    docker:
-      - image: circleci/python:3.5-jessie
 
   test-osx-3.8: &osx-tests-template
     macos:
@@ -140,12 +135,6 @@ jobs:
       PYTHON: 3.6.5
       HOMEBREW_NO_AUTO_UPDATE: 1
 
-  test-osx-3.5:
-    <<: *osx-tests-template
-    environment:
-      PYTHON: 3.5.5
-      HOMEBREW_NO_AUTO_UPDATE: 1
-
   deploy:
     docker:
       - image: circleci/python:3.6-jessie
@@ -203,11 +192,9 @@ workflows:
       - test-3.8
       - test-3.7
       - test-3.6
-      - test-3.5
       - test-osx-3.8
       - test-osx-3.7
       - test-osx-3.6
-      - test-osx-3.5
       - deploy:
           filters:
             tags:
