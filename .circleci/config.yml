@@ -1,8 +1,8 @@
 version: 2
 jobs:
-  test-3.8: &full-test-template
+  test-3.9: &full-test-template
     docker:
-      - image: circleci/python:3.8-buster
+      - image: circleci/python:3.9
 
     working_directory: ~/repo
 
@@ -56,21 +56,26 @@ jobs:
             . env/bin/activate
             make -C docs/ linkcheck
 
+  test-3.8:
+    <<: *full-test-template
+    docker:
+      - image: circleci/python:3.8
+
   test-3.7:
     <<: *full-test-template
     docker:
-      - image: circleci/python:3.7-stretch
+      - image: circleci/python:3.7
 
   test-3.6:
     <<: *full-test-template
     docker:
-      - image: circleci/python:3.6-jessie
+      - image: circleci/python:3.6
 
-  test-osx-3.8: &osx-tests-template
+  test-osx-3.9: &osx-tests-template
     macos:
-      xcode: "11.2.1"
+      xcode: "12.1.0"
     environment:
-      PYTHON: 3.8.0
+      PYTHON: 3.9.0
       HOMEBREW_NO_AUTO_UPDATE: 1
 
     working_directory: ~/repo
@@ -81,11 +86,11 @@ jobs:
       - run:
           name: install pyenv
           command: |
-            brew install pyenv
+            HOMEBREW_NO_AUTO_UPDATE=1 brew install pyenv
 
       - restore_cache:
           keys:
-            - pyenv-{{ .Environment.CIRCLE_JOB }}-xcode11.2.1
+            - pyenv-{{ .Environment.CIRCLE_JOB }}-xcode12.1.0
 
       - run:
           name: install python
@@ -95,7 +100,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.pyenv
-          key: pyenv-{{ .Environment.CIRCLE_JOB }}-xcode11.2.1
+          key: pyenv-{{ .Environment.CIRCLE_JOB }}-xcode12.1.0
 
       - run:
           name: create virtualenv
@@ -123,21 +128,27 @@ jobs:
 
       - run: *run-tests-template
 
+  test-osx-3.8:
+    <<: *osx-tests-template
+    environment:
+      PYTHON: 3.8.6
+      MACOSX_DEPLOYMENT_TARGET: 10.9
+
   test-osx-3.7:
     <<: *osx-tests-template
     environment:
       PYTHON: 3.7.4
-      HOMEBREW_NO_AUTO_UPDATE: 1
+      MACOSX_DEPLOYMENT_TARGET: 10.9
 
   test-osx-3.6:
     <<: *osx-tests-template
     environment:
       PYTHON: 3.6.5
-      HOMEBREW_NO_AUTO_UPDATE: 1
+      HMACOSX_DEPLOYMENT_TARGET: 10.9
 
   deploy:
     docker:
-      - image: circleci/python:3.6-jessie
+      - image: circleci/python:3.8-buster
 
     working_directory: ~/repo
 
@@ -189,6 +200,7 @@ workflows:
   version: 2
   test:
     jobs:
+      - test-3.9
       - test-3.8
       - test-3.7
       - test-3.6
