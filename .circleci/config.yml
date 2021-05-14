@@ -76,7 +76,6 @@ jobs:
       xcode: "12.1.0"
     environment:
       PYTHON: 3.9.0
-      HOMEBREW_NO_AUTO_UPDATE: 1
 
     working_directory: ~/repo
 
@@ -86,7 +85,7 @@ jobs:
       - run:
           name: install pyenv
           command: |
-            brew install pyenv
+            HOMEBREW_NO_AUTO_UPDATE=1 brew install pyenv
 
       - restore_cache:
           keys:
@@ -132,19 +131,16 @@ jobs:
     <<: *osx-tests-template
     environment:
       PYTHON: 3.8.6
-      MACOSX_DEPLOYMENT_TARGET: 10.9
 
   test-osx-3.7:
     <<: *osx-tests-template
     environment:
       PYTHON: 3.7.4
-      HOMEBREW_NO_AUTO_UPDATE: 1
 
   test-osx-3.6:
     <<: *osx-tests-template
     environment:
       PYTHON: 3.6.5
-      HOMEBREW_NO_AUTO_UPDATE: 1
 
   deploy:
     docker:
