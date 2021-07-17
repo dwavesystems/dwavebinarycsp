@@ -1,8 +1,9 @@
-penaltymodel==0.16.4
-penaltymodel-mip==0.2.4; (platform_machine == "x86_64" or platform_machine == "amd64" or platform_machine == "AMD64") and python_version != "3.4"
-penaltymodel-maxgap==0.5.4; platform_machine != "x86_64" and platform_machine != "amd64" and platform_machine != "AMD64" or python_version == "3.4"
-penaltymodel-lp==0.1.4
-penaltymodel-cache==0.4.3
+penaltymodel==0.16.5
+penaltymodel-mip==0.2.5; (platform_machine == "x86_64" or platform_machine == "amd64" or platform_machine == "AMD64") and python_version != "3.4"
+penaltymodel-maxgap==0.5.5; platform_machine != "x86_64" and platform_machine != "amd64" and platform_machine != "AMD64" or python_version == "3.4"
+penaltymodel-lp==0.1.5
+penaltymodel-cache==0.4.4
 networkx==2.5.1
 dimod==0.9.14
 six==1.11.0
+numpy!=1.21.0  # see https://github.com/dwavesystems/dimod/issues/901
