@@ -11,13 +11,9 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-#
-# ================================================================================================
 
 from itertools import combinations, count, product
 import operator
-
-from six import itervalues, iteritems
 
 import networkx as nx
 import penaltymodel.core as pm

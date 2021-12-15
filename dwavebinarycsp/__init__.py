@@ -11,8 +11,8 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-#
-# ================================================================================================
+
+__version__ = '0.1.3'
 
 from dwavebinarycsp.compilers import *
 import dwavebinarycsp.compilers
@@ -30,7 +30,7 @@ import dwavebinarycsp.factories
 from dwavebinarycsp.io import *
 import dwavebinarycsp.io
 
-from dwavebinarycsp.package_info import __version__, __author__, __authoremail__, __description__
+from dwavebinarycsp.package_info import __author__, __authoremail__, __description__
 
 import dwavebinarycsp.testing
 

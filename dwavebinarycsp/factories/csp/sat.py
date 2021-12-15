@@ -11,15 +11,11 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-#
-# ================================================================================================
 
 from functools import reduce
 from math import factorial
 from operator import mul
 from random import choice, sample, random
-
-from six.moves import range
 
 import dimod
 

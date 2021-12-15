@@ -11,8 +11,7 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-#
-# ================================================================================================
+
 """
 Solutions to a constraint satisfaction problem must satisfy certains conditions, the
 constraints of the problem, such as equality and inequality constraints.

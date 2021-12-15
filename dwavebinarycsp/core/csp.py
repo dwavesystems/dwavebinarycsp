@@ -11,8 +11,7 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-#
-# ================================================================================================
+
 """
 Constraint satisfaction problems require that all a problem's variables be assigned
 values, out of a finite domain, that result in the satisfying of all constraints.
