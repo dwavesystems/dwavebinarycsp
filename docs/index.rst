@@ -32,7 +32,6 @@ Documentation
 
   intro
   reference/index
-  examples/index
   bibliography
 
 .. sdk-end-marker
