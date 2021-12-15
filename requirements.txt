@@ -5,4 +5,3 @@ penaltymodel-lp==0.1.5
 penaltymodel-cache==0.4.4
 networkx==2.5.1
 dimod==0.9.14
-six==1.11.0

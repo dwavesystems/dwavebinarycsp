@@ -19,8 +19,6 @@ from math import factorial
 from operator import mul
 from random import choice, sample, random
 
-from six.moves import range
-
 import dimod
 
 from dwavebinarycsp.core.csp import ConstraintSatisfactionProblem

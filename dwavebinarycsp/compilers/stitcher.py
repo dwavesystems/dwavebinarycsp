@@ -17,8 +17,6 @@
 from itertools import combinations, count, product
 import operator
 
-from six import itervalues, iteritems
-
 import networkx as nx
 import penaltymodel.core as pm
 import dimod
