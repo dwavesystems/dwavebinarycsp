@@ -21,7 +21,7 @@ a constraint.
 """
 import itertools
 
-from collections import Sized, Callable
+from collections.abc import Sized, Callable
 
 import dimod
 

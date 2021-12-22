@@ -19,7 +19,8 @@ The :class:`ConstraintSatisfactionProblem` class aggregates all constraints and 
 defined for a problem and provides functionality to assist in problem solution, such
 as verifying whether a candidate solution satisfies the constraints.
 """
-from collections import Callable, Iterable, defaultdict
+from collections import defaultdict
+from collections.abc import Callable, Iterable
 
 import dimod
 
