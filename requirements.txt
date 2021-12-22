@@ -1,7 +1,8 @@
-penaltymodel==0.16.5
-penaltymodel-mip==0.2.5; (platform_machine == "x86_64" or platform_machine == "amd64" or platform_machine == "AMD64") and python_version != "3.4"
-penaltymodel-maxgap==0.5.5; platform_machine != "x86_64" and platform_machine != "amd64" and platform_machine != "AMD64" or python_version == "3.4"
-penaltymodel-lp==0.1.5
-penaltymodel-cache==0.4.4
+penaltymodel==0.16.6
+penaltymodel-mip==0.2.6; (platform_machine == "x86_64" or platform_machine == "amd64" or platform_machine == "AMD64") and python_version != "3.4"
+penaltymodel-maxgap==0.5.6; platform_machine != "x86_64" and platform_machine != "amd64" and platform_machine != "AMD64" or python_version == "3.4"
+penaltymodel-lp==0.1.6
+penaltymodel-cache==0.4.5
 networkx==2.5.1
-dimod==0.9.14
+dimod==0.9.14; python_version < "3.10"
+dimod==0.10.10; python_version >= "3.10"
