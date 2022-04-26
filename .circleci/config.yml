@@ -186,7 +186,7 @@ workflows:
           matrix:
             parameters:
               python-version: &python-versions [3.7.9, 3.8.9, 3.9.4, 3.10.0]
-              dimod-version: [==0.8.0, ~=0.9.0, ~=0.10.0]
+              dimod-version: [==0.8.0, ~=0.9.0, ~=0.10.0, ==0.11.0rc1]
             exclude:
               - dimod-version: ==0.8.0
                 python-version: 3.10.0
