@@ -12,12 +12,14 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-import penaltymodel.core as pm
+import penaltymodel
+
+__all__ = ['UnsatError', 'ImpossibleBQM']
 
 
 class UnsatError(Exception):
     """Constraint or csp cannot be satisfied"""
 
 
-class ImpossibleBQM(pm.ImpossiblePenaltyModel):
+class ImpossibleBQM(penaltymodel.ImpossiblePenaltyModel):
     """When a BQM cannot be built from a constraint/penaltymodel"""

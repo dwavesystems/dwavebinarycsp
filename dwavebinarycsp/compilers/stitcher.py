@@ -16,7 +16,7 @@ from itertools import combinations, count, product
 import operator
 
 import networkx as nx
-import penaltymodel.core as pm
+import penaltymodel
 import dimod
 
 from dwavebinarycsp.core.constraint import Constraint
@@ -120,12 +120,6 @@ def stitch(csp, min_classical_gap=2.0, max_graph_size=8):
 
     """
 
-    # ensure we have penaltymodel factory available
-    try:
-        dwavebinarycsp.assert_penaltymodel_factory_available()
-    except AssertionError as e:
-        raise RuntimeError(e)
-
     def aux_factory():
         for i in count():
             yield 'aux{}'.format(i)
@@ -158,39 +152,31 @@ def stitch(csp, min_classical_gap=2.0, max_graph_size=8):
             bqm.update(_bqm_from_1sat(const))
             continue
 
-        # developer note: we could cache them and relabel, for now though let's do the simple thing
-        # if configurations in penalty_models:
-        #     raise NotImplementedError
+        # turn the configurations into a sampleset
+        samples_like = (list(configurations), const.variables)
 
         for G in iter_complete_graphs(const.variables, max_graph_size + 1, aux):
 
-            # construct a specification
-            spec = pm.Specification(
-                graph=G,
-                decision_variables=const.variables,
-                feasible_configurations=configurations,
-                min_classical_gap=min_classical_gap,
-                vartype=csp.vartype
-            )
-
-            # try to use the penaltymodel ecosystem
             try:
-                pmodel = pm.get_penalty_model(spec)
-            except pm.ImpossiblePenaltyModel:
-                # hopefully adding more variables will make it possible
+                pmodel, classical_gap = penaltymodel.get_penalty_model(
+                    samples_like,
+                    G,
+                    min_classical_gap=min_classical_gap
+                    )
+            except penaltymodel.ImpossiblePenaltyModel:
+                # not able to be built on this graph
                 continue
 
-            if pmodel.classical_gap >= min_classical_gap:
-                break
+            pmodel.change_vartype(csp.vartype, inplace=True)
 
-        # developer note: we could cache them and relabel, for now though let's do the simple thing
-        # penalty_models[configurations] = pmodel
+            if classical_gap >= min_classical_gap:
+                break
 
         else:
             msg = ("No penalty model can be built for constraint {}".format(const))
             raise ImpossibleBQM(msg)
 
-        bqm.update(pmodel.model)
+        bqm.update(pmodel)
 
     return bqm
 
