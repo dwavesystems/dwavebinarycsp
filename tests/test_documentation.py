@@ -86,7 +86,7 @@ class TestDocumentation(unittest.TestCase):
         response = sampler.sample(bqm, num_reads=10)
 
         # # Plot the lowest-energy sample if it meets the constraints
-        sample = next(response.samples())      # doctest: +SKIP
+        sample = response.first.sample      # doctest: +SKIP
         # if not csp.check(sample):              # doctest: +SKIP
         #     print("Failed to color map")
         # else:

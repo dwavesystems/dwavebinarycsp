@@ -20,7 +20,7 @@ import dimod
 
 import dwavebinarycsp
 
-import penaltymodel.core as pm
+import penaltymodel as pm
 
 
 class TestStitch(unittest.TestCase):
