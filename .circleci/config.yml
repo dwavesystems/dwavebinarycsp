@@ -1,200 +1,259 @@
 version: 2.1
+
+orbs:
+  win: circleci/windows@5.0
+
 jobs:
   test-linux:
     parameters:
-      dimod-version:
-        type: string
       python-version:
         type: string
-    docker:
-      - image: circleci/python:<< parameters.python-version >>
+      pip-constraints:
+        type: string
 
-    working_directory: ~/repo
+    docker:
+      - image: cimg/python:<< parameters.python-version >>
 
     steps:
-
       - checkout
 
-      - restore_cache:
-          keys:
-          - v2-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "tests/requirements.txt" }}-{{ checksum "docs/requirements.txt" }}-{{ .Environment.CIRCLE_JOB }}
+      - restore_cache: &restore-cache-env
+          key: v1-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "tests/requirements.txt" }}-{{ .Environment.CIRCLE_JOB }}
 
-      - run:
-          name: create virtualenv
+      - run: &create-virtualenv
+          name: Create virtual environment
           command: |
-            python -m virtualenv env
+            python -m venv env
 
-      - run:
-          name: install dependencies
+      - run: &install-requirements
+          name: Install requirements
           command: |
             . env/bin/activate
-            python --version
-            pip install -r requirements.txt -r tests/requirements.txt -r docs/requirements.txt
-            pip install --upgrade 'dimod<< parameters.dimod-version >>'
+            pip install -U pip wheel twine setuptools
+            pip install -r requirements.txt -r tests/requirements.txt
 
-      - save_cache:
+      - save_cache: &save-cache-env
+          key: v1-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "tests/requirements.txt" }}-{{ .Environment.CIRCLE_JOB }}
           paths:
-            - ./env
-          key: v2-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "tests/requirements.txt" }}-{{ checksum "docs/requirements.txt" }}-{{ .Environment.CIRCLE_JOB }}
+            - ~/.cache/pip
 
-      - run: &run-tests-template
-          name: run unittests
+      - run: &build-package
+          name: Build package
+          command: env/bin/python setup.py sdist bdist_wheel
+
+      - run:
+          name: Install package (with constraints)
           command: |
             . env/bin/activate
+            pip install . -c <(printf '%s\n' << parameters.pip-constraints >>)
+
+      - run: &run-python-tests
+          name: Run Python tests
+          command: env/bin/coverage run -m unittest discover
+
+      - run:
+          name: Upload code coverage
+          command: |
+            . env/bin/activate
+            codecov     # calls `coverage xml`, so we must activate venv
+
+  test-macos:
+    parameters:
+      python-version:
+        type: string
+      xcode:
+        type: string
+
+    macos:
+      xcode: << parameters.xcode >>
+
+    steps:
+      - checkout
+
+      # install `python-version` and cache it
+      - run:
+          name: Install pyenv
+          command: HOMEBREW_NO_AUTO_UPDATE=1 brew install pyenv
+
+      - restore_cache: &restore-cache-pyenv
+          keys:
+            - v1-pyenv-{{ .Environment.CIRCLE_JOB }}-xcode-<< parameters.xcode >>
+
+      - run: &pyenv-install-python
+          name: Install python
+          command: pyenv install << parameters.python-version >> -s
+
+      - run:
+          name: Set system python
+          command: |
+            echo -e '\n\n# Initialize pyenv' >> ~/.bash_profile
+            echo 'eval "$(pyenv init --path 2>/dev/null || true)"' >> ~/.bash_profile
+            echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
+            pyenv global << parameters.python-version >>
+
+      - save_cache: &save-cache-pyenv
+          key: v1-pyenv-{{ .Environment.CIRCLE_JOB }}-xcode-<< parameters.xcode >>
+          paths:
+            - ~/.pyenv
+
+      # install dependencies and cache them
+      - restore_cache: *restore-cache-env
+
+      - run: *create-virtualenv
+
+      - run: *install-requirements
+
+      - save_cache: *save-cache-env
+
+      - run: &install-package
+          name: Install package
+          command: env/bin/pip install .
+
+      - run: *run-python-tests
+
+  test-win:
+    parameters:
+      python-version:
+        type: string
+
+    executor:
+      name: win/default
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install python and create virtualenv
+          shell: bash -eo pipefail
+          command: |
+            # resolve python MAJOR.MINOR version to latest MAJOR.MINOR.PATCH version available on NuGet
+            full_version=$(
+              curl -s 'https://azuresearch-usnc.nuget.org/query?q=python' \
+              | jq -r '.data[] | select(.id == "python") .versions[] | .version' \
+              | awk -F. -v ver='<< parameters.python-version >>' \
+                  'index($0, ver".") == 1 && $3 >= m { m = $3; v = $0 } END { print v }'
+            )
+            nuget install python -Version "$full_version" -ExcludeVersion
+            python/tools/python -V
+            python/tools/python -m venv env
+
+      - run:
+          name: Install dependencies
+          command: |
+            env\Scripts\activate.ps1
             python --version
-            coverage run -m unittest discover
+            pip install -r requirements.txt
+            pip install -r tests\requirements.txt
 
       - run:
-          name: codecov
+          name: Run unittests
+          command: |
+            env\Scripts\activate.ps1
+            python -m unittest discover
+
+  test-docs:
+    docker:
+      - image: cimg/python:3.9
+
+    steps:
+      - checkout
+
+      - restore_cache: *restore-cache-env
+
+      - run: *create-virtualenv
+
+      - run:
+          name: Install requirements
           command: |
             . env/bin/activate
-            codecov
+            pip install -U pip wheel twine setuptools
+            pip install -r requirements.txt -r tests/requirements.txt -r docs/requirements.txt
+
+      - save_cache: *save-cache-env
+
+      - run: *install-package
 
       - run:
-          name: doctest
+          name: Build docs
+          command: |
+            . env/bin/activate
+            make -C docs/ html
+
+      - store_artifacts:
+          path: ./docs/_build/html
+
+      - run:
+          name: Test docs
           command: |
             . env/bin/activate
             make -C docs/ doctest
 
       - run:
-          name: linkcheck
+          name: Test links
           command: |
             . env/bin/activate
             make -C docs/ linkcheck
 
-  test-osx:
-    parameters:
-      python-version:
-        type: string
-    macos:
-      xcode: 13.2.0
-    environment:
-      HOMEBREW_NO_AUTO_UPDATE: 1
-
-    working_directory: ~/repo
-
-    steps:
-      - checkout
-
-      - run:
-          name: install pyenv
-          command: |
-            HOMEBREW_NO_AUTO_UPDATE=1 brew install pyenv
-
-      - restore_cache:
-          keys:
-            - pyenv-{{ .Environment.CIRCLE_JOB }}-xcode13.2.0
-
-      - run:
-          name: install python
-          command: |
-            pyenv install << parameters.python-version>> -s
-
-      - save_cache:
-          paths:
-            - ~/.pyenv
-          key: pyenv-{{ .Environment.CIRCLE_JOB }}-xcode13.2.0
-
-      - run:
-          name: create virtualenv
-          command: |
-            eval "$(pyenv init --path)"
-            eval "$(pyenv init -)"
-            pyenv local << parameters.python-version >>
-            python -m pip install virtualenv
-            python -m virtualenv env
-
-      - restore_cache:
-          keys:
-          - v2-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "tests/requirements.txt" }}-{{ .Environment.CIRCLE_JOB }}
-
-      - run:
-          name: install dependencies
-          command: |
-            . env/bin/activate
-            python --version
-            pip install -r requirements.txt -r tests/requirements.txt
-
-      - save_cache:
-          paths:
-            - ./env
-          key: v2-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "tests/requirements.txt" }}-{{ .Environment.CIRCLE_JOB }}
-
-      - run: *run-tests-template
-
-  deploy:
+  pypi-deploy:
     docker:
-      - image: circleci/python:3.8-buster
-
-    working_directory: ~/repo
+      - image: cimg/python:3.9
 
     steps:
       - checkout
 
-      - run:
-          name: create virtualenv
-          command: |
-            python -m virtualenv env
+      - restore_cache: *restore-cache-env
+
+      - run: *create-virtualenv
+
+      - run: *install-requirements
+
+      - save_cache: *save-cache-env
+
+      - run: *build-package
+
+      - store_artifacts:
+          path: ./dist
 
       - run:
-          name: install dependencies
-          command: |
-            . env/bin/activate
-            python --version
-            pip install -r requirements.txt -r tests/requirements.txt -r docs/requirements.txt
-
-      - run:
-          name: install twine
-          command: |
-            . env/bin/activate
-            pip install twine
-
-      - run:
-          name: verify version matches tag
-          command: |
-            . env/bin/activate
-            pip install .
-            echo $CIRCLE_TAG
-            [[ "$(pip show dwavebinarycsp 2>/dev/null | grep Version)" == "Version: $CIRCLE_TAG" ]]
-
-      - run:
-          name: init .pypirc
-          command: |
-            echo -e "[pypi]" >> ~/.pypirc
-            echo -e "username = dwtools-ci" >> ~/.pypirc
-            echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
-
-      - run:
-          name: build sdist and bdist
-          command: |
-            . env/bin/activate
-            python setup.py sdist
-            python setup.py bdist_wheel
-
-      - run:
-          name: upload
-          command: |
-            . env/bin/activate
-            twine upload dist/*
+          name: Upload package to PyPI
+          command: env/bin/twine upload -u "$PYPI_USERNAME" -p "$PYPI_PASSWORD" --skip-existing ./dist/*
 
 workflows:
-  version: 2
   test:
     jobs:
       - test-linux:
-          name: test-linux-<< matrix.python-version >>-dimod<< matrix.dimod-version >>
+          name: test-linux-<< matrix.python-version >> | << matrix.pip-constraints >>
           matrix:
             parameters:
-              python-version: &python-versions [3.7.9, 3.8.9, 3.9.4, 3.10.0]
-              dimod-version: [==0.10.9, ~=0.10.0, ==0.11.0rc1]
-      - test-osx:
-          name: test-osx-<< matrix.python-version >>
+              python-version: &python-versions ["3.8", "3.9", "3.10", "3.11", "3.12"]
+              # Oldest and latest. The NumPy is needed because otherwise networkx==2.4 throws exceptions
+              pip-constraints: ["dimod==0.10.9 networkx==2.4 penaltymodel==1.0.0 numpy==1.20.0",
+                                "dimod networkx penaltymodel"]
+            exclude:
+                # dimod 0.10.9 only support Python < 3.10
+                - python-version: "3.10"
+                  pip-constraints: "dimod==0.10.9 networkx==2.4 penaltymodel==1.0.0 numpy==1.20.0"
+                - python-version: "3.11"
+                  pip-constraints: "dimod==0.10.9 networkx==2.4 penaltymodel==1.0.0 numpy==1.20.0"
+                - python-version: "3.12"
+                  pip-constraints: "dimod==0.10.9 networkx==2.4 penaltymodel==1.0.0 numpy==1.20.0"
+      - test-macos:
+          name: test-macos-<< matrix.python-version >>
           matrix:
             parameters:
               python-version: *python-versions
-      - deploy:
+              xcode: ["14.3.0"]
+      - test-win:
+          matrix:
+            parameters:
+              python-version: *python-versions
+      - test-docs
+
+  deploy:
+    jobs:
+      - pypi-deploy:
           filters:
             tags:
-              only: /^[0-9]+(\.[0-9]+)*(\.dev([0-9]+)?)?$/
+              only: /^[0-9]+(\.[0-9]+)*((\.dev|rc)([0-9]+)?)?$/
             branches:
               ignore: /.*/

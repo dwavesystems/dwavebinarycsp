@@ -14,8 +14,8 @@ Stack Overflow provides an excellent guide on [how to create a Minimal, Complete
 A clear and concise description of what you expected to happen.
 
 **Environment**
- - OS: [e.g., Ubuntu 16.04.4 LTS]
- - Python version: [e.g., 3.7.0]
+ - OS: [e.g. Ubuntu 22.04.3 LTS]
+ - Python version: [e.g. 3.12.0]
 
 **Additional Context**
 Add any other background information about the problem.
