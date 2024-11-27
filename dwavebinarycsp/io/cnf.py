@@ -44,7 +44,7 @@ def load_cnf(fp):
 
     .. _file object: https://docs.python.org/3/glossary.html#term-file-object
 
-    .. _formatted: http://www.satcompetition.org/2009/format-benchmarks2009.html
+    .. _formatted: http://www.satcompetition.org
 
 
     """
