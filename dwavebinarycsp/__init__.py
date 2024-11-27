@@ -14,7 +14,7 @@
 
 from warnings import warn as _warn  # so it doesn't get pulled in by import *
 
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 
 from dwavebinarycsp.compilers import *
 import dwavebinarycsp.compilers
