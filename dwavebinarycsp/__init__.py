@@ -12,6 +12,8 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+from warnings import warn as _warn  # so it doesn't get pulled in by import *
+
 __version__ = '0.3.0'
 
 from dwavebinarycsp.compilers import *
@@ -41,3 +43,11 @@ from dimod import Vartype, SPIN, BINARY
 def assert_penaltymodel_factory_available():
     """Legacy - does nothing."""
     pass
+
+
+_warn("dwavebinarycsp is deprecated and will be removed in Ocean 10. "
+      "For solving problems with constraints, "
+      "we recommend using the hybrid solvers in the Leap service. "
+      "You can find documentation for the hybrid solvers at https://docs.ocean.dwavesys.com.",
+      category=DeprecationWarning,
+      stacklevel=2)

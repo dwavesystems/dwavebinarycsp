@@ -4,6 +4,13 @@
 Introduction
 ============
 
+.. deprecated:: 0.3.1
+
+    ``dwavebinarycsp`` is deprecated and will be removed in Ocean 10.
+    For solving problems with constraints, we recommand using the hybrid
+    solvers in the Leap service.
+    You can find documentation for the hybrid solvers at :ref:`using_hybrid`.
+
 `dwavebinarycsp` is a library to construct a binary quadratic :term:`model` from a constraint
 satisfaction problem (CSP) with small constraints over binary variables (represented
 as either binary values {0, 1} or spin values {-1, 1}).
