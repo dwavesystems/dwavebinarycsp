@@ -12,7 +12,7 @@ jobs:
         type: string
 
     docker:
-      - image: cimg/python:<< parameters.python-version >>
+      - image: python:<< parameters.python-version >>
 
     steps:
       - checkout
@@ -153,7 +153,7 @@ jobs:
 
   test-docs:
     docker:
-      - image: cimg/python:3.9
+      - image: python:3.9
 
     steps:
       - checkout
@@ -196,7 +196,7 @@ jobs:
 
   pypi-deploy:
     docker:
-      - image: cimg/python:3.9
+      - image: python:3.9
 
     steps:
       - checkout
@@ -225,7 +225,7 @@ workflows:
           name: test-linux-<< matrix.python-version >> | << matrix.pip-constraints >>
           matrix:
             parameters:
-              python-version: &python-versions ["3.8", "3.9", "3.10", "3.11", "3.12"]
+              python-version: &python-versions ["3.9", "3.10", "3.11", "3.12", "3.12"]
               # Oldest and latest. The NumPy is needed because otherwise networkx==2.4 throws exceptions
               pip-constraints: ["dimod==0.10.9 networkx==2.4 penaltymodel==1.0.0 numpy==1.20.0",
                                 "dimod networkx penaltymodel"]
@@ -237,12 +237,14 @@ workflows:
                   pip-constraints: "dimod==0.10.9 networkx==2.4 penaltymodel==1.0.0 numpy==1.20.0"
                 - python-version: "3.12"
                   pip-constraints: "dimod==0.10.9 networkx==2.4 penaltymodel==1.0.0 numpy==1.20.0"
+                - python-version: "3.13"
+                  pip-constraints: "dimod==0.10.9 networkx==2.4 penaltymodel==1.0.0 numpy==1.20.0"
       - test-macos:
           name: test-macos-<< matrix.python-version >>
           matrix:
             parameters:
               python-version: *python-versions
-              xcode: ["14.3.0"]
+              xcode: ["16.2.0"]
       - test-win:
           matrix:
             parameters:
