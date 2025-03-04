@@ -1,10 +1,8 @@
-.. _reference_csp:
+.. _binarycsp_api_ref:
 
-Reference Documentation
-***********************
-
-   :Release: |release|
-   :Date: |today|
+=============
+API Reference
+=============
 
 .. toctree::
    :maxdepth: 2
