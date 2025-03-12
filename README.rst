@@ -8,9 +8,6 @@
 .. image:: https://codecov.io/gh/dwavesystems/dwavebinarycsp/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/dwavesystems/dwavebinarycsp
 
-.. image:: https://readthedocs.com/projects/d-wave-systems-binarycsp/badge/?version=latest
-    :target: https://docs.ocean.dwavesys.com/projects/binarycsp/en/latest/?badge=latest
-
 .. image:: https://circleci.com/gh/dwavesystems/dwavebinarycsp.svg?style=svg
     :target: https://circleci.com/gh/dwavesystems/dwavebinarycsp
 
@@ -64,9 +61,7 @@ License
 Released under the Apache License 2.0. See LICENSE file.
 
 Contributing
-------------
+============
 
-.. todo:: update link
-
-Ocean's `contributing guide <https://docs.ocean.dwavesys.com/en/stable/contributing.html>`_
+Ocean's `contributing guide <https://docs.dwavequantum.com/en/latest/ocean/index_ocean_sdk.html>`_
 has guidelines for contributing to Ocean packages.
