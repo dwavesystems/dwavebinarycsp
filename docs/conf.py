@@ -206,9 +206,8 @@ epub_exclude_files = ['search.html']
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'python': ('https://docs.python.org/3', None),
                        'networkx': ('https://networkx.github.io/documentation/stable/', None),
-                       'qbsolv': ('https://docs.ocean.dwavesys.com/projects/qbsolv/en/latest/', None),
-                       'oceandocs': ('https://docs.ocean.dwavesys.com/en/latest/', None),
-                       'sysdocs_gettingstarted': ('https://docs.dwavesys.com/docs/latest/', None)}
+                       'dwave': ('https://docs.dwavequantum.com/en/latest/', None),
+                       }
 
 # sort documentation they way the appear in the source file
 autodoc_member_order = 'bysource'

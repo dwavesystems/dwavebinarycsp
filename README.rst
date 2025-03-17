@@ -8,16 +8,15 @@
 .. image:: https://codecov.io/gh/dwavesystems/dwavebinarycsp/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/dwavesystems/dwavebinarycsp
 
-.. image:: https://readthedocs.com/projects/d-wave-systems-binarycsp/badge/?version=latest
-    :target: https://docs.ocean.dwavesys.com/projects/binarycsp/en/latest/?badge=latest
-
 .. image:: https://circleci.com/gh/dwavesystems/dwavebinarycsp.svg?style=svg
     :target: https://circleci.com/gh/dwavesystems/dwavebinarycsp
 
+
+==============
 dwavebinarycsp
 ==============
 
-.. index-start-marker
+.. start_binarycsp_about
 
 Library to construct a binary quadratic model from a constraint satisfaction problem with
 small constraints over binary variables.
@@ -38,12 +37,10 @@ Below is an example usage:
     for sample, energy in resp.data(['sample', 'energy']):
         print(sample, csp.check(sample), energy)
 
-.. index-end-marker
+.. end_binarycsp_about
 
 Installation
-------------
-
-.. installation-start-marker
+============
 
 To install:
 
@@ -58,15 +55,13 @@ To build from source:
     pip install -r requirements.txt
     python setup.py install
 
-.. installation-end-marker
-
 License
--------
+=======
 
 Released under the Apache License 2.0. See LICENSE file.
 
 Contributing
-------------
+============
 
-Ocean's `contributing guide <https://docs.ocean.dwavesys.com/en/stable/contributing.html>`_
+Ocean's `contributing guide <https://docs.dwavequantum.com/en/latest/ocean/ocean_contribute.html>`_
 has guidelines for contributing to Ocean packages.
