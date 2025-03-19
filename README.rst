@@ -1,6 +1,7 @@
 :warning: *dwavebinarycsp* is deprecated. For solving problems with constraints,
-    we recommend using the hybrid solvers in the Leap :tm: service. You can find
-    documentation for the hybrid solvers at https://docs.ocean.dwavesys.com.
+    we recommend using the hybrid solvers in the Leap\ :sup:`TM` service. You
+    can find documentation for the hybrid solvers at
+    https://docs.dwavequantum.com.
 
 .. image:: https://img.shields.io/pypi/v/dwavebinarycsp.svg
     :target: https://pypi.org/project/dwavebinarycsp
